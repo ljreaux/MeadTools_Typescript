@@ -1,0 +1,20 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* set default colors */
+@layer base {
+  :root {
+    --color-background: 210deg, 13%, 35%;
+    --color-textColor: 36deg, 16%, 82%;
+    --color-sidebar: 0deg, 0%, 14%;
+  }
+  /* light theme colors */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-background: 0deg, 0%, 100%;
+      --color-textColor: 0deg, 0%, 14%;
+      --color-sidebar: 38deg, 54%, 56%;
+    }
+  }
+}
