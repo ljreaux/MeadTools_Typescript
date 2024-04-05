@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import Trials from "./Trials.tsx";
-import useChangeLogger from "../../hooks/useChangeLogger.ts";
-import useUnitChange from "../../hooks/useUnitChange.ts";
+import useChangeLogger from "../../../hooks/useChangeLogger.ts";
+import useUnitChange from "../../../hooks/useUnitChange.ts";
 
 export interface BatchDetails {
   batchSize: number;

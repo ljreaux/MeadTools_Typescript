@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 export default function useUnitChange<
   T extends { units: string; batchSize: number }
 >({
@@ -7,7 +7,7 @@ export default function useUnitChange<
   propertyToChange,
 }: {
   stateObj: T;
-  setterFunction: (value: object) => void;
+  setterFunction: Dispatch<SetStateAction<T>>;
   propertyToChange: keyof T;
 }) {
   useEffect(() => {

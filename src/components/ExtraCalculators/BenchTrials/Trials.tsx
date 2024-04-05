@@ -1,6 +1,6 @@
 import { BatchDetails } from "./BenchTrials";
 import { FormEvent, useState } from "react";
-import useChangeLogger from "../../hooks/useChangeLogger";
+import useChangeLogger from "../../../hooks/useChangeLogger";
 
 type StockVolume = number[];
 
