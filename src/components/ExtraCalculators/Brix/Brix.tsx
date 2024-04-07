@@ -14,12 +14,12 @@ export default function Brix() {
     unit: "SG",
   });
 
- const handleUnitChange= (e: FormEvent<EventTarget>) =>{
+  const handleUnitChange = (e: FormEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
     const unit = target.value;
     console.log(unit);
     setBrixObj((prev) => ({ ...prev, unit: unit }));
-  }
+  };
 
   useBrixUnitsChange({
     stateObj: brixObj,
@@ -46,6 +46,7 @@ export default function Brix() {
         onChange={(e) =>
           setBrixObj((prev) => ({ ...prev, value: Number(e.target.value) }))
         }
+        onFocus={(e) => e.target.select()}
       />
       <p>{brixObj.unit === "Brix" ? brixObj.unit : null}</p>
       <select

@@ -57,6 +57,7 @@ export default function Refractometer() {
         id="cf"
         value={refrac.cf}
         onChange={handleChange}
+        onFocus={(e) => e.target.select()}
       />
       <label htmlFor="og">Enter OG: </label>
       <select
@@ -75,6 +76,7 @@ export default function Refractometer() {
         id="og"
         value={refrac.og}
         onChange={handleChange}
+        onFocus={(e) => e.target.select()}
       />
       <label htmlFor="fg">Enter FG in Brix: </label>
       <input
@@ -84,6 +86,7 @@ export default function Refractometer() {
         id="fg"
         value={refrac.fgInBrix}
         onChange={handleChange}
+        onFocus={(e) => e.target.select()}
       />
       <p>{Math.round(refrac.calcSg * 1000) / 1000}</p>
       <p>{Math.round(refrac.calcBrix * 100) / 100}</p>

@@ -1,18 +1,12 @@
-// import AbvCalculator from "./components/ExtraCalculators/Abv/AbvCalculator";
-// import BenchTrials from "./components/ExtraCalculators/BenchTrials/BenchTrials";
-// import Brix from "./components/ExtraCalculators/Brix/Brix";
-// import EstimatedOG from "./components/ExtraCalculators/EstimatedOG/EstimatedOG";
-
-import Refractometer from "./components/ExtraCalculators/Refractometer/Refractometer";
+import ExtraCalcs from "./components/ExtraCalculators/ExtraCalcs";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <main className="flex items-center justify-center">
-      {/* <BenchTrials/> */}
-      {/* <AbvCalculator /> */}
-      {/* <Brix /> */}
-      {/* <EstimatedOG /> */}
-      <Refractometer />
+      <Routes>
+        <Route path="/ExtraCalcs/*" element={<ExtraCalcs />} />
+      </Routes>
     </main>
   );
 }

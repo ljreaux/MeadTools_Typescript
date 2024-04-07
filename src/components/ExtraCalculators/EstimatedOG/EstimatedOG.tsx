@@ -33,6 +33,7 @@ export default function EstimatedOG() {
         type="number"
         id="hydrometerFG"
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
+        onFocus={(e) => e.target.select()}
       />
       <label className="text-center mx-2 my-2" htmlFor="refractometerFG">
         Enter Refractometer FG:{" "}
@@ -45,6 +46,7 @@ export default function EstimatedOG() {
         type="number"
         id="refractometerFG"
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
+        onFocus={(e) => e.target.select()}
       />
       <p>Estimated OG: {estOG}</p>
       <p>{Math.round(toBrix(estOG) * 100) / 100} Brix</p>

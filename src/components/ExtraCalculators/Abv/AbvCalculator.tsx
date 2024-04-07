@@ -15,7 +15,7 @@ export default function AbvCalculator() {
       {inputArr.map((item, index) => {
         const brix = toBrix(inputValues[index]);
         return (
-          <>
+          <div key={index}>
             <label htmlFor={item} className="text-center mx-2 my-2">
               Enter {item}:
             </label>
@@ -35,7 +35,7 @@ export default function AbvCalculator() {
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
             />
             <p>{Math.round(brix * 100) / 100} Brix</p>
-          </>
+          </div>
         );
       })}
       <AbvLine {...abv} />
