@@ -34,9 +34,8 @@ export default function BenchTrials() {
   const unitChangeParams = {
     stateObj: batchDetails,
     setterFunction: setBatchDetails,
-    propertyToChange: "batchSize",
   };
-  useUnitChange(unitChangeParams);
+  useUnitChange({ ...unitChangeParams, propertyToChange: "batchSize" });
   return (
     <form className="grid grid-cols-2 gap-2 items-start mt-[4rem] mx-[2rem]">
       <label htmlFor="batchSize">Batch Size</label>
