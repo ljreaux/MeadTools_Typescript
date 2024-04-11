@@ -5,17 +5,20 @@ import useAbv from "../../../hooks/useAbv";
 import AbvLine from "../../AbvLine";
 
 export default function AbvCalculator() {
-  const [inputValues, setInputValues] = useState([1, 1]);
+  const [inputValues, setInputValues] = useState([1.105, 1]);
   const abv = useAbv({ OG: inputValues[0], FG: inputValues[1] });
   const inputArr = ["OG", "FG"];
 
   return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8">
+    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
       <Title header="ABV Calculator" />
       {inputArr.map((item, index) => {
         const brix = toBrix(inputValues[index]);
         return (
-          <div key={index}>
+          <div
+            key={index}
+            className="flex items-center justify-center gap-[1rem]"
+          >
             <label htmlFor={item} className="text-center mx-2 my-2">
               Enter {item}:
             </label>

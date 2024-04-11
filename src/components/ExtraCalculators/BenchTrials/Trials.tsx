@@ -1,6 +1,5 @@
 import { BatchDetails } from "./BenchTrials";
 import { FormEvent, useState } from "react";
-import useChangeLogger from "../../../hooks/useChangeLogger";
 
 type StockVolume = number[];
 
@@ -9,7 +8,7 @@ interface Props {
 }
 
 export default function Trials({ batchDetails }: Props) {
-  const newStockSolutions = [0, 0, 0, 0, 0];
+  const newStockSolutions = [0.5, 1, 1.5, 2, 2.5];
 
   const [stockVolume, setStockVolume] =
     useState<StockVolume>(newStockSolutions);
@@ -31,88 +30,101 @@ export default function Trials({ batchDetails }: Props) {
     );
   };
 
-  useChangeLogger(stockVolume);
   return (
-    <div className="col-span-2 grid grid-cols-5">
-      {stockVolume.map((solution, i) => {
-        const sample = adjunctInSample(i);
-        const scaler =
-          Math.round(
-            (sample / (batchDetails.sampleSize + stockVolume[i])) * 10 ** 6
-          ) /
-          10 ** 6;
-        const scaledAdjunct =
-          batchDetails.units == "gallon"
-            ? Math.round(scaler * 37850000) / 10 ** 4
-            : (scaler * 10 ** 4) / 10;
-        const scaledBatch =
-          Math.round(scaledAdjunct * batchDetails.batchSize * 10 ** 4) /
-          10 ** 4;
+    <>
+      <div className="col-span-2 grid col-setup gap-2">
+        {stockVolume.map((solution, i) => {
+          const sample = adjunctInSample(i);
+          const scaler =
+            Math.round(
+              (sample / (batchDetails.sampleSize + stockVolume[i])) * 10 ** 6
+            ) /
+            10 ** 6;
+          const scaledAdjunct =
+            batchDetails.units == "gallon"
+              ? Math.round(scaler * 37850000) / 10 ** 4
+              : (scaler * 10 ** 4) / 10;
+          const scaledBatch =
+            Math.round(scaledAdjunct * batchDetails.batchSize * 10 ** 4) /
+            10 ** 4;
 
-        return (
-          <div
-            key={i}
-            className="text-center flex flex-col justify-center  items-center gap-4"
-          >
-            <label htmlFor={`stockVolume ${i + 1}`}>
-              Stock Solution Volume
-            </label>
-            <input
-              className="bg-sidebar text-center rounded-xl border-solid border-2 border-textColor w-[80%]"
-              id={`stockVolume ${i + 1}`}
-              type="number"
-              value={solution}
-              onChange={(e) => handleStockVolume(e, i)}
-              onFocus={(e) => e.target.select()}
-            />
+          return (
+            <div key={i} className="grid text-center">
+              <label
+                className="flex items-center justify-center text-sm p-2"
+                htmlFor={`stockVolume ${i + 1}`}
+              >
+                {i === 0 && `Stock Solution Volume`}
+                <input
+                  className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+                  id={`stockVolume ${i + 1}`}
+                  type="number"
+                  value={solution}
+                  onChange={(e) => handleStockVolume(e, i)}
+                  onFocus={(e) => e.target.select()}
+                />
+              </label>
 
-            <label htmlFor={`adjunctAmount ${i + 1}`}>
-              Adjunct Amount in sample (g)
-            </label>
-            <input
-              className="bg-sidebar text-center rounded-xl border-solid border-2 border-textColor w-[80%]"
-              id={`adjunctAmount ${i + 1}`}
-              type="number"
-              value={sample}
-              readOnly
-              disabled
-            />
-            <label htmlFor={`adjunctInSample ${i + 1}`}>
-              Adjunct Concentration (ppm)
-            </label>
-            <input
-              className="bg-sidebar text-center rounded-xl border-solid border-2 border-textColor w-[80%]"
-              id={`adjunctInSample ${i + 1}`}
-              type="number"
-              value={scaler * 1000000}
-              readOnly
-              disabled
-            />
-            <label htmlFor="scaledAdjunct">
-              Scaled Adjunct {`g/${batchDetails.units}`}
-            </label>
-            <input
-              className="bg-sidebar text-center rounded-xl border-solid border-2 border-textColor w-[80%]"
-              id={`scaledAdjunct ${i + 1}`}
-              type="number"
-              value={scaledAdjunct}
-              readOnly
-              disabled
-            />
-            <label htmlFor={`batchAmount ${i + 1}`}>
-              Scaled Adjunct (entire batch)
-            </label>
-            <input
-              className="bg-sidebar text-center rounded-xl border-solid border-2 border-textColor w-[80%]"
-              id={`batchAmount ${i + 1}`}
-              type="number"
-              value={scaledBatch}
-              readOnly
-              disabled
-            />
-          </div>
-        );
-      })}
-    </div>
+              <label
+                className="flex items-center justify-center text-sm p-2"
+                htmlFor={`adjunctAmount ${i + 1}`}
+              >
+                {i === 0 && `Adjunct Amount in sample (g)`}
+                <input
+                  className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+                  id={`adjunctAmount ${i + 1}`}
+                  type="number"
+                  value={sample}
+                  readOnly
+                  disabled
+                />
+              </label>
+              <label
+                className="flex items-center justify-center text-sm p-2"
+                htmlFor={`adjunctInSample ${i + 1}`}
+              >
+                {i === 0 && `Adjunct Concentration (ppm)`}
+                <input
+                  className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+                  id={`adjunctInSample ${i + 1}`}
+                  type="number"
+                  value={scaler * 1000000}
+                  readOnly
+                  disabled
+                />
+              </label>
+              <label
+                className="flex items-center justify-center text-sm p-2"
+                htmlFor="scaledAdjunct"
+              >
+                {i === 0 && `Scaled Adjunct g/${batchDetails.units}`}
+                <input
+                  className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+                  id={`scaledAdjunct ${i + 1}`}
+                  type="number"
+                  value={scaledAdjunct}
+                  readOnly
+                  disabled
+                />
+              </label>
+              <label
+                className="flex items-center justify-center text-sm p-2"
+                htmlFor={`batchAmount ${i + 1}`}
+              >
+                {i === 0 && `Scaled Adjunct (entire batch)`}
+                <input
+                  className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+                  id={`batchAmount ${i + 1}`}
+                  type="number"
+                  value={scaledBatch}
+                  readOnly
+                  disabled
+                />
+              </label>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }

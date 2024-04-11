@@ -23,32 +23,40 @@ export default function Sorbate() {
   return (
     <div>
       <Title header="Sorbate Addition Calculator" />
-      <label htmlFor="batchSize">Batch Size: </label>
-      <input
-        type="number"
-        id="batchSize"
-        onFocus={(e) => e.target.select()}
-        onChange={handleChange}
-        className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
-      />
-      <select
-        name="units"
-        id="units"
-        onChange={handleChange}
-        className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
-      >
-        <option value="gallons">Gallons</option>
-        <option value="liters">Liters</option>
-      </select>
-      <label htmlFor="abv">ABV: </label>
-      <input
-        id="abv"
-        type="number"
-        onFocus={(e) => e.target.select()}
-        onChange={handleChange}
-        className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
-      />
-      <p>{Math.round(sorbateAmount * 1000) / 1000}g k-sorbate</p>
+      <div className="flex w-full justify-center gap-4 my-4">
+        <label htmlFor="batchSize">Batch Size: </label>
+        <input
+          type="number"
+          id="batchSize"
+          onFocus={(e) => e.target.select()}
+          onChange={handleChange}
+          className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
+          value={sorbate.batchSize}
+        />
+        <select
+          name="units"
+          id="units"
+          onChange={handleChange}
+          className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
+        >
+          <option value="gallons">Gallons</option>
+          <option value="liters">Liters</option>
+        </select>
+      </div>
+      <div className="flex w-full justify-center gap-4">
+        <label htmlFor="abv">ABV: </label>
+        <input
+          id="abv"
+          type="number"
+          onFocus={(e) => e.target.select()}
+          onChange={handleChange}
+          className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
+          value={sorbate.abv}
+        />
+      </div>
+      <p className="text-2xl my-4 text-center">
+        {Math.round(sorbateAmount * 1000) / 1000}g k-sorbate
+      </p>
     </div>
   );
 }

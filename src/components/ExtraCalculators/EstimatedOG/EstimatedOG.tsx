@@ -20,7 +20,7 @@ export default function EstimatedOG() {
     1000;
   const abv = useAbv({ OG: estOG, FG: gravity.fgh });
   return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8">
+    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
       <Title header="Estimated OG Without Reading" />
       <label className="text-center mx-2 my-2" htmlFor="hydrometerFG">
         Enter Hydrometer FG:{" "}
@@ -48,8 +48,10 @@ export default function EstimatedOG() {
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         onFocus={(e) => e.target.select()}
       />
-      <p>Estimated OG: {estOG}</p>
-      <p>{Math.round(toBrix(estOG) * 100) / 100} Brix</p>
+      <div className="text-2xl flex gap-2 mt-8">
+        <p>Estimated OG: {estOG}</p>
+        <p>{Math.round(toBrix(estOG) * 100) / 100} Brix</p>
+      </div>
       <AbvLine {...abv} />
     </div>
   );

@@ -6,9 +6,9 @@ export default function AbvLine({
   delle: number;
 }) {
   return (
-    <>
-      <p>{Math.round(ABV * 100) / 100}% ABV</p>
-      <p>{Math.round(delle)} Delle Units</p>
-    </>
+    <div className="flex gap-2">
+      <p className="text-2xl">{Math.round(ABV * 100) / 100}% ABV</p>
+      <p className="text-2xl">{Math.round(delle)} Delle Units</p>
+    </div>
   );
 }

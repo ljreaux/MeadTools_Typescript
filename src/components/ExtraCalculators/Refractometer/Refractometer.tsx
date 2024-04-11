@@ -31,13 +31,13 @@ export default function Refractometer() {
     setRefrac((prev) => ({ ...prev, units: unit }));
   };
 
-  const abv = useAbv({ OG: og, FG: refrac.calcBrix });
+  const abv = useAbv({ OG: og, FG: refrac.calcSg });
 
   useEffect(() => {
     const { cf: corFac, og, fgInBrix: fgBr, units } = refrac;
 
-    let actualFg = refracCalc(og, corFac, fgBr);
-    if (units == "SG") actualFg = refracCalc(toBrix(og), corFac, fgBr);
+    let actualFg = refracCalc(og, fgBr, corFac);
+    if (units == "SG") actualFg = refracCalc(toBrix(og), fgBr, corFac);
 
     setRefrac((prev) => ({
       ...prev,
@@ -47,7 +47,7 @@ export default function Refractometer() {
   }, [refrac.cf, refrac.og, refrac.fgInBrix, refrac.units]);
 
   return (
-    <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8">
+    <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
       <Title header="Refractometer Correction Calculator" />
       <label htmlFor="cf">Correction Factor: </label>
       <input
@@ -82,7 +82,7 @@ export default function Refractometer() {
       <input
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         type="number"
-        name="fg"
+        name="fgInBrix"
         id="fg"
         value={refrac.fgInBrix}
         onChange={handleChange}
