@@ -27,11 +27,11 @@ export default function Navbar({
   setOpened: Dispatch<SetStateAction<Opened>>;
 }) {
   return (
-    <div className="h-20 absolute top-0 z-[51] flex items-center justify-between mb-[1rem]">
+    <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
       <div className="w-screen h-full bg-sidebar flex justify-between items-center text-textColor text-xl text-center relative">
         <nav className="flex items-center justify-between sm:text-[1rem] text-[.6rem] my-0">
           <button
-            className="relative mx-2"
+            className="relative ml-4"
             onClick={() =>
               setOpened((prev) => {
                 return { ...prev, menu: !prev.menu };
@@ -45,7 +45,7 @@ export default function Navbar({
               opened.menu ? "grid" : "hidden"
             } w-[40vw] bg-sidebar text-start left-0 rounded-xl translate-y-2/4 mt-8 -mx-8`}
           >
-            <div className="w-fit mx-2 hover:text-background transition-colors">
+            <div className="flex items-center justify-center w-fit mx-2 hover:text-background transition-colors">
               <NavLink to="/">Calculators</NavLink>
               <button
                 className="mx-2"
@@ -75,7 +75,7 @@ export default function Navbar({
               >
                 Nutrient Calculator
               </NavLink>
-              <div>
+              <div className="flex items-center">
                 <NavLink
                   className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                   to="/ExtraCalcs"
@@ -96,7 +96,7 @@ export default function Navbar({
                   )}
                 </button>
               </div>
-              <div className={`${opened.extraCalcs ? "grid" : "hidden"} mx-12`}>
+              <div className={`${opened.extraCalcs ? "grid" : "hidden"} mx-8`}>
                 <Link to="/ExtraCalcs/" className="hover:text-background ">
                   ABV Calculator
                 </Link>{" "}
@@ -141,7 +141,7 @@ export default function Navbar({
                 </Link>
               </div>
             </div>
-            <div className="w-fit mx-2 hover:text-background transition-colors ">
+            <div className="flex items-center w-fit mx-2 hover:text-background transition-colors ">
               <NavLink to={"/account"}>Account</NavLink>
               <button
                 className="mx-2"
@@ -178,7 +178,7 @@ export default function Navbar({
                 </NavLink>
               )}
             </div>
-            <div className="w-fit mx-2 hover:text-background transition-colors">
+            <div className="flex items-center w-fit mx-2 hover:text-background transition-colors">
               <NavLink to="/about">Additional Links</NavLink>
               <button
                 className="mx-2"
@@ -225,6 +225,6 @@ export default function Navbar({
           </span>
         </Link>{" "}
       </div>
-    </div>
+    </nav>
   );
 }
