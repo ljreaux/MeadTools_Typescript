@@ -5,8 +5,10 @@ import {
 } from "../../../helpers/temperature";
 import { toBrix } from "../../../helpers/unitConverters";
 import Title from "../../Title";
+import { useTranslation } from "react-i18next";
 
 export default function TempCorrection() {
+  const { t } = useTranslation();
   const [tempObj, setTempObj] = useState({
     measured: 1.1,
     tempUnits: "F",
@@ -38,9 +40,9 @@ export default function TempCorrection() {
 
   return (
     <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Temperature Correction Calculator" />
+      <Title header={t("tempCorrectionHeading")} />
       <div className="flex gap-2 justify-center items-center">
-        <label htmlFor="measured">Measured SG: </label>
+        <label htmlFor="measured">{t("measuredSG")} </label>
         <input
           type="number"
           id="measured"
@@ -48,10 +50,12 @@ export default function TempCorrection() {
           onChange={handleChange}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         />
-        <p>{Math.round(toBrix(tempObj.measured) * 100) / 100} Brix</p>
+        <p>
+          {Math.round(toBrix(tempObj.measured) * 100) / 100} {t("Brix")}
+        </p>
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <label htmlFor="curTemp">Current Temp: </label>
+        <label htmlFor="curTemp">{t("curTemp")} </label>
         <input
           type="number"
           id="curTemp"
@@ -65,12 +69,12 @@ export default function TempCorrection() {
           onChange={handleChange}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         >
-          <option value="F">°F</option>
-          <option value="C">°C</option>
+          <option value="F">{t("FAR")}</option>
+          <option value="C">{t("CEL")}</option>
         </select>
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <label htmlFor="calTemp">Calibration Temp: </label>
+        <label htmlFor="calTemp">{t("calTemp")} </label>
         <input
           type="number"
           id="calTemp"
@@ -81,7 +85,7 @@ export default function TempCorrection() {
       </div>
       <p className="text-2xl my-4 text-center">
         {Math.round(result * 1000) / 1000}, {Math.round(resultBrix * 100) / 100}{" "}
-        Brix
+        {t("Brix")}
       </p>
     </form>
   );

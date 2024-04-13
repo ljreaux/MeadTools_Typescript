@@ -1,7 +1,9 @@
 import { FormEvent, useState } from "react";
 import Title from "../../Title";
+import { useTranslation } from "react-i18next";
 
 export default function Sorbate() {
+  const { t } = useTranslation();
   const [sorbate, setSorbate] = useState({
     batchSize: 1,
     units: "gallons",
@@ -22,9 +24,9 @@ export default function Sorbate() {
   };
   return (
     <div>
-      <Title header="Sorbate Addition Calculator" />
+      <Title header={t("sorbateHeading")} />
       <div className="flex w-full justify-center gap-4 my-4">
-        <label htmlFor="batchSize">Batch Size: </label>
+        <label htmlFor="batchSize">{t("batchSize")} </label>
         <input
           type="number"
           id="batchSize"
@@ -39,12 +41,12 @@ export default function Sorbate() {
           onChange={handleChange}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         >
-          <option value="gallons">Gallons</option>
-          <option value="liters">Liters</option>
+          <option value="gallons">{t("GAL")}</option>
+          <option value="liters">{t("LIT")}</option>
         </select>
       </div>
       <div className="flex w-full justify-center gap-4">
-        <label htmlFor="abv">ABV: </label>
+        <label htmlFor="abv">{t("ABV")}: </label>
         <input
           id="abv"
           type="number"
@@ -55,7 +57,7 @@ export default function Sorbate() {
         />
       </div>
       <p className="text-2xl my-4 text-center">
-        {Math.round(sorbateAmount * 1000) / 1000}g k-sorbate
+        {Math.round(sorbateAmount * 1000) / 1000}g {t("kSorb")}
       </p>
     </div>
   );

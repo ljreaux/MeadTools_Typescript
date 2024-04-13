@@ -1,5 +1,6 @@
 import { BatchDetails } from "./BenchTrials";
 import { FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type StockVolume = number[];
 
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export default function Trials({ batchDetails }: Props) {
+  const { t } = useTranslation();
   const newStockSolutions = [0.5, 1, 1.5, 2, 2.5];
 
   const [stockVolume, setStockVolume] =
@@ -54,7 +56,7 @@ export default function Trials({ batchDetails }: Props) {
                 className="flex items-center justify-center text-sm p-2"
                 htmlFor={`stockVolume ${i + 1}`}
               >
-                {i === 0 && `Stock Solution Volume`}
+                {i === 0 && t("solutionVolume")}
                 <input
                   className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
                   id={`stockVolume ${i + 1}`}
@@ -69,7 +71,7 @@ export default function Trials({ batchDetails }: Props) {
                 className="flex items-center justify-center text-sm p-2"
                 htmlFor={`adjunctAmount ${i + 1}`}
               >
-                {i === 0 && `Adjunct Amount in sample (g)`}
+                {i === 0 && t("adjunctAmount")}
                 <input
                   className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
                   id={`adjunctAmount ${i + 1}`}
@@ -83,7 +85,7 @@ export default function Trials({ batchDetails }: Props) {
                 className="flex items-center justify-center text-sm p-2"
                 htmlFor={`adjunctInSample ${i + 1}`}
               >
-                {i === 0 && `Adjunct Concentration (ppm)`}
+                {i === 0 && t("adjunctConcentration")}
                 <input
                   className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
                   id={`adjunctInSample ${i + 1}`}
@@ -97,7 +99,7 @@ export default function Trials({ batchDetails }: Props) {
                 className="flex items-center justify-center text-sm p-2"
                 htmlFor="scaledAdjunct"
               >
-                {i === 0 && `Scaled Adjunct g/${batchDetails.units}`}
+                {i === 0 && t(`${batchDetails.units}ScaledAdjunct`)}
                 <input
                   className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
                   id={`scaledAdjunct ${i + 1}`}
@@ -111,7 +113,7 @@ export default function Trials({ batchDetails }: Props) {
                 className="flex items-center justify-center text-sm p-2"
                 htmlFor={`batchAmount ${i + 1}`}
               >
-                {i === 0 && `Scaled Adjunct (entire batch)`}
+                {i === 0 && t("scaledBatch")}
                 <input
                   className=" bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-[80%]  disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
                   id={`batchAmount ${i + 1}`}

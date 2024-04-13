@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import Trials from "./Trials.tsx";
 import useUnitChange from "../../../hooks/useUnitChange.ts";
 import Title from "../../Title.tsx";
+import { useTranslation } from "react-i18next";
 
 export interface BatchDetails {
   batchSize: number;
@@ -11,6 +12,7 @@ export interface BatchDetails {
 }
 
 export default function BenchTrials() {
+  const { t } = useTranslation();
   const [batchDetails, setBatchDetails] = useState<BatchDetails>({
     batchSize: 1,
     sampleSize: 50,
@@ -36,9 +38,9 @@ export default function BenchTrials() {
   useUnitChange({ ...unitChangeParams, propertyToChange: "batchSize" });
   return (
     <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Bench Trials" />
+      <Title header={t("benchTrialsHeading")} />
       <div className="grid grid-cols-2 items-center justify-center my-4">
-        <label htmlFor="batchSize">Batch Size</label>
+        <label htmlFor="batchSize">{t("batchSize")}</label>
         <input
           id="batchSize"
           type="number"
@@ -47,7 +49,7 @@ export default function BenchTrials() {
           onFocus={(e) => e.target.select()}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background "
         />
-        <label htmlFor="trialBatchUnits">Units</label>
+        <label htmlFor="trialBatchUnits">{t("UNITS")}:</label>
         <select
           name="trialBatchUnits"
           id="trialBatchUnits"
@@ -55,10 +57,10 @@ export default function BenchTrials() {
           onChange={(e) => handleBatchDetails(e, "units")}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background "
         >
-          <option value="gallon">gallon</option>
-          <option value="liter">liter</option>
+          <option value="gallon">{t("GAL")}</option>
+          <option value="liter">{t("LIT")}</option>
         </select>
-        <label htmlFor="sampleSize">Sample Size (ml)</label>
+        <label htmlFor="sampleSize">{t("sampleSize")}</label>
         <input
           id="sampleSize"
           type="number"
@@ -67,7 +69,7 @@ export default function BenchTrials() {
           onFocus={(e) => e.target.select()}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background "
         />
-        <label htmlFor="concentration">Concentration (%)</label>
+        <label htmlFor="concentration">{t("stockSolutionConcentration")}</label>
         <input
           id="concentration"
           type="number"

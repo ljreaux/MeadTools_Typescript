@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import Title from "../../Title";
 import useBrixUnitsChange from "../../../hooks/useBrixUnitsChange";
 import { toBrix, toSG } from "../../../helpers/unitConverters";
+import { useTranslation } from "react-i18next";
 
 export interface Brix {
   value: number;
@@ -9,6 +10,8 @@ export interface Brix {
 }
 
 export default function Brix() {
+  const { t } = useTranslation();
+
   const [brixObj, setBrixObj] = useState<Brix>({
     value: 1,
     unit: "SG",
@@ -29,14 +32,14 @@ export default function Brix() {
 
   const displayString =
     brixObj.unit === "SG"
-      ? `${Math.round(toBrix(brixObj.value) * 100) / 100} Brix`
+      ? `${Math.round(toBrix(brixObj.value) * 100) / 100} ${t("BRIX")}`
       : Math.round(toSG(brixObj.value) * 1000) / 1000;
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Brix Conversion Calculator" />
+      <Title header={t("brixHeading")} />
       <label className="text-center mx-2 my-2" htmlFor="gravity">
-        Enter Gravity
+        {t("gravityLabel")}
       </label>
       <input
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
@@ -48,15 +51,15 @@ export default function Brix() {
         }
         onFocus={(e) => e.target.select()}
       />
-      <p>{brixObj.unit === "Brix" ? brixObj.unit : null}</p>
+      <p>{brixObj.unit === "Brix" ? t(brixObj.unit.toUpperCase()) : null}</p>
       <select
         name="units"
         id="units"
         onChange={handleUnitChange}
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
       >
-        <option value="SG">SG</option>
-        <option value="Brix">Brix</option>
+        <option value="SG">{t("SG")}</option>
+        <option value="Brix">{t("BRIX")}</option>
       </select>
       <p>{displayString}</p>
     </div>

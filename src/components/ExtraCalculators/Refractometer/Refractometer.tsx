@@ -4,8 +4,10 @@ import Title from "../../Title";
 import useAbv from "../../../hooks/useAbv";
 import refracCalc from "../../../helpers/refracCalc";
 import AbvLine from "../../AbvLine";
+import { useTranslation } from "react-i18next";
 
 export default function Refractometer() {
+  const { t } = useTranslation();
   const [refrac, setRefrac] = useState({
     cf: 1,
     og: 1.1,
@@ -48,8 +50,8 @@ export default function Refractometer() {
 
   return (
     <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Refractometer Correction Calculator" />
-      <label htmlFor="cf">Correction Factor: </label>
+      <Title header={t("refractometerHeading")} />
+      <label htmlFor="cf">{t("correctionFactor")} </label>
       <input
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         type="number"
@@ -59,15 +61,15 @@ export default function Refractometer() {
         onChange={handleChange}
         onFocus={(e) => e.target.select()}
       />
-      <label htmlFor="og">Enter OG: </label>
+      <label htmlFor="og">{t("ogLabel")} </label>
       <select
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         name="units"
         id="units"
         onChange={handleUnitChange}
       >
-        <option value="SG">SG</option>
-        <option value="Brix">Brix</option>
+        <option value="SG">{t("SG")}</option>
+        <option value="Brix">{t("BRIX")}</option>
       </select>
       <input
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
@@ -78,7 +80,7 @@ export default function Refractometer() {
         onChange={handleChange}
         onFocus={(e) => e.target.select()}
       />
-      <label htmlFor="fg">Enter FG in Brix: </label>
+      <label htmlFor="fg">{t("fgInBrix")} </label>
       <input
         className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4"
         type="number"
@@ -89,7 +91,9 @@ export default function Refractometer() {
         onFocus={(e) => e.target.select()}
       />
       <p>{Math.round(refrac.calcSg * 1000) / 1000}</p>
-      <p>{Math.round(refrac.calcBrix * 100) / 100}</p>
+      <p>
+        {Math.round(refrac.calcBrix * 100) / 100} {t("BRIX")}
+      </p>
       <AbvLine {...abv} />
     </form>
   );

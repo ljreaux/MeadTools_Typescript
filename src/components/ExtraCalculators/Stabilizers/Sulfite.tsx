@@ -1,7 +1,10 @@
 import { FormEvent, useState } from "react";
 import Title from "../../Title";
+import { useTranslation } from "react-i18next";
 
 export default function Sulfite() {
+  const { t } = useTranslation();
+
   const [sulfite, setSulfite] = useState({
     batchSize: 1,
     units: "gallons",
@@ -22,9 +25,9 @@ export default function Sulfite() {
 
   return (
     <div>
-      <Title header="Sorbate Addition Calculator" />
+      <Title header={t("sulfiteHeading")} />
       <div className="flex w-full justify-center gap-4 my-4">
-        <label htmlFor="batchSize">Batch Size: </label>
+        <label htmlFor="batchSize">{t("batchSize")} </label>
         <input
           type="number"
           id="batchSize"
@@ -44,7 +47,7 @@ export default function Sulfite() {
         </select>
       </div>
       <div className="flex w-full justify-center gap-4 my-4">
-        <label htmlFor="ppm">Desired PPM: </label>
+        <label htmlFor="ppm">{t("desiredPpm")} </label>
         <input
           type="number"
           name="ppm"
@@ -55,7 +58,7 @@ export default function Sulfite() {
         />
       </div>
       <p className="text-2xl my-4 text-center">
-        {Math.round(sulfiteAmount * 1000) / 1000}g k-meta
+        {Math.round(sulfiteAmount * 1000) / 1000}g {t("kMeta")}
       </p>
     </div>
   );

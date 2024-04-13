@@ -29,7 +29,7 @@ function App() {
         onClick={() => setOpened((prev) => ({ ...prev, menu: false }))}
       >
         <Routes>
-          <Route path="/NuteCalc" element={<NutrientCalc/>}/>
+          <Route path="/NuteCalc" element={<NutrientCalc />} />
           <Route path="/ExtraCalcs/*" element={<ExtraCalcs />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />

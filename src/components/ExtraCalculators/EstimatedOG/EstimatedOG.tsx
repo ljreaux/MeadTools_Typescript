@@ -3,6 +3,7 @@ import Title from "../../Title";
 import useAbv from "../../../hooks/useAbv";
 import { toBrix } from "../../../helpers/unitConverters";
 import AbvLine from "../../AbvLine";
+import { useTranslation } from "react-i18next";
 
 interface Gravity {
   fgh: number;
@@ -10,6 +11,7 @@ interface Gravity {
 }
 
 export default function EstimatedOG() {
+  const { t } = useTranslation();
   const [gravity, setGravity] = useState<Gravity>({
     fgh: 1.0,
     fgr: 5,
@@ -21,9 +23,9 @@ export default function EstimatedOG() {
   const abv = useAbv({ OG: estOG, FG: gravity.fgh });
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Estimated OG Without Reading" />
+      <Title header={t("ogHeading")} />
       <label className="text-center mx-2 my-2" htmlFor="hydrometerFG">
-        Enter Hydrometer FG:{" "}
+        {t("hydrometerFG")}{" "}
       </label>
       <input
         value={gravity.fgh}
@@ -36,7 +38,7 @@ export default function EstimatedOG() {
         onFocus={(e) => e.target.select()}
       />
       <label className="text-center mx-2 my-2" htmlFor="refractometerFG">
-        Enter Refractometer FG:{" "}
+        {t("refractometerFG")}{" "}
       </label>
       <input
         value={gravity.fgr}
@@ -49,8 +51,12 @@ export default function EstimatedOG() {
         onFocus={(e) => e.target.select()}
       />
       <div className="text-2xl flex gap-2 mt-8">
-        <p>Estimated OG: {estOG}</p>
-        <p>{Math.round(toBrix(estOG) * 100) / 100} Brix</p>
+        <p>
+          {t("estimatedOG")} {estOG}
+        </p>
+        <p>
+          {Math.round(toBrix(estOG) * 100) / 100} {t("BRIX")}
+        </p>
       </div>
       <AbvLine {...abv} />
     </div>

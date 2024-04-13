@@ -3,8 +3,10 @@ import useBlend from "../../../hooks/useBlend";
 import useChangeLogger from "../../../hooks/useChangeLogger";
 import { NumArray } from "../../../hooks/useBlend";
 import Title from "../../Title";
+import { useTranslation } from "react-i18next";
 
 export default function BlendingCalc() {
+  const { t } = useTranslation();
   const [inputValues, setInputValues] = useState<NumArray>([
     [0, 0],
     [0, 0],
@@ -30,10 +32,10 @@ export default function BlendingCalc() {
         runBlendingFunction();
       }}
     >
-      <Title header="Blending Calculator" />
+      <Title header={t("blendingHeading")} />
       <div>
         <label className="text-center mx-2 my-2" htmlFor="valueOne">
-          Value One
+          {t("valOne")}
         </label>
         <input
           type="number"
@@ -46,7 +48,7 @@ export default function BlendingCalc() {
         />
 
         <label className="text-center mx-2 my-2" htmlFor="volumeOne">
-          Volume One
+          {t("volOne")}
         </label>
         <input
           type="number"
@@ -60,7 +62,7 @@ export default function BlendingCalc() {
       </div>
       <div>
         <label className="text-center mx-2 my-2" htmlFor="valueTwo">
-          Value Two
+          {t("valTwo")}
         </label>
         <input
           type="number"
@@ -72,7 +74,7 @@ export default function BlendingCalc() {
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
         />
         <label className="text-center mx-2 my-2" htmlFor="volumeTwo">
-          Volume Two
+          {t("volTwo")}
         </label>
         <input
           type="number"
@@ -86,7 +88,7 @@ export default function BlendingCalc() {
       </div>
       <div>
         <label className="text-center mx-2 my-2" htmlFor="totalVol">
-          Total Volume
+          {t("totalVol")}
         </label>
         <input
           type="number"
@@ -95,7 +97,7 @@ export default function BlendingCalc() {
           value={blend.totalVolume}
         />
         <label className="text-center mx-2 my-2" htmlFor="blendedVal">
-          Blended Value
+          {t("blendedVal")}
         </label>
         <input
           id="blendedVal"
