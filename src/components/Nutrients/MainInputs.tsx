@@ -2,10 +2,8 @@ import { Dispatch, FormEvent, SetStateAction, useEffect } from "react";
 import { FormData } from "./NutrientCalc";
 import Title from "../Title";
 import FirstLineInputs from "./FirstLineInputs";
-import useChangeLogger from "../../hooks/useChangeLogger";
 import useTargetYan from "../../hooks/useTargetYan";
 import useYeastAmount from "../../hooks/yeastAmount";
-
 export interface YeastType {
   Lalvin: Yeast[];
   Fermentis: Yeast[];
@@ -21,15 +19,23 @@ type Yeast = {
   HighTemp: number;
 };
 
+interface MainInputs {
+  yeasts: FormData["yeasts"];
+  selected: FormData["selected"];
+  inputs: FormData["inputs"];
+  maxGpl: FormData["maxGpl"];
+}
+
 export default function MainInputs({
   yeasts,
   selected,
   inputs,
   maxGpl,
   setData,
-}: Partial<FormData> & {
+}: MainInputs & {
   setData: Dispatch<SetStateAction<FormData>>;
 }) {
+  const keyArr = Object.keys(maxGpl);
   const handleSelected = (e: FormEvent<EventTarget>) => {
     const target = e.target as HTMLFormElement;
     setData((prev) => ({
@@ -46,10 +52,9 @@ export default function MainInputs({
     }));
   };
 
-  useChangeLogger(inputs);
   useEffect(() => {
     const yeastDetails = yeasts[selected.yeastBrand].find(
-      (yeast) => yeast.name === selected.yeastStrain
+      (yeast: Yeast) => yeast.name === selected.yeastStrain
     );
     setData((prev) => {
       return {
@@ -171,14 +176,16 @@ export default function MainInputs({
           name="schedule"
           id="schedule"
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+          onChange={handleSelected}
         >
-          {Object.keys(maxGpl).map((key) => {
-            return (
-              <option key={key} value={maxGpl[key].name}>
-                {maxGpl[key].name}
-              </option>
-            );
-          })}
+          {maxGpl &&
+            keyArr.map((key) => {
+              return (
+                <option key={key} value={key}>
+                  {maxGpl[key].name}
+                </option>
+              );
+            })}
         </select>
         <p id="targetYan">{target.targetString}</p>
         <select

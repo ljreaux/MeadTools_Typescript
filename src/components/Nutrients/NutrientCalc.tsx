@@ -4,6 +4,7 @@ import MainInputs, { YeastType } from "./MainInputs";
 import { initialData } from "./intialData";
 import useChangeLogger from "../../hooks/useChangeLogger";
 import NutrientCalcResults from "./NutrientCalcResults";
+import useMaxGpl from "../../helpers/useMaxGpl";
 
 interface Selected {
   yeastBrand: string;
@@ -17,6 +18,7 @@ interface Selected {
   };
   n2Requirement: string;
   volumeUnits: string;
+  schedule: keyof FormData["maxGpl"];
 }
 
 interface GplEntries {
@@ -53,18 +55,35 @@ export interface FormData {
 
 export default function NutrientCalc() {
   const [data, setData] = useState<FormData>({ ...initialData });
+  const maxGPL = useMaxGpl(
+    data.maxGpl,
+    data.selected.schedule,
+    data.inputs?.sg
+  );
   useChangeLogger(data.outputs);
   const { currentStepIndex, step, next, back, steps } = useMultistepForm([
     <MainInputs {...data} setData={setData} />,
-    <NutrientCalcResults {...data} setData={setData} />,
+    <NutrientCalcResults {...data} setData={setData} {...maxGPL} />,
   ]);
 
   return (
-    <div>
+    <div className="w-full flex flex-col items-center justify-center">
       {step}
-      {currentStepIndex > 0 && <button onClick={back}>Back</button>}
+      {currentStepIndex > 0 && (
+        <button
+          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
+          onClick={back}
+        >
+          Back
+        </button>
+      )}
       {currentStepIndex < steps.length - 1 && (
-        <button onClick={next}>Next</button>
+        <button
+          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
+          onClick={next}
+        >
+          Next
+        </button>
       )}
     </div>
   );

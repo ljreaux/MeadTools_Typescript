@@ -1,6 +1,7 @@
 import yeasts from "../../assets/JSON/yeast.json";
+import { FormData } from "./NutrientCalc";
 
-export const initialData = {
+export const initialData: FormData = {
   yeasts,
   inputs: {
     volume: 0,
@@ -20,6 +21,7 @@ export const initialData = {
     },
     n2Requirement: "Low",
     volumeUnits: "gal",
+    schedule: "tbe",
   },
   maxGpl: {
     tbe: { name: "TBE (All Three)", value: [0.45, 0.5, 0.96] },
