@@ -4,8 +4,8 @@ import { initReactI18next } from "react-i18next";
 import { unitsTranslations } from "./units";
 import { extraCalcsTranslations } from "./extraCalcs";
 
-const [unitsEN] = unitsTranslations;
-const [ExtraCalcsEN] = extraCalcsTranslations;
+const [unitsEN, unitsDE] = unitsTranslations;
+const [ExtraCalcsEN, ExtraCalcsDE] = extraCalcsTranslations;
 
 i18n
   .use(LanguageDetector)
@@ -20,6 +20,13 @@ i18n
           ...ExtraCalcsEN,
         },
       },
+      de: {
+        translation: {
+          greeting: "Hallo",
+          ...unitsDE,
+          ...ExtraCalcsDE,
+        },
+      }
     },
     interpolation: {
       escapeValue: false,

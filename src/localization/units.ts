@@ -12,4 +12,18 @@ const unitsEN = {
   CEL: "°C",
 };
 
-export const unitsTranslations = [unitsEN];
+const unitsDE = {
+  UNITS: "Einheiten",
+  BRIX: "Brix",
+  DU: "Delle-Einheiten",
+  ABV: "Alk.%",
+  OG: "OG",
+  FG: "FG",
+  SG: "SG",
+  GAL: "Gallonen",
+  LIT: "Liter",
+  FAR: "°F",
+  CEL: "°C",
+};
+
+export const unitsTranslations = [unitsEN, unitsDE];
