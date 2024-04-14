@@ -16,6 +16,7 @@ function App() {
     account: false,
     links: false,
   });
+
   return (
     <div className="grid">
       <Navbar

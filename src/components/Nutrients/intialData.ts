@@ -39,6 +39,7 @@ export const initialData: FormData = {
     oAndDap: { name: "Fermaid O & DAP", value: [1, 0, 0.96] },
     kAndDap: { name: "Fermaid K & DAP", value: [0, 1, 0.96] },
   },
+  yanContribution: [40, 100, 210],
   outputs: {
     targetYan: 0,
     yeastAmount: 0,

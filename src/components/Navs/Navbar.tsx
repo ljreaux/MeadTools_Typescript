@@ -6,6 +6,10 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdExpandCircleDown } from "react-icons/md";
 import { IoIosArrowDropupCircle } from "react-icons/io";
+import { MdDarkMode } from "react-icons/md";
+import { MdLightMode } from "react-icons/md";
+import useThemeButton from "../../hooks/useThemeButton";
+import { useTranslation } from "react-i18next";
 
 interface Opened {
   menu: boolean;
@@ -26,6 +30,8 @@ export default function Navbar({
   opened: Opened;
   setOpened: Dispatch<SetStateAction<Opened>>;
 }) {
+  const { i18n } = useTranslation();
+  const { theme, toggle } = useThemeButton();
   return (
     <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
       <div className="w-screen h-full bg-sidebar flex justify-between items-center text-textColor text-xl text-center relative">
@@ -99,7 +105,7 @@ export default function Navbar({
               <div className={`${opened.extraCalcs ? "grid" : "hidden"} mx-8`}>
                 <Link to="/ExtraCalcs/" className="hover:text-background ">
                   ABV Calculator
-                </Link>{" "}
+                </Link>
                 <Link
                   to="/ExtraCalcs/brixCalc"
                   className="hover:text-background "
@@ -210,20 +216,37 @@ export default function Navbar({
               </NavLink>
             </div>
           </div>
-        </nav>{" "}
-        <Link
-          className="bg-background w-[3rem] md:flex md:w-24 lg:w-52 h-full left-0 border-[1px] border-sidebar hover:opacity-80 transition-all"
-          to="/"
-        >
-          <span className="w-full h-full flex flex-col justify-center items-center">
-            <img src={logo} alt="MeadTools logo" className="hidden lg:flex" />
-            <img
-              src={logoOnly}
-              alt="MeadTools logo"
-              className="lg:hidden w-[50%]"
-            />
-          </span>
-        </Link>{" "}
+        </nav>
+        <div className="flex h-full justify-center items-center">
+          <button onClick={toggle} className="mr-[2rem]">
+            {theme === "light" ? <MdDarkMode /> : <MdLightMode />}
+          </button>
+          <select
+            name=""
+            id=""
+            onChange={(e) => {
+              i18n.changeLanguage(e.target.value);
+            }}
+            value={i18n.language}
+            className="mr-[2rem] h-fit bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
+          >
+            <option value="en">EN</option>
+            <option value="de">DE</option>
+          </select>
+          <Link
+            className="bg-background w-[3rem] md:flex md:w-24 lg:w-52 h-full left-0 border-[1px] border-sidebar hover:opacity-80 transition-all"
+            to="/"
+          >
+            <span className="w-full h-full flex flex-col justify-center items-center">
+              <img src={logo} alt="MeadTools logo" className="hidden lg:flex" />
+              <img
+                src={logoOnly}
+                alt="MeadTools logo"
+                className="lg:hidden w-[50%]"
+              />
+            </span>
+          </Link>
+        </div>
       </div>
     </nav>
   );

@@ -9,13 +9,16 @@
     --color-textColor: 36deg, 16%, 82%;
     --color-sidebar: 0deg, 0%, 14%;
   }
+
+  [data-theme="dark"] {
+    transition: all 1s ease-in-out;
+  }
   /* light theme colors */
-  @media (prefers-color-scheme: light) {
-    :root {
-      --color-background: 0deg, 0%, 100%;
-      --color-textColor: 0deg, 0%, 14%;
-      --color-sidebar: 38deg, 54%, 56%;
-    }
+  [data-theme="light"] {
+    --color-background: 0deg, 0%, 100%;
+    --color-textColor: 0deg, 0%, 14%;
+    --color-sidebar: 38deg, 54%, 56%;
+    transition: all 1s ease-in-out;
   }
 }
 
