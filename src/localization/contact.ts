@@ -5,6 +5,8 @@ const contact = {
     name: "Name:",
     message: "Message:",
     send: "Send",
+    success: "Your message has been sent!",
+    error: "Something went wrong",
   },
 };
 

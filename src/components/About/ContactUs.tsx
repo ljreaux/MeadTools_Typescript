@@ -28,13 +28,13 @@ const ContactUs = () => {
           console.log(result.text);
           e.target.reset();
           setMessageColor("green");
-          setStatus("Your message was successfully sent!");
+          setStatus(t("success"));
           setDisabled(false);
         },
         (error) => {
           console.error(error.text);
           setMessageColor("red");
-          setStatus(`Something went wrong`);
+          setStatus(t("error"));
           setDisabled(false);
         }
       );
