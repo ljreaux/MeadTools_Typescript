@@ -9,6 +9,7 @@ import { IoIosArrowDropupCircle } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { MdLightMode } from "react-icons/md";
 import useThemeButton from "../../hooks/useThemeButton";
+import { useTranslation } from "react-i18next";
 
 interface Opened {
   menu: boolean;
@@ -29,6 +30,7 @@ export default function Navbar({
   opened: Opened;
   setOpened: Dispatch<SetStateAction<Opened>>;
 }) {
+  const { i18n } = useTranslation();
   const { theme, toggle } = useThemeButton();
   return (
     <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
@@ -215,10 +217,21 @@ export default function Navbar({
             </div>
           </div>
         </nav>
-        <div className="flex h-full">
+        <div className="flex h-full justify-center items-center">
           <button onClick={toggle} className="mr-[2rem]">
             {theme === "light" ? <MdDarkMode /> : <MdLightMode />}
           </button>
+          <select
+            name=""
+            id=""
+            onChange={(e) => {
+              i18n.changeLanguage(e.target.value);
+            }}
+            className="mr-[2rem] h-fit bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
+          >
+            <option value="en">EN</option>
+            <option value="de">DE</option>
+          </select>
           <Link
             className="bg-background w-[3rem] md:flex md:w-24 lg:w-52 h-full left-0 border-[1px] border-sidebar hover:opacity-80 transition-all"
             to="/"
