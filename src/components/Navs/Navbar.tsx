@@ -227,6 +227,7 @@ export default function Navbar({
             onChange={(e) => {
               i18n.changeLanguage(e.target.value);
             }}
+            value={i18n.language}
             className="mr-[2rem] h-fit bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
           >
             <option value="en">EN</option>
