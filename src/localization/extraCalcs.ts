@@ -4,6 +4,11 @@ const abvCalc = {
     ogLabel: "Enter OG:",
     fgLabel: "Enter FG:",
   },
+  de: {
+    abvHeading: "Alkoholgehaltsrechner",
+    ogLabel: "OG eingeben:",
+    fgLabel: "FG eingeben:",
+  }
 };
 
 const brixCalc = {
@@ -11,6 +16,10 @@ const brixCalc = {
     brixHeading: "Brix Conversion Calculator",
     gravityLabel: "Enter Gravity:",
   },
+  de: {
+    brixHeading: "Brix-Umrechnung",
+    gravityLabel: "Spezifisches Gewicht:",
+  }
 };
 
 const estOG = {
@@ -20,6 +29,12 @@ const estOG = {
     refractometerFG: "Enter Refractometer FG:",
     estimatedOG: "Estimated OG:",
   },
+  de: {
+    ogHeading: "Geschätztes OG ohne Messwert",
+    hydrometerFG: "Hydrometer-FG:",
+    refractometerFG: "Refraktometer-FG:",
+    estimatedOG: "Geschätztes OG:",
+  }
 };
 
 const benchTrials = {
@@ -35,6 +50,18 @@ const benchTrials = {
     literScaledAdjunct: "Scaled Adjunct g/liter:",
     scaledBatch: "Scaled Adjunct (entire batch):",
   },
+  de: {
+    benchTrialsHeading: "Bench Trials",
+    batchSize: "Ansatzmenge:",
+    sampleSize: "Probenmenge (ml):",
+    stockSolutionConcentration: "Konzentration (%):",
+    solutionVolume: "Volumen Stammlösung:",
+    adjunctAmount: "Zusatzmenge in Probe (g):",
+    adjunctConcentration: "Zusatzkonzentration (PPM):",
+    gallonScaledAdjunct: "Skalierter Zusatz g/Gallone:",
+    literScaledAdjunct: "Skalierter Zusatz g/Liter:",
+    scaledBatch: "Skalierter Zusatz (gesamter Ansatz):",
+  }
 };
 
 const stabilizers = {
@@ -45,6 +72,13 @@ const stabilizers = {
     desiredPpm: "Desired PPM:",
     kMeta: "k-meta",
   },
+  de: {
+    sorbateHeading: "Sorbatmengenrechner",
+    kSorb: "Kaliumsorbat",
+    sulfiteHeading: "Sulfitmengenrechner",
+    desiredPpm: "Gewünschte PPM:",
+    kMeta: "Kaliumpyrosulfit",
+  }
 };
 
 const refractometer = {
@@ -53,6 +87,11 @@ const refractometer = {
     correctionFactor: "Correction Factor:",
     fgInBrix: "Enter FG in Brix:",
   },
+  de: {
+    refractometerHeading: "Refraktometerkorrektur-Rechner",
+    correctionFactor: "Korrekturfaktor:",
+    fgInBrix: "FG in Brix:",
+  }
 };
 
 const tempCorrection = {
@@ -62,6 +101,12 @@ const tempCorrection = {
     curTemp: "Current Temp:",
     calTemp: "Calibration Temp:",
   },
+  de: {
+    tempCorrectionHeading: "Temperaturkorrektur-Rechner",
+    measuredSG: "Gemessene SG:",
+    curTemp: "Momentane Temperatur:",
+    calTemp: "Kalibrierungstemperatur:",
+  }
 };
 
 const blending = {
@@ -74,6 +119,15 @@ const blending = {
     totalVol: "Total Volume:",
     blendedVal: "Blended Value:",
   },
+  de: {
+    blendingHeading: "Mischwert-Rechner",
+    valOne: "Erster Wert:",
+    valTwo: "Zweiter Wert:",
+    volOne: "Erstes Volumen:",
+    volTwo: "Zweites Volumen:",
+    totalVol: "Gesamtvolumen:",
+    blendedVal: "Mischwert:",
+  }
 };
 
 const ExtraCalcsEN = {
@@ -87,4 +141,15 @@ const ExtraCalcsEN = {
   ...blending.en,
 };
 
-export const extraCalcsTranslations = [ExtraCalcsEN];
+const ExtraCalcsDE = {
+  ...abvCalc.de,
+  ...brixCalc.de,
+  ...estOG.de,
+  ...benchTrials.de,
+  ...stabilizers.de,
+  ...refractometer.de,
+  ...tempCorrection.de,
+  ...blending.de,
+}
+
+export const extraCalcsTranslations = [ExtraCalcsEN, ExtraCalcsDE];
