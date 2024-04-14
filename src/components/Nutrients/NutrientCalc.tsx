@@ -1,10 +1,10 @@
-import { useState } from "react";
-import useMultistepForm from "../../hooks/useMultistepForm";
+import { useEffect, useState } from "react";
+import useMultiStepForm from "../../hooks/useMultiStepForm";
 import MainInputs, { YeastType } from "./MainInputs";
 import { initialData } from "./intialData";
-import useChangeLogger from "../../hooks/useChangeLogger";
 import NutrientCalcResults from "./NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
+import AdvancedInputForm from "./AdvancedInputForm";
 
 interface Selected {
   yeastBrand: string;
@@ -55,16 +55,47 @@ export interface FormData {
 }
 
 export default function NutrientCalc() {
+  const [advanced, setAdvanced] = useState(false);
+
+  useEffect(() => {
+    if (advanced) setYanFromSource([0, 0, 0]);
+    else setYanFromSource(null);
+  }, [advanced]);
+
+  const [yanContribution, setYanContribution] = useState([40, 100, 210]);
+  const [yanFromSource, setYanFromSource] = useState<number[] | null>(null);
   const [data, setData] = useState<FormData>({ ...initialData });
   const maxGPL = useMaxGpl(
     data.maxGpl,
     data.selected.schedule,
     data.inputs?.sg
   );
-  useChangeLogger(data.outputs);
-  const { currentStepIndex, step, next, back, steps } = useMultistepForm([
-    <MainInputs {...data} setData={setData} />,
-    <NutrientCalcResults {...data} setData={setData} {...maxGPL} />,
+
+  const { currentStepIndex, step, next, back, steps } = useMultiStepForm([
+    <>
+      <MainInputs {...data} setData={setData} />{" "}
+      <button
+        onClick={() => setAdvanced((prev) => !prev)}
+        className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
+      >
+        Advanced Nutrition
+      </button>
+      {advanced && (
+        <AdvancedInputForm
+          advanced={advanced}
+          yanFromSource={yanFromSource}
+          setYanFromSource={setYanFromSource}
+          yanContribution={yanContribution}
+          setYanContribution={setYanContribution}
+        />
+      )}{" "}
+    </>,
+    <NutrientCalcResults
+      {...data}
+      {...maxGPL}
+      yanFromSource={yanFromSource}
+      advanced={advanced}
+    />,
   ]);
 
   return (
@@ -80,8 +111,14 @@ export default function NutrientCalc() {
       )}
       {currentStepIndex < steps.length - 1 && (
         <button
-          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
-          onClick={next}
+          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4 mb-[3rem]"
+          onClick={() => {
+            setData((prev) => ({
+              ...prev,
+              yanContribution,
+            }));
+            next();
+          }}
         >
           Next
         </button>

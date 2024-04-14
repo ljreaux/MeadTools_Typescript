@@ -205,6 +205,7 @@ export default function MainInputs({
           value={yeastAmount}
           onChange={(e) => setYeastAmount(Number(e.target.value))}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+          onFocus={(e) => e.target.select()}
         />
       </form>
     </div>

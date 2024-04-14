@@ -6,7 +6,6 @@ export default function useMultistepForm(steps: ReactElement[]) {
     setCurrentStepIndex(index);
   }
   function next() {
-    console.log();
     setCurrentStepIndex((prev) =>
       prev <= steps.length - 1 ? (prev += 1) : prev
     );

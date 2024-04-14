@@ -4,6 +4,9 @@ import Title from "../Title";
 // import useMaxGpl from "../../helpers/useMaxGpl";
 import useChangeLogger from "../../hooks/useChangeLogger";
 import useYanCalc from "../../hooks/useYanCalc";
+import calcSb from "../../helpers/calcSb";
+import { toBrix } from "../../helpers/unitConverters";
+import useGoFerm from "../../hooks/useGoFerm";
 
 export default function NutrientCalcResults({
   gplArr,
@@ -11,18 +14,19 @@ export default function NutrientCalcResults({
   inputs,
   selected,
   outputs,
+  yanFromSource,
+  advanced,
   setGplArr,
-  setData,
 }: {
   gplArr: number[];
   yanContribution: FormData["yanContribution"];
   inputs: FormData["inputs"];
   selected: FormData["selected"];
   outputs: FormData["outputs"];
+  yanFromSource: number[] | null;
+  advanced: boolean;
   setGplArr: Dispatch<SetStateAction<number[]>>;
-  setData: Dispatch<SetStateAction<FormData>>;
 }) {
-  const [editable, setEditable] = useState(false);
   const [gfType, setGfType] = useState("Go-Ferm");
   const handleChange = (e: FormEvent, index: number) =>
     setGplArr((prev) => {
@@ -39,24 +43,13 @@ export default function NutrientCalcResults({
     gfType,
     yanContribution,
     gplArr,
-    inputs.numberOfAdditions
+    inputs.numberOfAdditions,
+    yanFromSource
   );
 
-  useChangeLogger(nutrients);
-  function handleYanContribution(
-    e: FormEvent<EventTarget>,
-    index: number
-  ): void {
-    const target = e.target as HTMLInputElement;
-    const value = Number(target.value);
-    const newYan = yanContribution.map((item: number, i) =>
-      i === index ? value : item
-    );
-    setData((prev) => ({
-      ...prev,
-      yanContribution: newYan,
-    }));
-  }
+  useChangeLogger(yanContribution);
+
+  const { gf, gfWater } = useGoFerm(gfType, outputs.yeastAmount);
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
@@ -84,35 +77,6 @@ export default function NutrientCalcResults({
           </select>
         </label>
 
-        <label
-          htmlFor="yanContribution"
-          className="flex justify-center items-center gap-2"
-        >
-          Yan Contribution
-          <input
-            type="checkbox"
-            name="editable"
-            id="editable"
-            className="opacity-60"
-            onChange={(e) => setEditable(e.target.checked)}
-          />
-        </label>
-        <div id="yanContribution" className="col-span-3 grid grid-cols-3">
-          {yanContribution.map((yan, i) => (
-            <input
-              key={yan}
-              type="number"
-              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
-disabled:cursor-not-allowed"
-              value={yan}
-              disabled={!editable}
-              onChange={(e) => handleYanContribution(e, i)}
-              onFocus={(e) => e.target.select()}
-            />
-          ))}
-        </div>
-        <p>{`${0}g`}</p>
-
         <label className="my-[.25rem] col-start-1" htmlFor="maxGpl">
           Max g/L
         </label>
@@ -121,7 +85,9 @@ disabled:cursor-not-allowed"
             type="number"
             name="fermOgpl"
             id="fermOgpl"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+            disabled={advanced}
             value={gplArr[0]}
             onChange={(e) => handleChange(e, 0)}
             onFocus={(e) => e.target.select()}
@@ -130,7 +96,9 @@ disabled:cursor-not-allowed"
             type="number"
             name="fermKgpl"
             id="fermKgpl"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+            disabled={advanced}
             value={gplArr[1]}
             onChange={(e) => handleChange(e, 1)}
             onFocus={(e) => e.target.select()}
@@ -139,22 +107,24 @@ disabled:cursor-not-allowed"
             type="number"
             name="DapGpl"
             id="DapGpl"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+            disabled={advanced}
             value={gplArr[2]}
             onChange={(e) => handleChange(e, 2)}
             onFocus={(e) => e.target.select()}
           />
         </div>
-        <label className="my-[.25rem]" htmlFor="goFermWater">
-          Water for Go-Ferm
-        </label>
+        <p>{`${gf}g`}</p>
+
         <label className="my-[.25rem]" htmlFor="ppmYan">
           PPM YAN
         </label>
         <div className="col-span-3 grid grid-cols-3" id="ppmYan">
           <input
             type="number"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
             value={nutrients.ppmYan[0]}
             onChange={(e) =>
               setNutrients((prev) => ({
@@ -167,12 +137,15 @@ disabled:cursor-not-allowed"
               }))
             }
             onFocus={(e) => e.target.select()}
+            disabled
           />
           <input
             type="number"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
             value={nutrients.ppmYan[1]}
             onFocus={(e) => e.target.select()}
+            disabled
             onChange={(e) =>
               setNutrients((prev) => ({
                 ...prev,
@@ -186,9 +159,11 @@ disabled:cursor-not-allowed"
           />
           <input
             type="number"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
             value={nutrients.ppmYan[2]}
             onFocus={(e) => e.target.select()}
+            disabled
             onChange={(e) =>
               setNutrients((prev) => ({
                 ...prev,
@@ -201,7 +176,9 @@ disabled:cursor-not-allowed"
             }
           />
         </div>
-        <p>{`${0}ml`}</p>
+        <label className="my-[.25rem]" htmlFor="goFermWater">
+          Water for Go-Ferm
+        </label>
         <label className="my-[.25rem]" htmlFor="totalGrams">
           Total Grams
         </label>
@@ -217,9 +194,8 @@ disabled:cursor-not-allowed"
             />
           ))}
         </div>
-        <label className="my-[.25rem]" htmlFor="oneThird">
-          1/3 Sugar Break
-        </label>
+        <p>{`${gfWater}ml`}</p>
+
         <label className="my-[.25rem]" htmlFor="perAddition">
           Amount per Addition
         </label>
@@ -234,7 +210,13 @@ disabled:cursor-not-allowed"
             />
           ))}
         </div>
-        <p>{1.0}</p>
+        <label className="my-[.25rem]" htmlFor="oneThird">
+          1/3 Sugar Break
+        </label>
+        <p className="col-start-5">
+          {calcSb(inputs.sg)},{" "}
+          {Math.round(toBrix(calcSb(inputs.sg)) * 100) / 100}Brix
+        </p>
         <label htmlFor="totalYan" className="col-span-3 my-[.25rem]">
           Total YAN
           <p>{`${Math.round(nutrients.totalYan)}PPM`}</p>
