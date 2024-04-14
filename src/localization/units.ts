@@ -1,4 +1,5 @@
 const unitsEN = {
+  SUBMIT: "Submit",
   UNITS: "Units",
   BRIX: "Brix",
   DU: "Delle Units",
@@ -6,6 +7,7 @@ const unitsEN = {
   OG: "OG",
   FG: "FG",
   SG: "SG",
+  PPM: "PPM",
   GAL: "Gallons",
   LIT: "Liters",
   FAR: "°F",

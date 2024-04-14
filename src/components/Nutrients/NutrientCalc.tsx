@@ -5,6 +5,7 @@ import { initialData } from "./intialData";
 import NutrientCalcResults from "./NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
 import AdvancedInputForm from "./AdvancedInputForm";
+import { useTranslation } from "react-i18next";
 
 interface Selected {
   yeastBrand: string;
@@ -55,6 +56,7 @@ export interface FormData {
 }
 
 export default function NutrientCalc() {
+  const { t } = useTranslation();
   const [advanced, setAdvanced] = useState(false);
 
   useEffect(() => {
@@ -73,12 +75,12 @@ export default function NutrientCalc() {
 
   const { currentStepIndex, step, next, back, steps } = useMultiStepForm([
     <>
-      <MainInputs {...data} setData={setData} />{" "}
+      <MainInputs {...data} setData={setData} />
       <button
         onClick={() => setAdvanced((prev) => !prev)}
         className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
       >
-        Advanced Nutrition
+        {t("buttonLabels.advanced")}
       </button>
       {advanced && (
         <AdvancedInputForm
@@ -106,7 +108,7 @@ export default function NutrientCalc() {
           className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
           onClick={back}
         >
-          Back
+          {t("buttonLabels.back")}
         </button>
       )}
       {currentStepIndex < steps.length - 1 && (
@@ -120,7 +122,7 @@ export default function NutrientCalc() {
             next();
           }}
         >
-          Next
+          {t("buttonLabels.next")}
         </button>
       )}
     </div>

@@ -1,46 +1,20 @@
 import Title from "../Title";
+import { useTranslation } from "react-i18next";
 
 function About() {
+  const { t } = useTranslation();
   return (
     <div className="w-fit h-fit flex items-center justify-center my-12">
       <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar px-8 text-textColor my-16">
-        <Title header="About MeadTools" />
+        <Title header={t("about.label")} />
         <div className="px-12">
-          <p className="text-center py-4">
-            MeadTools came to me as an idea to help my mead making community
-            while simultaneously kickstarting a new career in software
-            development. There are several other tools to assist in mead making,
-            but most are confusing to beginners, or, in my opinion incomplete.
-            My hope is that MeadTools solves these issues.
-          </p>
-          <p className="text-center py-4">
-            Below I have listed all of the resources that I used in the creation
-            of MeadTools as well as additional mead making resources. I can’t
-            thank my personal mead community enough for making this project
-            possible. I can be found on discord in the Doin’ the Most and Man
-            Made Mead Mazer servers. My user name is larry_r. There is also a
-            brand new MeadTools discord. I can be contacted through the contact
-            page, linked on the bottom bar directly at contact@meadtools.com.
-          </p>
-          <p className="text-center py-4">
-            MeadTools is completely open source under a MIT license, so if you
-            want to check out the code, please have a look over on GitHub. If
-            you use any of the code for anything fun, I just ask that you share
-            it with me and the rest of the mead making community.
-          </p>
+          <p className="text-center py-4">{t("about.paragraphOne")}</p>
+          <p className="text-center py-4">{t("about.paragraphTwo")}</p>
+          <p className="text-center py-4">{t("about.paragraphThree")}</p>
           <ol className="list-decimal pt-8">
+            <li>{t("about.sourcesList.one")}</li>
             <li>
-              Almost all of the ingredient data was gathered from the USDA
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://fdc.nal.usda.gov/"
-              >
-                {" FoodData Central"}
-              </a>
-            </li>
-            <li>
-              ABV formula was taken from
+              {t("about.sourcesList.two.label")}
               <ul className="list-disc ml-8">
                 <li>
                   <a
@@ -49,25 +23,24 @@ function About() {
                     rel="noreferrer"
                     href=" https://www.homebrewersassociation.org/attachments/0000/2497/Math_in_Mash_SummerZym95.pdf"
                   >
-                    This Zymergy Article
+                    {t("about.sourcesList.two.linkText")}
                   </a>
                 </li>
                 <li>
-                  Important reading on ABV can be found from the person that
-                  gave MeadTools it’s name:
+                  {t("about.sourcesList.two.two.text")}
                   <a
                     className=" text-background underline hover:text-textColor hover:font-bold transition-all"
                     target="_blank"
                     rel="noreferrer"
                     href="https://docs.google.com/document/d/e/2PACX-1vR89nFNsnMTrIpykZpciqHeRXpO6ysy8MmlBczpLv0ziBxkQ0Qn2B3EiFH7vvNwODOjMJmOvZMqabtj/pub"
                   >
-                    {"  On Calculating ABV"}
+                    {t("about.sourcesList.two.two.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              Yeast information
+              {t("about.sourcesList.three.label")}
               <ul className="list-disc ml-8">
                 <li>
                   <a
@@ -76,7 +49,7 @@ function About() {
                     rel="noreferrer"
                     href="https://scottlabsltd.com/content/files/documents/sll/handbooks/scott%20canada%202023%20handbook.pdf"
                   >
-                    Scott Labs Yeast Handbook
+                    {t("about.sourcesList.three.one.linkText")}
                   </a>
                 </li>
                 <li>
@@ -86,7 +59,7 @@ function About() {
                     rel="noreferrer"
                     href="https://help.mangrovejacks.com/hc/en-us/article_attachments/13551379984785"
                   >
-                    Mangrove Jack Yeast Information
+                    {t("about.sourcesList.three.two.linkText")}
                   </a>
                 </li>
                 <li>
@@ -96,13 +69,13 @@ function About() {
                     rel="noreferrer"
                     href="https://www.piwine.com/media/pdf/yeast-selection-chart.pdf"
                   >
-                    Piwine Yeast Chart
+                    {t("about.sourcesList.three.three.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              {"  Nutrient schedule and requirement information"}
+              {t("about.sourcesList.four.label")}
 
               <ul className="list-disc ml-8">
                 <li>
@@ -112,13 +85,13 @@ function About() {
                     rel="noreferrer"
                     href="https://docs.google.com/document/d/11pW-dC91OupCYKX-zld73ckg9ximXwxbmpLFOqv6JEk/edit"
                   >
-                    Advanced Nutrients in Meadmaking
+                    {t("about.sourcesList.four.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              Sorbate and Sulfite information, as well as SO many other things
+              {t("about.sourcesList.five.label")}
               <ul className="list-disc ml-8">
                 <li>
                   <a
@@ -127,15 +100,13 @@ function About() {
                     rel="noreferrer"
                     href="https://meadmaking.wiki/en/faq/stabilization_and_backsweetening"
                   >
-                    {
-                      'Modern Meadmaking wiki - "Stabilization and Back Sweetening"'
-                    }
+                    {t("about.sourcesList.five.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              Hydrometer Temperature correction
+              {t("about.sourcesList.six.label")}
               <ul className="list-disc ml-8">
                 <li>
                   <a
@@ -144,13 +115,13 @@ function About() {
                     rel="noreferrer"
                     href="https://www.homebrewtalk.com/threads/temp-correction-formula-for-hydrometer.10684/"
                   >
-                    Homebrewtalk thread
+                    {t("about.sourcesList.six.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              {" Refractometer calculator"}
+              {t("about.sourcesList.seven.label")}
 
               <ul className="list-disc ml-8">
                 <li>
@@ -160,13 +131,13 @@ function About() {
                     rel="noreferrer"
                     href="https://www.homebrewersassociation.org/zymurgy-magazine/jul-aug-2017/ "
                   >
-                    This Zymergy Article
+                    {t("about.sourcesList.seven.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              {" Calculating OG without reading"}
+              {t("about.sourcesList.eight.label")}
 
               <ul className="list-disc ml-8">
                 <li>
@@ -176,13 +147,13 @@ function About() {
                     rel="noreferrer"
                     href="http://www.woodlandbrew.com/2013/02/abv-without-og.html"
                   >
-                    Woodlandbrew article
+                    {t("about.sourcesList.eight.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
             <li>
-              {" General inspiration"}
+              {t("about.sourcesList.nine.label")}
 
               <ul className="list-disc ml-8">
                 <li>
@@ -192,19 +163,16 @@ function About() {
                     rel="noreferrer"
                     href="https://gotmead.com/blog/the-mead-calculator/"
                   >
-                    MeadCalc from Got Mead
+                    {t("about.sourcesList.nine.one.linkText")}
                   </a>
                 </li>
               </ul>
             </li>
-            <li>Ash and StormBeforeDawn from the Mead Hall discord</li>
+            <li> {t("about.sourcesList.ten.label")}</li>
           </ol>
           <div className="text-center text-2xl py-12">
-            <p>
-              To the entire mead making community, for all of the help,
-              inspiration, and knowledge I have gained over the past 4 years
-            </p>
-            <p className="text-4xl py-[3rem]">Thank you</p>
+            <p>{t("about.thanks.text")}</p>
+            <p className="text-4xl py-[3rem]"> {t("about.thanks.thanks")}</p>
           </div>
         </div>
       </div>

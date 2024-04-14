@@ -1,11 +1,14 @@
 import { toBrix } from "../helpers/unitConverters";
 import { useState, useEffect } from "react";
+import { useTransition } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function useTargetYan(
   n2Requirement: string = "Low",
   sg: number = 1,
   offset: number = 0
 ) {
+  const { t } = useTranslation();
   const [target, setTarget] = useState({ target: 0, targetString: "0 PPM" });
   useEffect(() => {
     let multiplier = 1;
@@ -26,7 +29,7 @@ export default function useTargetYan(
 
     setTarget({
       target: roundedYan,
-      targetString: `${roundedYan}PPM`,
+      targetString: `${roundedYan}${t("PPM")}`,
     });
   }, [n2Requirement, sg, offset]);
   return { target };

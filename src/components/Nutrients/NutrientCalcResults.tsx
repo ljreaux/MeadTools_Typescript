@@ -7,6 +7,7 @@ import useYanCalc from "../../hooks/useYanCalc";
 import calcSb from "../../helpers/calcSb";
 import { toBrix } from "../../helpers/unitConverters";
 import useGoFerm from "../../hooks/useGoFerm";
+import { useTranslation } from "react-i18next";
 
 export default function NutrientCalcResults({
   gplArr,
@@ -27,6 +28,7 @@ export default function NutrientCalcResults({
   advanced: boolean;
   setGplArr: Dispatch<SetStateAction<number[]>>;
 }) {
+  const { t } = useTranslation();
   const [gfType, setGfType] = useState("Go-Ferm");
   const handleChange = (e: FormEvent, index: number) =>
     setGplArr((prev) => {
@@ -53,14 +55,14 @@ export default function NutrientCalcResults({
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Nutrient Calculator Results" />
+      <Title header={t("nuteResults.label")} />
       <form
         action=""
         className="grid grid-cols-5 justify-center items-center text-center"
       >
-        <h2 className="col-start-2">Fermaid O</h2>
-        <h2>Fermaid K</h2>
-        <h2>DAP</h2>
+        <h2 className="col-start-2">{t("nutrients.fermO")}</h2>
+        <h2>{t("nutrients.fermK")}</h2>
+        <h2>{t("nutrients.dap")}</h2>
 
         <label className="mt-[2.5em]">
           Go Ferm (g)
@@ -70,15 +72,19 @@ export default function NutrientCalcResults({
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             onChange={(e) => setGfType(e.target.value)}
           >
-            <option value="Go-Ferm">Go-Ferm</option>
-            <option value="protect">Go-Ferm Protect</option>
-            <option value="sterol-flash">Go-Ferm Sterol Flash</option>
-            <option value="none">None</option>
+            <option value="Go-Ferm">{t("nuteResults.gfTypes.gf")}</option>
+            <option value="protect">
+              {t("nuteResults.gfTypes.gfProtect")}
+            </option>
+            <option value="sterol-flash">
+              {t("nuteResults.gfTypes.gfSterol")}
+            </option>
+            <option value="none">{t("nuteResults.gfTypes.none")}</option>
           </select>
         </label>
 
         <label className="my-[.25rem] col-start-1" htmlFor="maxGpl">
-          Max g/L
+          {t("nuteResults.sideLabels.maxGpl")}
         </label>
         <div className="col-span-3 grid grid-cols-3" id="maxGpl">
           <input
@@ -118,7 +124,7 @@ export default function NutrientCalcResults({
         <p>{`${gf}g`}</p>
 
         <label className="my-[.25rem]" htmlFor="ppmYan">
-          PPM YAN
+          {t("nuteResults.sideLabels.ppmYan")}
         </label>
         <div className="col-span-3 grid grid-cols-3" id="ppmYan">
           <input
@@ -177,10 +183,10 @@ export default function NutrientCalcResults({
           />
         </div>
         <label className="my-[.25rem]" htmlFor="goFermWater">
-          Water for Go-Ferm
+          {t("nuteResults.gfWater")}
         </label>
         <label className="my-[.25rem]" htmlFor="totalGrams">
-          Total Grams
+          {t("nuteResults.sideLabels.totalGrams")}
         </label>
         <div className="col-span-3 grid grid-cols-3" id="totalGrams">
           {nutrients.totalGrams.map((grams, index) => (
@@ -197,7 +203,7 @@ export default function NutrientCalcResults({
         <p>{`${gfWater}ml`}</p>
 
         <label className="my-[.25rem]" htmlFor="perAddition">
-          Amount per Addition
+          {t("nuteResults.sideLabels.perAddition")}
         </label>
         <div className="col-span-3 grid grid-cols-3" id="perAddition">
           {nutrients.perAddition.map((grams, index) => (
@@ -211,19 +217,20 @@ export default function NutrientCalcResults({
           ))}
         </div>
         <label className="my-[.25rem]" htmlFor="oneThird">
-          1/3 Sugar Break
+          {t("nuteResults.sb")}
         </label>
         <p className="col-start-5">
           {calcSb(inputs.sg)},{" "}
-          {Math.round(toBrix(calcSb(inputs.sg)) * 100) / 100}Brix
+          {Math.round(toBrix(calcSb(inputs.sg)) * 100) / 100}
+          {t("BRIX")}
         </p>
         <label htmlFor="totalYan" className="col-span-3 my-[.25rem]">
-          Total YAN
-          <p>{`${Math.round(nutrients.totalYan)}PPM`}</p>
+          {t("nuteResults.sideLabels.totalYan")}
+          <p>{`${Math.round(nutrients.totalYan)}${t("PPM")}`}</p>
         </label>
         <label htmlFor="remainingYan" className="col-span-2 my-[.25rem]">
-          Remaining YAN
-          <p>{`${Math.round(nutrients.remainingYan)}PPM`}</p>
+          {t("nuteResults.sideLabels.remainingYan")}
+          <p>{`${Math.round(nutrients.remainingYan)}${t("PPM")}`}</p>
         </label>
       </form>
     </div>

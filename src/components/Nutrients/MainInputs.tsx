@@ -4,6 +4,7 @@ import Title from "../Title";
 import FirstLineInputs from "./FirstLineInputs";
 import useTargetYan from "../../hooks/useTargetYan";
 import useYeastAmount from "../../hooks/yeastAmount";
+import { useTranslation } from "react-i18next";
 export interface YeastType {
   Lalvin: Yeast[];
   Fermentis: Yeast[];
@@ -35,6 +36,7 @@ export default function MainInputs({
 }: MainInputs & {
   setData: Dispatch<SetStateAction<FormData>>;
 }) {
+  const { t } = useTranslation();
   const keyArr = Object.keys(maxGpl);
   const handleSelected = (e: FormEvent<EventTarget>) => {
     const target = e.target as HTMLFormElement;
@@ -92,12 +94,12 @@ export default function MainInputs({
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Nutrient Calculator" />
+      <Title header={t("nutesHeading")} />
       <form action="" className="grid grid-cols-5 justify-center text-center">
-        <label htmlFor="yeastBrand">Yeast Brand</label>
-        <label htmlFor="yeastStrain">Yeast Strain</label>
+        <label htmlFor="yeastBrand">{t("yeastBrand")}</label>
+        <label htmlFor="yeastStrain">{t("yeastStrain")}</label>
         <div>
-          <label htmlFor="volume">Volume</label>
+          <label htmlFor="volume">{t("nuteVolume")}</label>
           <select
             onChange={handleSelected}
             value={selected.volumeUnits}
@@ -105,12 +107,12 @@ export default function MainInputs({
             id="volumeUnits"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
           >
-            <option value="gal">Gallons</option>
-            <option value="liter">Liters</option>
+            <option value="gal">{t("GAL")}</option>
+            <option value="liter">{t("LIT")}</option>
           </select>
         </div>
-        <label htmlFor="specificGravity">Specific Gravity</label>
-        <label htmlFor="offsetPpm">Offset PPM</label>
+        <label htmlFor="specificGravity">{t("nuteSgLabel")}</label>
+        <label htmlFor="offsetPpm">{t("offset")}</label>
         <select
           onChange={(e) =>
             setData((prev) => {
@@ -153,11 +155,11 @@ export default function MainInputs({
         </select>
         <FirstLineInputs inputs={inputs} handleChange={handleChange} />
 
-        <label htmlFor="n2Requirement">Nitrogen Requirement</label>
-        <label htmlFor="schedule">Preferred Schedule</label>
-        <label htmlFor="targetYan">Target YAN</label>
-        <label htmlFor="numberOfAdditions">Number of Additions</label>
-        <label htmlFor="yeastAmount">Yeast Amount (g)</label>
+        <label htmlFor="n2Requirement">{t("n2Requirement.label")}</label>
+        <label htmlFor="schedule">{t("nuteSchedules.label")}</label>
+        <label htmlFor="targetYan">{t("targetYan")}</label>
+        <label htmlFor="numberOfAdditions">{t("numberOfAdditions")}</label>
+        <label htmlFor="yeastAmount">{t("yeastAmount")}</label>
 
         <select
           name="n2Requirement"
@@ -166,10 +168,10 @@ export default function MainInputs({
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
           onChange={handleSelected}
         >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="Very High">Very High</option>
+          <option value="Low">{t("n2Requirement.low")}</option>
+          <option value="Medium">{t("n2Requirement.medium")}</option>
+          <option value="High">{t("n2Requirement.high")}</option>
+          <option value="Very High">{t("n2Requirement.veryHigh")}</option>
         </select>
 
         <select
@@ -182,7 +184,7 @@ export default function MainInputs({
             keyArr.map((key) => {
               return (
                 <option key={key} value={key}>
-                  {maxGpl[key].name}
+                  {t(`nuteSchedules.${key}`)}
                 </option>
               );
             })}

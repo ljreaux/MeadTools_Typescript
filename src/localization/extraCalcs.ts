@@ -8,7 +8,7 @@ const abvCalc = {
     abvHeading: "Alkoholgehaltsrechner",
     ogLabel: "OG eingeben:",
     fgLabel: "FG eingeben:",
-  }
+  },
 };
 
 const brixCalc = {
@@ -19,7 +19,7 @@ const brixCalc = {
   de: {
     brixHeading: "Brix-Umrechnung",
     gravityLabel: "Spezifisches Gewicht:",
-  }
+  },
 };
 
 const estOG = {
@@ -34,7 +34,7 @@ const estOG = {
     hydrometerFG: "Hydrometer-FG:",
     refractometerFG: "Refraktometer-FG:",
     estimatedOG: "Geschätztes OG:",
-  }
+  },
 };
 
 const benchTrials = {
@@ -61,7 +61,7 @@ const benchTrials = {
     gallonScaledAdjunct: "Skalierter Zusatz g/Gallone:",
     literScaledAdjunct: "Skalierter Zusatz g/Liter:",
     scaledBatch: "Skalierter Zusatz (gesamter Ansatz):",
-  }
+  },
 };
 
 const stabilizers = {
@@ -78,7 +78,7 @@ const stabilizers = {
     sulfiteHeading: "Sulfitmengenrechner",
     desiredPpm: "Gewünschte PPM:",
     kMeta: "Kaliumpyrosulfit",
-  }
+  },
 };
 
 const refractometer = {
@@ -91,7 +91,7 @@ const refractometer = {
     refractometerHeading: "Refraktometerkorrektur-Rechner",
     correctionFactor: "Korrekturfaktor:",
     fgInBrix: "FG in Brix:",
-  }
+  },
 };
 
 const tempCorrection = {
@@ -106,7 +106,7 @@ const tempCorrection = {
     measuredSG: "Gemessene SG:",
     curTemp: "Momentane Temperatur:",
     calTemp: "Kalibrierungstemperatur:",
-  }
+  },
 };
 
 const blending = {
@@ -127,7 +127,21 @@ const blending = {
     volTwo: "Zweites Volumen:",
     totalVol: "Gesamtvolumen:",
     blendedVal: "Mischwert:",
-  }
+  },
+};
+const nav = {
+  en: {
+    sideNav: {
+      abv: "ABV",
+      brix: "Brix Conversion",
+      estOG: "Estimated OG without Reading",
+      benchTrials: "Bench Trials",
+      stabilizers: "Stabilizer Additions",
+      refractometer: "Refractometer Correction",
+      tempCorrection: "Hydrometer Temperature Correction",
+      blending: "Blending",
+    },
+  },
 };
 
 const ExtraCalcsEN = {
@@ -139,6 +153,7 @@ const ExtraCalcsEN = {
   ...refractometer.en,
   ...tempCorrection.en,
   ...blending.en,
+  ...nav.en,
 };
 
 const ExtraCalcsDE = {
@@ -150,6 +165,6 @@ const ExtraCalcsDE = {
   ...refractometer.de,
   ...tempCorrection.de,
   ...blending.de,
-}
+};
 
 export const extraCalcsTranslations = [ExtraCalcsEN, ExtraCalcsDE];

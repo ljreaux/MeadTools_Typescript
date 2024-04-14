@@ -1,5 +1,6 @@
 import { SetStateAction, Dispatch } from "react";
 import Title from "../Title";
+import { useTranslation } from "react-i18next";
 
 export default function AdvancedInputForm({
   advanced,
@@ -14,19 +15,20 @@ export default function AdvancedInputForm({
   yanContribution: number[];
   setYanContribution: Dispatch<SetStateAction<number[]>>;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
       <div className="text-center">
-        <Title header="Advanced Nutrition" />
+        <Title header={t("advancedNutrition.label")} />
         <label htmlFor="yanContribution" className="w-full">
-          Edit YAN Contribution
+          {t("advancedNutrition.yanContribution")}
         </label>
         <div
           id="yanContribution"
           className="grid grid-cols-3 gap-4 text-center"
         >
           <label htmlFor="fermaidO">
-            Fermaid O
+            {t("nutrients.fermO")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
@@ -42,7 +44,7 @@ export default function AdvancedInputForm({
             />
           </label>
           <label htmlFor="fermaidK">
-            Fermaid K
+            {t("nutrients.fermK")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
@@ -58,7 +60,7 @@ export default function AdvancedInputForm({
             />
           </label>
           <label htmlFor="dap">
-            DAP
+            {t("nutrients.dap")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
@@ -77,11 +79,11 @@ export default function AdvancedInputForm({
       </div>
       <div className="text-center">
         <label htmlFor="yanFromSource" className="w-full">
-          Edit YAN From Source
+          {t("advancedNutrition.yanFromSource")}
         </label>
         <div id="yanFromSource" className="grid grid-cols-3 gap-4 text-center">
           <label htmlFor="fermaidO">
-            Fermaid O
+            {t("nutrients.fermO")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
@@ -99,7 +101,7 @@ export default function AdvancedInputForm({
             />
           </label>
           <label htmlFor="fermaidK">
-            Fermaid K
+            {t("nutrients.fermK")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
@@ -117,7 +119,7 @@ export default function AdvancedInputForm({
             />
           </label>
           <label htmlFor="dap">
-            DAP
+            {t("nutrients.dap")}
             <input
               type="number"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"

@@ -30,7 +30,7 @@ export default function Navbar({
   opened: Opened;
   setOpened: Dispatch<SetStateAction<Opened>>;
 }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme, toggle } = useThemeButton();
   return (
     <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
@@ -52,7 +52,7 @@ export default function Navbar({
             } w-[40vw] bg-sidebar text-start left-0 rounded-xl translate-y-2/4 mt-8 -mx-8`}
           >
             <div className="flex items-center justify-center w-fit mx-2 hover:text-background transition-colors">
-              <NavLink to="/">Calculators</NavLink>
+              <NavLink to="/">{t("calculators.label")}</NavLink>
               <button
                 className="mx-2"
                 onClick={() =>
@@ -73,20 +73,20 @@ export default function Navbar({
                 className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                 to="/"
               >
-                Recipe Builder
+                {t("calculators.recipes")}
               </NavLink>
               <NavLink
                 className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                 to="/NuteCalc/"
               >
-                Nutrient Calculator
+                {t("calculators.nutes")}
               </NavLink>
               <div className="flex items-center">
                 <NavLink
                   className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                   to="/ExtraCalcs"
                 >
-                  Extra Calculators
+                  {t("calculators.extraCalcs.label")}
                 </NavLink>
                 <button
                   onClick={() =>
@@ -104,51 +104,51 @@ export default function Navbar({
               </div>
               <div className={`${opened.extraCalcs ? "grid" : "hidden"} mx-8`}>
                 <Link to="/ExtraCalcs/" className="hover:text-background ">
-                  ABV Calculator
+                  {t("calculators.extraCalcs.abv")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/brixCalc"
                   className="hover:text-background "
                 >
-                  Brix Conversion
+                  {t("calculators.extraCalcs.brix")}
                 </Link>
                 <Link to="/ExtraCalcs/estOG" className="hover:text-background ">
-                  Estimated OG
+                  {t("calculators.extraCalcs.estOG")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/benchTrials"
                   className="hover:text-background "
                 >
-                  Bench Trials
+                  {t("calculators.extraCalcs.benchTrials")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/stabilizers"
                   className="hover:text-background "
                 >
-                  Stabilizers
+                  {t("calculators.extraCalcs.stabilizers")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/RefractometerCorrection"
                   className="hover:text-background "
                 >
-                  Refractometer Correction
+                  {t("calculators.extraCalcs.refractometer")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/tempCorrection"
                   className="hover:text-background "
                 >
-                  Temperature Correction
+                  {t("calculators.extraCalcs.tempCorrection")}
                 </Link>
                 <Link
                   to="/ExtraCalcs/blending"
                   className="hover:text-background pb-2"
                 >
-                  Blending
+                  {t("calculators.extraCalcs.blending")}
                 </Link>
               </div>
             </div>
             <div className="flex items-center w-fit mx-2 hover:text-background transition-colors ">
-              <NavLink to={"/account"}>Account</NavLink>
+              <NavLink to={"/account"}>{t("account.label")}</NavLink>
               <button
                 className="mx-2"
                 onClick={() =>
@@ -173,19 +173,19 @@ export default function Navbar({
                   }}
                   className="hover:text-background transition-colors sm:mx-4 mx-2 "
                 >
-                  Logout
+                  {t("account.logout")}
                 </button>
               ) : (
                 <NavLink
                   className="hover:text-background transition-colors sm:mx-4 mx-2 "
                   to="/login"
                 >
-                  Login/Register
+                  {t("account.login")}
                 </NavLink>
               )}
             </div>
             <div className="flex items-center w-fit mx-2 hover:text-background transition-colors">
-              <NavLink to="/about">Additional Links</NavLink>
+              <NavLink to="/about">{t("additionalLinks.label")}</NavLink>
               <button
                 className="mx-2"
                 onClick={() =>
@@ -206,13 +206,13 @@ export default function Navbar({
                 className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                 to="/about"
               >
-                About
+                {t("additionalLinks.about")}
               </NavLink>
               <NavLink
                 className="hover:text-background transition-colors sm:mx-4 mx-[.125rem] "
                 to="/contact"
               >
-                Contact
+                {t("additionalLinks.contact")}
               </NavLink>
             </div>
           </div>
