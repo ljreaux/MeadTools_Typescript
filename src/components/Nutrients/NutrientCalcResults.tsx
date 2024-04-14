@@ -1,17 +1,29 @@
-import { Dispatch, SetStateAction, FormEvent } from "react";
+import { Dispatch, SetStateAction, FormEvent, useState } from "react";
 import { FormData } from "./NutrientCalc";
 import Title from "../Title";
 // import useMaxGpl from "../../helpers/useMaxGpl";
 import useChangeLogger from "../../hooks/useChangeLogger";
+import useYanCalc from "../../hooks/useYanCalc";
 
 export default function NutrientCalcResults({
   gplArr,
+  yanContribution,
+  inputs,
+  selected,
+  outputs,
   setGplArr,
-}: Partial<FormData> & {
-  setData: Dispatch<SetStateAction<FormData>>;
+  setData,
+}: {
   gplArr: number[];
+  yanContribution: FormData["yanContribution"];
+  inputs: FormData["inputs"];
+  selected: FormData["selected"];
+  outputs: FormData["outputs"];
   setGplArr: Dispatch<SetStateAction<number[]>>;
+  setData: Dispatch<SetStateAction<FormData>>;
 }) {
+  const [editable, setEditable] = useState(false);
+  const [gfType, setGfType] = useState("Go-Ferm");
   const handleChange = (e: FormEvent, index: number) =>
     setGplArr((prev) => {
       const target = e.target as HTMLInputElement;
@@ -20,7 +32,31 @@ export default function NutrientCalcResults({
       return copy;
     });
 
-  useChangeLogger(gplArr);
+  const { nutrients, setNutrients } = useYanCalc(
+    inputs.volume,
+    selected.volumeUnits,
+    outputs.targetYan,
+    gfType,
+    yanContribution,
+    gplArr,
+    inputs.numberOfAdditions
+  );
+
+  useChangeLogger(nutrients);
+  function handleYanContribution(
+    e: FormEvent<EventTarget>,
+    index: number
+  ): void {
+    const target = e.target as HTMLInputElement;
+    const value = Number(target.value);
+    const newYan = yanContribution.map((item: number, i) =>
+      i === index ? value : item
+    );
+    setData((prev) => ({
+      ...prev,
+      yanContribution: newYan,
+    }));
+  }
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
@@ -39,6 +75,7 @@ export default function NutrientCalcResults({
             name="go-ferm"
             id="go-ferm"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            onChange={(e) => setGfType(e.target.value)}
           >
             <option value="Go-Ferm">Go-Ferm</option>
             <option value="protect">Go-Ferm Protect</option>
@@ -47,7 +84,36 @@ export default function NutrientCalcResults({
           </select>
         </label>
 
-        <label className="my-[.25rem]" htmlFor="maxGpl">
+        <label
+          htmlFor="yanContribution"
+          className="flex justify-center items-center gap-2"
+        >
+          Yan Contribution
+          <input
+            type="checkbox"
+            name="editable"
+            id="editable"
+            className="opacity-60"
+            onChange={(e) => setEditable(e.target.checked)}
+          />
+        </label>
+        <div id="yanContribution" className="col-span-3 grid grid-cols-3">
+          {yanContribution.map((yan, i) => (
+            <input
+              key={yan}
+              type="number"
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+disabled:cursor-not-allowed"
+              value={yan}
+              disabled={!editable}
+              onChange={(e) => handleYanContribution(e, i)}
+              onFocus={(e) => e.target.select()}
+            />
+          ))}
+        </div>
+        <p>{`${0}g`}</p>
+
+        <label className="my-[.25rem] col-start-1" htmlFor="maxGpl">
           Max g/L
         </label>
         <div className="col-span-3 grid grid-cols-3" id="maxGpl">
@@ -58,6 +124,7 @@ export default function NutrientCalcResults({
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             value={gplArr[0]}
             onChange={(e) => handleChange(e, 0)}
+            onFocus={(e) => e.target.select()}
           />
           <input
             type="number"
@@ -66,6 +133,7 @@ export default function NutrientCalcResults({
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             value={gplArr[1]}
             onChange={(e) => handleChange(e, 1)}
+            onFocus={(e) => e.target.select()}
           />
           <input
             type="number"
@@ -74,16 +142,8 @@ export default function NutrientCalcResults({
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             value={gplArr[2]}
             onChange={(e) => handleChange(e, 2)}
+            onFocus={(e) => e.target.select()}
           />
-        </div>
-        <p>{`${0}g`}</p>
-        <label className="my-[.25rem]" htmlFor="gplToAdd">
-          g/L to add
-        </label>
-        <div className="col-span-3 grid grid-cols-3" id="gplToAdd">
-          <p>{0}</p>
-          <p>{0}</p>
-          <p>{0}</p>
         </div>
         <label className="my-[.25rem]" htmlFor="goFermWater">
           Water for Go-Ferm
@@ -95,17 +155,50 @@ export default function NutrientCalcResults({
           <input
             type="number"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            defaultValue={0}
+            value={nutrients.ppmYan[0]}
+            onChange={(e) =>
+              setNutrients((prev) => ({
+                ...prev,
+                ppmYan: [
+                  Number(e.target.value),
+                  prev.ppmYan[1],
+                  prev.ppmYan[2],
+                ],
+              }))
+            }
+            onFocus={(e) => e.target.select()}
           />
           <input
             type="number"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            defaultValue={0}
+            value={nutrients.ppmYan[1]}
+            onFocus={(e) => e.target.select()}
+            onChange={(e) =>
+              setNutrients((prev) => ({
+                ...prev,
+                ppmYan: [
+                  prev.ppmYan[0],
+                  Number(e.target.value),
+                  prev.ppmYan[2],
+                ],
+              }))
+            }
           />
           <input
             type="number"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            defaultValue={0}
+            value={nutrients.ppmYan[2]}
+            onFocus={(e) => e.target.select()}
+            onChange={(e) =>
+              setNutrients((prev) => ({
+                ...prev,
+                ppmYan: [
+                  prev.ppmYan[0],
+                  prev.ppmYan[1],
+                  Number(e.target.value),
+                ],
+              }))
+            }
           />
         </div>
         <p>{`${0}ml`}</p>
@@ -113,9 +206,16 @@ export default function NutrientCalcResults({
           Total Grams
         </label>
         <div className="col-span-3 grid grid-cols-3" id="totalGrams">
-          <p>{`${0}g`}</p>
-          <p>{`${0}g`}</p>
-          <p>{`${0}g`}</p>
+          {nutrients.totalGrams.map((grams, index) => (
+            <input
+              key={index}
+              value={`${Math.round(grams * 100) / 100}g`}
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+              disabled
+              onFocus={(e) => e.target.select()}
+            />
+          ))}
         </div>
         <label className="my-[.25rem]" htmlFor="oneThird">
           1/3 Sugar Break
@@ -124,18 +224,24 @@ export default function NutrientCalcResults({
           Amount per Addition
         </label>
         <div className="col-span-3 grid grid-cols-3" id="perAddition">
-          <p>{`${0}g`}</p>
-          <p>{`${0}g`}</p>
-          <p>{`${0}g`}</p>
+          {nutrients.perAddition.map((grams, index) => (
+            <input
+              key={index}
+              value={`${Math.round(grams * 100) / 100}g`}
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+              disabled
+            />
+          ))}
         </div>
         <p>{1.0}</p>
         <label htmlFor="totalYan" className="col-span-3 my-[.25rem]">
           Total YAN
-          <p>{`${0}PPM`}</p>
+          <p>{`${Math.round(nutrients.totalYan)}PPM`}</p>
         </label>
         <label htmlFor="remainingYan" className="col-span-2 my-[.25rem]">
           Remaining YAN
-          <p>{`${0}PPM`}</p>
+          <p>{`${Math.round(nutrients.remainingYan)}PPM`}</p>
         </label>
       </form>
     </div>

@@ -4,7 +4,7 @@ import MainInputs, { YeastType } from "./MainInputs";
 import { initialData } from "./intialData";
 import useChangeLogger from "../../hooks/useChangeLogger";
 import NutrientCalcResults from "./NutrientCalcResults";
-import useMaxGpl from "../../helpers/useMaxGpl";
+import useMaxGpl from "../../hooks/useMaxGpl";
 
 interface Selected {
   yeastBrand: string;
@@ -47,6 +47,7 @@ export interface FormData {
     offset: number;
     numberOfAdditions: number;
   };
+  yanContribution: number[];
   outputs: {
     targetYan: number;
     yeastAmount: number;
