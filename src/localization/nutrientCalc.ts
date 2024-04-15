@@ -72,9 +72,9 @@ const nutes = {
     nutesHeading: "Nährstoffrechner",
     yeastBrand: "Hefehersteller",
     yeastStrain: "Hefesorte",
-    nuteVolume: "Volum",
+    nuteVolume: "Volumen",
     nuteSgLabel: "Spezifische Dichte (SG)",
-    offset: "Offset PPM",
+    offset: "PPM-Versatz",
     n2Requirement: {
       label: "Stickstoffbedarf",
       low: "Niedrig",
@@ -102,7 +102,7 @@ const nutes = {
     },
     advancedNutrition: {
       label: "Erweiterte Einstellungen",
-      yanContribution: "YAN-Beitrag bearbeiten",
+      yanContribution: "YAN-Anteil bearbeiten",
       yanFromSource: "YAN aus der Quelle bearbeiten",
     },
     nuteResults: {
