@@ -27,6 +27,34 @@ const navbar = {
       contact: "Contact",
     },
   },
+  de: {
+    calculators: {
+      label: "Umrechner",
+      recipes: "Rezepterstellung",
+      nutes: "Nährstoffrechner",
+      extraCalcs: {
+        label: "Weitere Umrechner",
+        abv: "Alkoholgehaltsrechner",
+        brix: "Brix-Umrechner",
+        estOG: "Geschätzte OG",
+        benchTrials: "Bench Trials",
+        stabilizers: "Stabilisierungszusätze",
+        refractometer: "Refraktometerkorrektur",
+        tempCorrection: "Temperaturkorrektur",
+        blending: "Mischkreuz",
+      },
+    },
+    account: {
+      label: "Benutzerkonto",
+      login: "Anmelden/Registrieren",
+      logout: "Abmelden",
+    },
+    additionalLinks: {
+      label: "Weiterführende Links",
+      about: "Über MeadTools",
+      contact: "Kontakt",
+    },
+  }
 };
 
-export const navBarTranslations = [navbar.en];
+export const navBarTranslations = [navbar.en, navbar.de];

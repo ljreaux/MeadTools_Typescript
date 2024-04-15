@@ -10,10 +10,10 @@ import { contactTranslations } from "./contact";
 
 const [unitsEN, unitsDE] = unitsTranslations;
 const [ExtraCalcsEN, ExtraCalcsDE] = extraCalcsTranslations;
-const [NutrientCalcEN] = nutrientCalcTranslations;
-const [NavbarEN] = navBarTranslations;
-const [AboutEN] = aboutTranslations;
-const [ContactEN] = contactTranslations;
+const [NutrientCalcEN, NutrientCalcDE] = nutrientCalcTranslations;
+const [NavbarEN, NavbarDE] = navBarTranslations;
+const [AboutEN, AboutDE] = aboutTranslations;
+const [ContactEN, ContactDE] = contactTranslations;
 
 i18n
   .use(LanguageDetector)
@@ -37,6 +37,10 @@ i18n
           greeting: "Hallo",
           ...unitsDE,
           ...ExtraCalcsDE,
+          ...NutrientCalcDE,
+          ...NavbarDE,
+          ...AboutDE,
+          ...ContactDE,
         },
       },
     },
