@@ -62,6 +62,69 @@ const nutes = {
       },
     },
   },
+  de: {
+    nutrients: {
+      fermO: "Fermaid O",
+      fermK: "Fermaid K",
+      dap: "DAP",
+      goFerm: "Go Ferm",
+    },
+    nutesHeading: "Nährstoffrechner",
+    yeastBrand: "Hefehersteller",
+    yeastStrain: "Hefesorte",
+    nuteVolume: "Volum",
+    nuteSgLabel: "Spezifische Dichte (SG)",
+    offset: "Offset PPM",
+    n2Requirement: {
+      label: "Stickstoffbedarf",
+      low: "Niedrig",
+      medium: "Mittel",
+      high: "Hoch",
+      veryHigh: "Sehr Hoch",
+    },
+    nuteSchedules: {
+      label: "Bevorzugter Nährstoffplan",
+      tbe: "TBE (Alle drei)",
+      tosna: "TOSNA (Nur Fermaid O)",
+      justK: "Nur Fermaid K",
+      dap: "Nur DAP",
+      oAndk: "Fermaid O und K",
+      oAndDap: "Fermaid O und DAP",
+      kAndDap: "Fermaid K und DAP",
+    },
+    targetYan: "Ziel-YAN",
+    numberOfAdditions: "Anzahl an Nährstoffgaben",
+    yeastAmount: "Hefemenge (g)",
+    buttonLabels: {
+      advanced: "Erweiterte Einstellungen",
+      next: "Weiter",
+      back: "Zurück",
+    },
+    advancedNutrition: {
+      label: "Erweiterte Einstellungen",
+      yanContribution: "YAN-Beitrag bearbeiten",
+      yanFromSource: "YAN aus der Quelle bearbeiten",
+    },
+    nuteResults: {
+      label: "Nährstoffrechner-Ergebnisse",
+      gfTypes: {
+        gf: "Go-Ferm",
+        gfProtect: "Go-Ferm Protect",
+        gfSterol: "Go-Ferm Sterol Flash",
+        none: "Keine",
+      },
+      gfWater: "Wasser for Go-Ferm",
+      sb: "1/3 Zuckergrenze",
+      sideLabels: {
+        maxGpl: "Max g/L",
+        ppmYan: "PPM YAN",
+        totalGrams: "Gesamt Gram",
+        perAddition: "Menge pro Gabe",
+        totalYan: "Gesamt YAN",
+        remainingYan: "Verbleibende YAN",
+      },
+    },
+  }
 };
 
-export const nutrientCalcTranslations = [nutes.en];
+export const nutrientCalcTranslations = [nutes.en, nutes.de];

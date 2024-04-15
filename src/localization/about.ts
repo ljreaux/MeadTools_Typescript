@@ -86,5 +86,93 @@ const about = {
       },
     },
   },
+  de: {
+    about: {
+      label: "Über uns",
+      paragraphOne: `Die Idee zu MeadTools kam mir, um unserer Metherstellungs-Gemeinschaft zu helfen
+      und gleichzeitig eine neue Karriere in der Softwareentwicklung zu starten.
+      Es gibt etliche andere Tools, um bei der Metherstellung zu helfen, aber die meisten davon sind
+      zu kompliziert für Anfänger oder aber – meiner Meinung nach – unvollständig.
+      Meine Hoffnung ist, dass MeadTools diese Probleme löst.`,
+      paragraphTwo: `Weiter unten habe ich eine Liste all der Ressourcen aufgeführt, die ich für die Erstellung 
+      von MeadTools genutzt habe, sowie weitere Quellen für Wissen zur Metherstellung.
+      Ich kann der Met-Gemeinschaft nicht genug dafür danken, dass sie dieses Projekt möglich gemacht
+      hat.
+      Man findet mich auf Discord auf den \"Doin’ the Most\"- und \"Man
+      Made Mead Mazer\"-Servern. Mein Benutzername ist larry_r.
+      Es gibt außerdem ein brandneues MeadTools-Discord.
+      Man erreicht mich über die Kontakt-Seite oder direkt unter contact@meadtools.com`,
+      paragraphThree: `MeadTools ist komplett quelloffen und unter der MIT-Lizenz. Also wenn ihr den Quelltext
+      einsehen wollt, schaut gerne drüben auf GitHub nach. Wenn ihr den Quelltext für irgendwelche
+      schönen Projekt verwendet, bitte ich euch nur, es mit mir und dem Rest der Metherstellungs-Gemeinschaft
+      zu teilen.`,
+      sourcesList: {
+        one: "Fast alle Daten zu Inhaltsstoffen stammen aus der USDA FoodData Central",
+        two: {
+          label: "Die Formel zur Berechnung des Alkoholgehalts wurde entnommen aus ",
+          linkText: "Diesem Zymergy-Artikel",
+          two: {
+            text: "Wichtige weiterführende Lektüre zum Alkoholgehalt findet sich hier von der Person, die MeadTools seinen Namen gegeben hat:",
+            linkText: "Über die Berechnung des Alkoholgehalts",
+          },
+        },
+        three: {
+          label: "Informationen über Hefe",
+          one: {
+            linkText: "Scott Labs Hefehandbuch",
+          },
+          two: {
+            linkText: "Mangrove Jack Hefe-Information",
+          },
+          three: {
+            linkText: "Piwine Hefetabelle",
+          },
+        },
+        four: {
+          label: "Nährstoffpläne und -anforderungen",
+          one: {
+            linkText: "Advanced Nutrients in Meadmaking",
+          },
+        },
+        five: {
+          label:
+            "Informationen zu Sorbat, Sulfit und SO viele andere Dinge",
+          one: {
+            linkText:
+              'Modern Meadmaking wiki - "Stabilization and Back Sweetening"',
+          },
+        },
+        six: {
+          label: "Hydrometer-Temperaturkorrektur",
+          one: {
+            linkText: "Homebrewtalk thread",
+          },
+        },
+        seven: {
+          label: "Refraktometerrechner",
+          one: { linkText: "Dieser Zymergy-Artikel" },
+        },
+        eight: {
+          label: "OG ohne Messwert bestimmen",
+          one: {
+            linkText: "Woodlandbrew-Artikel",
+          },
+        },
+        nine: {
+          label: "Allgemeine Inspiration",
+          one: {
+            linkText: "MeadCalc von Got Mead",
+          },
+        },
+        ten: {
+          label: "Ash und StormBeforeDawn vom \"The Mead Hall\"-Discord",
+        },
+        thanks: {
+          text: "An die gesamte Metherstellungs-Gemeinschaft für all die Hilfe, Inspiration und das Wissen, das ich über die letzte vier Jahre gesammelt habe",
+          thanks: "Vielen Dank!",
+        },
+      },
+    },
+  },
 };
-export const aboutTranslations = [about.en];
+export const aboutTranslations = [about.en, about.de];
