@@ -6,8 +6,24 @@ import BottomBar from "./components/Navs/BottomBar";
 import About from "./components/About/About";
 import ContactUs from "./components/About/ContactUs";
 import NutrientCalc from "./components/Nutrients/NutrientCalc";
+import Home from "./components/Home/Home";
+import { initialIngredients } from "./components/Home/initialIngredients";
+
+export interface Ingredient {
+  name: string;
+  brix: number;
+  details: number[];
+}
+export interface RecipeData {
+  ingredients: Ingredient[];
+  ingredientsList: object[];
+}
 
 function App() {
+  const [recipeData, setRecipeData] = useState<RecipeData>({
+    ingredients: initialIngredients,
+    ingredientsList: [],
+  });
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [opened, setOpened] = useState({
     menu: false,
@@ -30,6 +46,12 @@ function App() {
         onClick={() => setOpened((prev) => ({ ...prev, menu: false }))}
       >
         <Routes>
+          <Route
+            path="/"
+            element={
+              <Home recipeData={recipeData} setRecipeData={setRecipeData} />
+            }
+          />
           <Route path="/NuteCalc" element={<NutrientCalc />} />
           <Route path="/ExtraCalcs/*" element={<ExtraCalcs />} />
           <Route path="/about" element={<About />} />

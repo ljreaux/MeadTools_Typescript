@@ -1,6 +1,5 @@
 import { useState, FormEvent } from "react";
 import useBlend from "../../../hooks/useBlend";
-import useChangeLogger from "../../../hooks/useChangeLogger";
 import { NumArray } from "../../../hooks/useBlend";
 import Title from "../../Title";
 import { useTranslation } from "react-i18next";
@@ -23,7 +22,6 @@ export default function BlendingCalc() {
 
   const { blend, runBlendingFunction } = useBlend(inputValues);
 
-  useChangeLogger(blend);
   return (
     <form
       className="flex flex-col gap-4 w-11/12 sm:w-9/12 rounded-xl bg-sidebar p-8 my-8 items-center justify-center aspect-video"

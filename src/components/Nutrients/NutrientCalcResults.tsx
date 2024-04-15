@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, FormEvent, useState } from "react";
 import { FormData } from "./NutrientCalc";
 import Title from "../Title";
 // import useMaxGpl from "../../helpers/useMaxGpl";
-import useChangeLogger from "../../hooks/useChangeLogger";
 import useYanCalc from "../../hooks/useYanCalc";
 import calcSb from "../../helpers/calcSb";
 import { toBrix } from "../../helpers/unitConverters";
@@ -48,8 +47,6 @@ export default function NutrientCalcResults({
     inputs.numberOfAdditions,
     yanFromSource
   );
-
-  useChangeLogger(yanContribution);
 
   const { gf, gfWater } = useGoFerm(gfType, outputs.yeastAmount);
 

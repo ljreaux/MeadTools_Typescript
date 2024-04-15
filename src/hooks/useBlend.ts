@@ -16,7 +16,8 @@ export default function useBlend(arr: NumArray) {
       let numerator = 0;
       let denominator = 0;
       for (const [val, vol] of arr) {
-        numerator = numerator + val * vol;
+        console.log([val, vol]);
+        if (vol > 0) numerator = numerator + val * vol;
         denominator += vol;
       }
 
