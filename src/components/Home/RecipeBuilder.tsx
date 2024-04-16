@@ -242,7 +242,7 @@ export default function RecipeBuilder({
         />
       ))}
       {ingredients.length < 9 && (
-        <button onClick={addIngredientLine}>Add new Ingredient</button>
+        <button onClick={addIngredientLine}>{t("recipeBuilder.addNew")}</button>
       )}
       <div className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 col-span-5 items-center flex justify-center sm:gap-8 gap-4 my-4 group text-lg">
         <button
