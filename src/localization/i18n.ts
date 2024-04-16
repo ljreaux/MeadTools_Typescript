@@ -10,8 +10,8 @@ import { navBarTranslations } from "./navbar";
 import { aboutTranslations } from "./about";
 import { contactTranslations } from "./contact";
 
-const [ingredientsEN] = ingredientTranslations;
-const [homeCalcEN] = homeCalcTranslations;
+const [ingredientsEN, ingredientsDE] = ingredientTranslations;
+const [homeCalcEN, homeCalcDE] = homeCalcTranslations;
 const [unitsEN, unitsDE] = unitsTranslations;
 const [ExtraCalcsEN, ExtraCalcsDE] = extraCalcsTranslations;
 const [NutrientCalcEN, NutrientCalcDE] = nutrientCalcTranslations;
@@ -41,6 +41,8 @@ i18n
       de: {
         translation: {
           greeting: "Hallo",
+          ...ingredientsDE,
+          ...homeCalcDE,
           ...unitsDE,
           ...ExtraCalcsDE,
           ...NutrientCalcDE,

@@ -17,6 +17,7 @@ const unitsEN = {
 };
 
 const unitsDE = {
+  SUBMIT: "Abschicken",
   UNITS: "Einheiten",
   BRIX: "Brix",
   DU: "Delle-Einheiten",
@@ -24,6 +25,9 @@ const unitsDE = {
   OG: "OG",
   FG: "FG",
   SG: "SG",
+  PPM: "PPM",
+  LBS: "Pfund",
+  KG: "kg",
   GAL: "Gallonen",
   LIT: "Liter",
   FAR: "°F",
