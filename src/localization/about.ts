@@ -98,8 +98,8 @@ const about = {
       von MeadTools genutzt habe, sowie weitere Quellen für Wissen zur Metherstellung.
       Ich kann der Met-Gemeinschaft nicht genug dafür danken, dass sie dieses Projekt möglich gemacht
       hat.
-      Man findet mich auf Discord auf den \"Doin’ the Most\"- und \"Man
-      Made Mead Mazer\"-Servern. Mein Benutzername ist larry_r.
+      Man findet mich auf Discord auf den "Doin’ the Most"- und "Man
+      Made Mead Mazer"-Servern. Mein Benutzername ist larry_r.
       Es gibt außerdem ein brandneues MeadTools-Discord.
       Man erreicht mich über die Kontakt-Seite oder direkt unter contact@meadtools.com`,
       paragraphThree: `MeadTools ist komplett quelloffen und unter der MIT-Lizenz. Also wenn ihr den Quelltext
@@ -109,7 +109,8 @@ const about = {
       sourcesList: {
         one: "Fast alle Daten zu Inhaltsstoffen stammen aus der USDA FoodData Central",
         two: {
-          label: "Die Formel zur Berechnung des Alkoholgehalts wurde entnommen aus ",
+          label:
+            "Die Formel zur Berechnung des Alkoholgehalts wurde entnommen aus ",
           linkText: "Diesem Zymergy-Artikel",
           two: {
             text: "Wichtige weiterführende Lektüre zum Alkoholgehalt findet sich hier von der Person, die MeadTools seinen Namen gegeben hat:",
@@ -135,8 +136,7 @@ const about = {
           },
         },
         five: {
-          label:
-            "Informationen zu Sorbat, Sulfit und SO viele andere Dinge",
+          label: "Informationen zu Sorbat, Sulfit und SO viele andere Dinge",
           one: {
             linkText:
               'Modern Meadmaking wiki - "Stabilization and Back Sweetening"',
@@ -165,7 +165,7 @@ const about = {
           },
         },
         ten: {
-          label: "Ash und StormBeforeDawn vom \"The Mead Hall\"-Discord",
+          label: 'Ash und StormBeforeDawn vom "The Mead Hall"-Discord',
         },
         thanks: {
           text: "An die gesamte Metherstellungs-Gemeinschaft für all die Hilfe, Inspiration und das Wissen, das ich über die letzte vier Jahre gesammelt habe",

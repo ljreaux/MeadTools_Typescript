@@ -15,10 +15,22 @@ export default function Home({
     <div></div>,
   ]);
   return (
-    <div>
+    <div className="flex items-center justify-center flex-col">
       {step}
-      <button onClick={back}>Back</button>
-      <button onClick={next}>Next</button>
+      <div>
+        <button
+          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+          onClick={back}
+        >
+          Back
+        </button>
+        <button
+          className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+          onClick={next}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

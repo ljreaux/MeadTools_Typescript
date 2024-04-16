@@ -17,12 +17,22 @@ export interface Ingredient {
 export interface RecipeData {
   ingredients: Ingredient[];
   ingredientsList: object[];
+  FG: number;
+  units: {
+    weight: "lbs" | "kg";
+    volume: "gal" | "liter";
+  };
 }
 
 function App() {
   const [recipeData, setRecipeData] = useState<RecipeData>({
     ingredients: initialIngredients,
     ingredientsList: [],
+    FG: 0.996,
+    units: {
+      weight: "lbs",
+      volume: "gal",
+    },
   });
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [opened, setOpened] = useState({

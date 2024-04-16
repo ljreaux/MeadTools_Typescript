@@ -27,6 +27,7 @@ export default function Ingredient({
   index,
   ingredientsList: ingredients,
   filterTerm,
+  units,
   setIngredients,
   removeLine,
 
@@ -36,10 +37,23 @@ export default function Ingredient({
   index: number;
   ingredientsList: object[];
   filterTerm: null | string[];
+  units: {
+    weight: "lbs" | "kg";
+    volume: "gal" | "liter";
+  };
   setIngredients: (obj: object) => void;
   removeLine: (index: number) => void;
   setIndividual: (index: number, obj: object) => void;
 }) {
+  const converter =
+    units.weight === "kg" && units.volume === "liter"
+      ? (8.345 * 0.453592) / 3.78541
+      : units.weight === "kg"
+      ? 8.345 * 0.453592
+      : units.volume === "liter"
+      ? 8.345 / 3.78541
+      : 8.345;
+
   const { array } = useWeightOrVol(
     ingredient.details,
     ingredient.brix,
@@ -65,7 +79,7 @@ export default function Ingredient({
       details: [
         ingredient.details[0],
         Math.round(
-          (ingredient.details[0] / 8.345 / toSG(Number(brix))) * 10000
+          (ingredient.details[0] / converter / toSG(Number(brix))) * 10000
         ) / 10000,
       ],
     });
@@ -84,8 +98,10 @@ export default function Ingredient({
       detailCopy[detailIndex] = value;
       detailCopy[otherIndex] =
         otherIndex === 0
-          ? Math.round(value * 8.345 * toSG(ingredient.brix) * 10000) / 10000
-          : Math.round((value / 8.345 / toSG(ingredient.brix)) * 10000) / 10000;
+          ? Math.round(value * converter * toSG(ingredient.brix) * 10000) /
+            10000
+          : Math.round((value / converter / toSG(ingredient.brix)) * 10000) /
+            10000;
 
       console.log(detailCopy);
       setIndividual(index, {
@@ -97,14 +113,19 @@ export default function Ingredient({
         brix: value,
         details: [
           ingredient.details[0],
-          Math.round((ingredient.details[0] / 8.345 / toSG(value)) * 10000) /
-            10000,
+          Math.round(
+            (ingredient.details[0] / converter / toSG(value)) * 10000
+          ) / 10000,
         ],
       });
     }
   }
   return (
-    <div className="flex w-full">
+    <div
+      className={`flex w-full py-[.25rem] ${
+        index == 1 ? "border-dotted border-b-[1px] border-textColor" : null
+      }`}
+    >
       <div key={index} className="grid grid-cols-4 w-full">
         <select
           name="ingredientList"

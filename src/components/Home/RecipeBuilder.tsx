@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { RecipeData } from "../../App";
 import Title from "../Title";
 import { FaMinusSquare, FaPlusSquare } from "react-icons/fa";
@@ -10,6 +10,8 @@ import useAbv from "../../hooks/useAbv";
 export default function RecipeBuilder({
   ingredients,
   ingredientsList,
+  FG,
+  units,
   setRecipeData,
 }: RecipeData & { setRecipeData: Dispatch<SetStateAction<RecipeData>> }) {
   const toBlend = ingredients.map((ingredient) => {
@@ -64,7 +66,40 @@ export default function RecipeBuilder({
     });
   }
 
-  const { ABV, delle } = useAbv({ OG: blend.blendedValue, FG: 0.996 });
+  const { ABV, delle } = useAbv({ OG: blend.blendedValue, FG });
+
+  useEffect(() => {
+    const multiplier = units.weight === "kg" ? 0.453592 : 2.20462;
+    setRecipeData((prev: RecipeData) => {
+      return {
+        ...prev,
+        ingredients: prev.ingredients.map((ing) => ({
+          ...ing,
+          details: [
+            Math.round(ing.details[0] * multiplier * 1000) / 1000,
+            ing.details[1],
+          ],
+        })),
+      };
+    });
+  }, [units.weight]);
+
+  useEffect(() => {
+    const multiplier = units.volume === "liter" ? 3.78541 : 0.264172;
+    setRecipeData((prev: RecipeData) => {
+      return {
+        ...prev,
+        ingredients: prev.ingredients.map((ing) => ({
+          ...ing,
+          details: [
+            ing.details[0],
+            Math.round(ing.details[1] * multiplier * 1000) / 1000,
+          ],
+        })),
+      };
+    });
+    runBlendingFunction();
+  }, [units.volume]);
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
@@ -77,6 +112,18 @@ export default function RecipeBuilder({
             name="weightUnits"
             id="weightUnits"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            value={units.weight}
+            onChange={(e) => {
+              setRecipeData((prev: RecipeData) => {
+                return {
+                  ...prev,
+                  units: {
+                    ...prev.units,
+                    weight: e.target.value,
+                  },
+                };
+              });
+            }}
           >
             <option value="lbs">lbs</option>
             <option value="kg">kg</option>
@@ -89,6 +136,18 @@ export default function RecipeBuilder({
             name="volumeUnits"
             id="volumeUnits"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            value={units.volume}
+            onChange={(e) => {
+              setRecipeData((prev: RecipeData) => {
+                return {
+                  ...prev,
+                  units: {
+                    ...prev.units,
+                    volume: e.target.value,
+                  },
+                };
+              });
+            }}
           >
             <option value="gal">Gallons</option>
             <option value="liter">Liters</option>
@@ -104,6 +163,7 @@ export default function RecipeBuilder({
           setIndividual={setIndividual}
           removeLine={removeLine}
           filterTerm={i <= 1 ? ["water", "juice"] : null}
+          units={units}
         />
       ))}
       {ingredients.length < 9 && (
@@ -142,15 +202,26 @@ export default function RecipeBuilder({
           <p id="estOG">{Math.round(blend.blendedValue * 1000) / 1000}</p>
           <input
             type="number"
-            value={0.996}
+            value={FG}
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+            onChange={(e) => {
+              setRecipeData((prev: RecipeData) => {
+                return {
+                  ...prev,
+                  FG: Number(e.target.value),
+                };
+              });
+            }}
+            onFocus={(e) => e.target.select()}
           />
           <p>{Math.round(ABV * 100) / 100}% ABV</p>
           <p>{Math.round(delle)} Delle Units</p>
           <label htmlFor="totalVolume" className="col-span-4">
             Total Volume
           </label>
-          <p id="totalVolume">{Math.round(blend.totalVolume * 1000) / 1000}</p>
+          <p id="totalVolume">
+            {Math.round(blend.totalVolume * 1000) / 1000} {units.volume}
+          </p>
         </div>
       )}
     </div>

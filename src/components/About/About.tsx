@@ -171,8 +171,11 @@ function About() {
             <li> {t("about.sourcesList.ten.label")}</li>
           </ol>
           <div className="text-center text-2xl py-12">
-            <p>{t("about.thanks.text")}</p>
-            <p className="text-4xl py-[3rem]"> {t("about.thanks.thanks")}</p>
+            <p>{t("about.sourcesList.thanks.text")}</p>
+            <p className="text-4xl py-[3rem]">
+              {" "}
+              {t("about.sourcesList.thanks.thanks")}
+            </p>
           </div>
         </div>
       </div>
