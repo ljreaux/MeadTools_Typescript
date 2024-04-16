@@ -4,6 +4,8 @@ import { FaMinusSquare } from "react-icons/fa";
 import { useEffect } from "react";
 import getAllIngredients from "../../helpers/getAllIngredients";
 import { toSG } from "../../helpers/unitConverters";
+import lodash from "lodash";
+import { useTranslation } from "react-i18next";
 
 export interface IngredientListItem {
   id: number;
@@ -20,17 +22,22 @@ function IngredientOptions({
   ingredients: IngredientListItem[];
   setIngredients: (obj: IngredientListItem[]) => void;
 }) {
+  const { t } = useTranslation();
   useEffect(() => {
     (async () => {
       const ingredients = await getAllIngredients();
       setIngredients(ingredients);
     })();
   }, []);
+
   return (
     <>
-      {ingredients.map((ingredient) => (
-        <option value={ingredient.name}>{ingredient.name}</option>
-      ))}
+      {ingredients.map((ingredient) => {
+        const ingredientDisplay = lodash.camelCase(ingredient.name);
+        return (
+          <option value={ingredient.name}>{t(`${ingredientDisplay}`)}</option>
+        );
+      })}
     </>
   );
 }
