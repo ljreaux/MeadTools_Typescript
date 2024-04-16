@@ -23,6 +23,30 @@ const homeCalc = {
       percent: "% ABV",
     },
   },
+  de: {
+    recipeBuilder: {
+      homeHeading: "Rezepterstellung",
+      labels: {
+        ingredients: "Zutaten",
+        weight: "Gewicht",
+        brix: "Zuckergehalt (Brix)",
+        volume: "Volumen",
+        secondary: "In sekundärer Gärung?",
+      },
+      addNew: "Neue Zutat hinzufügen",
+      resultsLabels: {
+        estOG: "Geschätzte OG-Messung:",
+        estActualOG: "Geschätzte OG:",
+        estFG: "Geschätzte FG nach Verdünnung:",
+        abv: "Alk.%:",
+        delle: "Delle-Einheiten:",
+        totalPrimary: "Gesamtes Gärvolumen:",
+        totalSecondary: "Tatsächliches Gesamtvolumen:",
+      },
+      submit: "Abschicken",
+      percent: "% Alk.vol.",
+    },
+  }
 };
 
-export const homeCalcTranslations = [homeCalc.en];
+export const homeCalcTranslations = [homeCalc.en, homeCalc.de];
