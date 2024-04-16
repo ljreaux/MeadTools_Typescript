@@ -51,7 +51,7 @@ export default function NutrientCalcResults({
   const { gf, gfWater } = useGoFerm(gfType, outputs.yeastAmount);
 
   return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
+    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video">
       <Title header={t("nuteResults.label")} />
       <form
         action=""

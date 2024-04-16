@@ -62,4 +62,4 @@ const ingredientsEN = {
   watermelon: "Watermelon",
 };
 
-export const translatedIngredients = [ingredientsEN];
+export const ingredientTranslations = [ingredientsEN];

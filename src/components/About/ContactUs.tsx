@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import Title from "../Title";
 import { useTranslation } from "react-i18next";
@@ -7,37 +7,39 @@ import { useTranslation } from "react-i18next";
 // sends an email to contact@meadtools.com
 const ContactUs = () => {
   const { t } = useTranslation();
-  const form = useRef();
+  const form = useRef(null);
   const [status, setStatus] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [messageColor, setMessageColor] = useState("green");
 
-  const sendEmail = (e) => {
+  const sendEmail = (e: FormEvent) => {
     e.preventDefault();
     setDisabled(true);
 
-    emailjs
-      .sendForm(
-        "service_3kmg80f",
-        "template_5pwnpf5",
-        form.current,
-        "2G-OLW9VI5seyvCUK"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          e.target.reset();
-          setMessageColor("green");
-          setStatus(t("success"));
-          setDisabled(false);
-        },
-        (error) => {
-          console.error(error.text);
-          setMessageColor("red");
-          setStatus(t("error"));
-          setDisabled(false);
-        }
-      );
+    if (form.current)
+      emailjs
+        .sendForm(
+          "service_3kmg80f",
+          "template_5pwnpf5",
+          form.current,
+          "2G-OLW9VI5seyvCUK"
+        )
+        .then(
+          (result) => {
+            const target = e.target as HTMLFormElement;
+            console.log(result.text);
+            target.reset();
+            setMessageColor("green");
+            setStatus(t("success"));
+            setDisabled(false);
+          },
+          (error) => {
+            console.error(error.text);
+            setMessageColor("red");
+            setStatus(t("error"));
+            setDisabled(false);
+          }
+        );
   };
 
   return (

@@ -59,14 +59,16 @@ export default function MainInputs({
       (yeast: Yeast) => yeast.name === selected.yeastStrain
     );
     setData((prev) => {
-      return {
-        ...prev,
-        selected: {
-          ...prev.selected,
-          yeastDetails: { ...yeastDetails },
-          n2Requirement: yeastDetails.NitrogenRequirement,
-        },
-      };
+      return yeastDetails
+        ? {
+            ...prev,
+            selected: {
+              ...prev.selected,
+              yeastDetails: { ...yeastDetails },
+              n2Requirement: yeastDetails.NitrogenRequirement,
+            },
+          }
+        : prev;
     });
   }, [selected.yeastBrand, selected.yeastStrain]);
 
@@ -93,7 +95,7 @@ export default function MainInputs({
   }, [target, yeastAmount]);
 
   return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
+    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mt-24 mb-8 aspect-video">
       <Title header={t("nutesHeading")} />
       <form action="" className="grid grid-cols-5 justify-center text-center">
         <label htmlFor="yeastBrand">{t("yeastBrand")}</label>
@@ -117,14 +119,20 @@ export default function MainInputs({
           onChange={(e) =>
             setData((prev) => {
               const target = e.target as HTMLSelectElement;
-              return {
-                ...prev,
-                selected: {
-                  ...prev.selected,
-                  [e.target.name]: e.target.value,
-                  yeastStrain: yeasts[target.value][0].name,
-                },
-              };
+              return target.value === "Lalvin" ||
+                target.value === "Fermentis" ||
+                target.value === "MangroveJack" ||
+                target.value === "RedStar" ||
+                target.value === "Other"
+                ? {
+                    ...prev,
+                    selected: {
+                      ...prev.selected,
+                      [e.target.name]: e.target.value,
+                      yeastStrain: yeasts[target.value][0].name,
+                    },
+                  }
+                : prev;
             })
           }
           name="yeastBrand"

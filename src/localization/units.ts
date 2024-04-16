@@ -9,6 +9,8 @@ const unitsEN = {
   SG: "SG",
   PPM: "PPM",
   GAL: "Gallons",
+  LBS: "lbs",
+  KG: "kg",
   LIT: "Liters",
   FAR: "°F",
   CEL: "°C",

@@ -25,7 +25,7 @@ export default function useAbv(obj: TAbvObj) {
 
     const delle = toBrix(FG) + 4.5 * ABV;
     setAbv({ ABV, delle });
-  }, [obj.OG, obj.FG]);
+  }, [OG, FG]);
 
   return abv;
 }

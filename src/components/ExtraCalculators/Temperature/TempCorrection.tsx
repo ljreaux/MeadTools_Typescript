@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import {
-  toFareinheight,
+  toFahrenheit,
   temperatureCorrection,
 } from "../../../helpers/temperature";
 import { toBrix } from "../../../helpers/unitConverters";
@@ -33,8 +33,8 @@ export default function TempCorrection() {
         )
       : temperatureCorrection(
           tempObj.measured,
-          toFareinheight(tempObj.curTemp),
-          toFareinheight(tempObj.calTemp)
+          toFahrenheit(tempObj.curTemp),
+          toFahrenheit(tempObj.calTemp)
         );
   const resultBrix = toBrix(result);
 

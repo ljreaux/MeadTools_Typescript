@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RecipeData } from "../../App";
 import Title from "../Title";
 import { FaMinusSquare, FaPlusSquare } from "react-icons/fa";
@@ -6,6 +6,9 @@ import Ingredient from "./Ingredient";
 import { toSG } from "../../helpers/unitConverters";
 import useBlend from "../../hooks/useBlend";
 import useAbv from "../../hooks/useAbv";
+import { IngredientListItem } from "./Ingredient";
+import { Ingredient as IngredientType } from "../../App";
+import { useTranslation } from "react-i18next";
 
 export default function RecipeBuilder({
   ingredients,
@@ -14,26 +17,44 @@ export default function RecipeBuilder({
   units,
   setRecipeData,
 }: RecipeData & { setRecipeData: Dispatch<SetStateAction<RecipeData>> }) {
-  const toBlend = ingredients.map((ingredient) => {
+  const { t } = useTranslation();
+  const [firstMount, setFirstMount] = useState(true);
+  useEffect(() => setFirstMount(false), []);
+  const totalBlended = ingredients.map((ingredient) => {
     return [toSG(ingredient.brix), ingredient.details[1]];
   });
+  const withOutSecondary: number[][] = [];
+  const offsetArr: number[] = [];
+  ingredients.forEach((ingredient) => {
+    if (!ingredient.secondary) {
+      withOutSecondary.push([toSG(ingredient.brix), ingredient.details[1]]);
+      if (ingredient.category === "fruit")
+        offsetArr.push(ingredient.details[0] * 50);
+    }
+  });
 
-  const { blend, runBlendingFunction } = useBlend(toBlend);
+  const { blend, runBlendingFunction } = useBlend(totalBlended);
+  const {
+    blend: noSecondaryBlend,
+    runBlendingFunction: secondaryBlendFunction,
+  } = useBlend(withOutSecondary);
 
-  function setIngredients(ingredientList: object) {
-    setRecipeData((prev: RecipeData) => {
-      return {
-        ...prev,
-        ingredientsList: ingredientList,
-      };
+  function setIngredients(ingredientList: IngredientListItem[]) {
+    setRecipeData((prev) => {
+      return ingredientList
+        ? {
+            ...prev,
+            ingredientsList: ingredientList,
+          }
+        : prev;
     });
   }
-  function setIndividual(index: number, ingredient: object) {
-    setRecipeData((prev: RecipeData) => {
+  function setIndividual(index: number, ingredient: Partial<IngredientType>) {
+    setRecipeData((prev) => {
       const newIngredient = prev.ingredients.map((ing, i) =>
         i === index ? { ...ing, ...ingredient } : ing
       );
-      console.log(newIngredient);
+
       return {
         ...prev,
         ingredients: newIngredient,
@@ -42,15 +63,17 @@ export default function RecipeBuilder({
   }
 
   function addIngredientLine() {
-    setRecipeData((prev: RecipeData) => {
+    setRecipeData((prev) => {
       return {
         ...prev,
         ingredients: [
           ...prev.ingredients,
           {
-            name: "Honey",
+            name: "honey",
             brix: 79.6,
             details: [0, 0],
+            secondary: false,
+            category: "sugar",
           },
         ],
       };
@@ -58,7 +81,7 @@ export default function RecipeBuilder({
   }
 
   function removeLine(index: number) {
-    setRecipeData((prev: RecipeData) => {
+    setRecipeData((prev) => {
       return {
         ...prev,
         ingredients: prev.ingredients.filter((_, i) => i !== index),
@@ -66,93 +89,144 @@ export default function RecipeBuilder({
     });
   }
 
+  function setChecked(index: number) {
+    setRecipeData((prev) => {
+      return {
+        ...prev,
+        ingredients: prev.ingredients.map((ingred, i) => {
+          if (i === index) {
+            return {
+              ...ingred,
+              secondary: !ingred.secondary,
+            };
+          } else {
+            return ingred;
+          }
+        }),
+      };
+    });
+    runBlendingFunction();
+    secondaryBlendFunction();
+  }
+
   const { ABV, delle } = useAbv({ OG: blend.blendedValue, FG });
 
   useEffect(() => {
     const multiplier = units.weight === "kg" ? 0.453592 : 2.20462;
-    setRecipeData((prev: RecipeData) => {
-      return {
-        ...prev,
-        ingredients: prev.ingredients.map((ing) => ({
-          ...ing,
-          details: [
-            Math.round(ing.details[0] * multiplier * 1000) / 1000,
-            ing.details[1],
-          ],
-        })),
-      };
-    });
+    if (!firstMount)
+      setRecipeData((prev) => {
+        return {
+          ...prev,
+          ingredients: prev.ingredients.map((ing) => ({
+            ...ing,
+            details: [
+              Math.round(ing.details[0] * multiplier * 1000) / 1000,
+              ing.details[1],
+            ],
+          })),
+        };
+      });
   }, [units.weight]);
 
   useEffect(() => {
     const multiplier = units.volume === "liter" ? 3.78541 : 0.264172;
-    setRecipeData((prev: RecipeData) => {
-      return {
-        ...prev,
-        ingredients: prev.ingredients.map((ing) => ({
-          ...ing,
-          details: [
-            ing.details[0],
-            Math.round(ing.details[1] * multiplier * 1000) / 1000,
-          ],
-        })),
-      };
-    });
+    if (!firstMount)
+      setRecipeData((prev) => {
+        return {
+          ...prev,
+          ingredients: prev.ingredients.map((ing) => ({
+            ...ing,
+            details: [
+              ing.details[0],
+              Math.round(ing.details[1] * multiplier * 1000) / 1000,
+            ],
+          })),
+        };
+      });
     runBlendingFunction();
+    secondaryBlendFunction();
   }, [units.volume]);
 
+  useEffect(() => {
+    if (!firstMount)
+      setRecipeData((prev) => {
+        return {
+          ...prev,
+          OG: noSecondaryBlend.blendedValue,
+          FG:
+            Math.round(
+              (Math.abs(blend.blendedValue - noSecondaryBlend.blendedValue) +
+                0.996) *
+                1000
+            ) / 1000,
+          offset: offsetArr.reduce((prev, curr) => {
+            return curr / noSecondaryBlend.totalVolume + prev;
+          }, 0),
+          ABV,
+          volume: noSecondaryBlend.totalVolume,
+        };
+      });
+  }, [blend.blendedValue, noSecondaryBlend.blendedValue]);
+
   return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
-      <Title header="Recipe Builder" />
-      <div className="grid grid-cols-4 text-center">
-        <label htmlFor="ingredients">Ingredients</label>
+    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-24 aspect-video">
+      <Title header={t("recipeBuilder.homeHeading")} />
+      <div className="grid grid-cols-5 text-center">
+        <label htmlFor="ingredients">
+          {t("recipeBuilder.labels.ingredients")}
+        </label>
         <label htmlFor="weight">
-          Weight
+          {t("recipeBuilder.labels.weight")}
           <select
             name="weightUnits"
             id="weightUnits"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             value={units.weight}
             onChange={(e) => {
-              setRecipeData((prev: RecipeData) => {
-                return {
-                  ...prev,
-                  units: {
-                    ...prev.units,
-                    weight: e.target.value,
-                  },
-                };
+              setRecipeData((prev) => {
+                return e.target.value === "lbs" || e.target.value === "kg"
+                  ? {
+                      ...prev,
+                      units: {
+                        ...prev.units,
+                        weight: e.target.value,
+                      },
+                    }
+                  : prev;
               });
             }}
           >
-            <option value="lbs">lbs</option>
-            <option value="kg">kg</option>
+            <option value="lbs">{t("LBS")}</option>
+            <option value="kg">{t("KG")}</option>
           </select>
         </label>
-        <label htmlFor="brix">Sugar Percentage (Brix)</label>
+        <label htmlFor="brix">{t("recipeBuilder.labels.brix")}</label>
         <label htmlFor="volume">
-          Volume
+          {t("recipeBuilder.labels.volume")}
           <select
             name="volumeUnits"
             id="volumeUnits"
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             value={units.volume}
             onChange={(e) => {
-              setRecipeData((prev: RecipeData) => {
-                return {
-                  ...prev,
-                  units: {
-                    ...prev.units,
-                    volume: e.target.value,
-                  },
-                };
+              setRecipeData((prev) => {
+                return e.target.value === "gal" || e.target.value === "liter"
+                  ? {
+                      ...prev,
+                      units: {
+                        ...prev.units,
+                        volume: e.target.value,
+                      },
+                    }
+                  : prev;
               });
             }}
           >
-            <option value="gal">Gallons</option>
-            <option value="liter">Liters</option>
+            <option value="gal">{t("GAL")}</option>
+            <option value="liter">{t("LIT")}</option>
           </select>
         </label>
+        <label htmlFor="secondary">{t("recipeBuilder.labels.secondary")}</label>
       </div>
       {ingredients.map((ingredient, i) => (
         <Ingredient
@@ -164,12 +238,13 @@ export default function RecipeBuilder({
           removeLine={removeLine}
           filterTerm={i <= 1 ? ["water", "juice"] : null}
           units={units}
+          setChecked={setChecked}
         />
       ))}
       {ingredients.length < 9 && (
         <button onClick={addIngredientLine}>Add new Ingredient</button>
       )}
-      <div className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 col-span-4 items-center flex justify-center sm:gap-8 gap-4 my-4 group text-lg">
+      <div className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 col-span-5 items-center flex justify-center sm:gap-8 gap-4 my-4 group text-lg">
         <button
           type="button"
           className={`group w-fit text-sidebar hover:text-textColor transition-colors disabled:cursor-not-allowed`}
@@ -189,23 +264,38 @@ export default function RecipeBuilder({
       </div>
       <button
         className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2"
-        onClick={runBlendingFunction}
+        onClick={() => {
+          runBlendingFunction();
+          secondaryBlendFunction();
+        }}
       >
-        Submit
+        {t("recipeBuilder.submit")}
       </button>{" "}
       {blend.blendedValue > 0 && (
-        <div className="w-full grid grid-cols-4">
-          <label htmlFor="estOG">Estimated OG:</label>
-          <label htmlFor="estFG">Estimated FG:</label>
-          <label htmlFor="abv">ABV:</label>
-          <label htmlFor="delle">Delle Units</label>
-          <p id="estOG">{Math.round(blend.blendedValue * 1000) / 1000}</p>
+        <div className="w-full grid grid-cols-5">
+          <label htmlFor="estOG">
+            {t("recipeBuilder.resultsLabels.estOG")}
+          </label>
+          <label htmlFor="estActualOG">
+            {t("recipeBuilder.resultsLabels.estActualOG")}
+          </label>
+          <label htmlFor="estFG">
+            {t("recipeBuilder.resultsLabels.estFG")}
+          </label>
+          <label htmlFor="abv">{t("recipeBuilder.resultsLabels.abv")}</label>
+          <label htmlFor="delle">
+            {t("recipeBuilder.resultsLabels.delle")}
+          </label>
+          <p id="estOG">
+            {Math.round(noSecondaryBlend.blendedValue * 1000) / 1000}
+          </p>
+          <p>{Math.round(blend.blendedValue * 1000) / 1000}</p>
           <input
             type="number"
             value={FG}
             className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             onChange={(e) => {
-              setRecipeData((prev: RecipeData) => {
+              setRecipeData((prev) => {
                 return {
                   ...prev,
                   FG: Number(e.target.value),
@@ -214,10 +304,23 @@ export default function RecipeBuilder({
             }}
             onFocus={(e) => e.target.select()}
           />
-          <p>{Math.round(ABV * 100) / 100}% ABV</p>
-          <p>{Math.round(delle)} Delle Units</p>
-          <label htmlFor="totalVolume" className="col-span-4">
-            Total Volume
+
+          <p>
+            {Math.round(ABV * 100) / 100}
+            {t("recipeBuilder.percent")}
+          </p>
+          <p>
+            {Math.round(delle)} {t("DU")}
+          </p>
+          <label htmlFor="totalVolume">
+            {t("recipeBuilder.resultsLabels.totalPrimary")}
+          </label>
+          <p id="totalVolume">
+            {Math.round(noSecondaryBlend.totalVolume * 1000) / 1000}{" "}
+            {units.volume}
+          </p>
+          <label htmlFor="totalSecondaryVolume" className="col-start-3">
+            {t("recipeBuilder.resultsLabels.totalSecondary")}
           </label>
           <p id="totalVolume">
             {Math.round(blend.totalVolume * 1000) / 1000} {units.volume}

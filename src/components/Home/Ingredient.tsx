@@ -3,11 +3,23 @@ import { FormEvent } from "react";
 import { FaMinusSquare } from "react-icons/fa";
 import { useEffect } from "react";
 import getAllIngredients from "../../helpers/getAllIngredients";
-import useWeightOrVol from "../../hooks/useWeightOrVol";
-
 import { toSG } from "../../helpers/unitConverters";
 
-function IngredientOptions({ ingredients, setIngredients }) {
+export interface IngredientListItem {
+  id: number;
+  name: string;
+  sugar_content: string;
+  water_content: string;
+  category: string;
+}
+
+function IngredientOptions({
+  ingredients,
+  setIngredients,
+}: {
+  ingredients: IngredientListItem[];
+  setIngredients: (obj: IngredientListItem[]) => void;
+}) {
   useEffect(() => {
     (async () => {
       const ingredients = await getAllIngredients();
@@ -30,20 +42,21 @@ export default function Ingredient({
   units,
   setIngredients,
   removeLine,
-
+  setChecked,
   setIndividual,
 }: {
   ingredient: IngredientType;
   index: number;
-  ingredientsList: object[];
+  ingredientsList: IngredientListItem[];
   filterTerm: null | string[];
   units: {
     weight: "lbs" | "kg";
     volume: "gal" | "liter";
   };
-  setIngredients: (obj: object) => void;
+  setIngredients: (obj: IngredientListItem[]) => void;
   removeLine: (index: number) => void;
-  setIndividual: (index: number, obj: object) => void;
+  setChecked: (index: number) => void;
+  setIndividual: (index: number, obj: Partial<IngredientType>) => void;
 }) {
   const converter =
     units.weight === "kg" && units.volume === "liter"
@@ -54,12 +67,6 @@ export default function Ingredient({
       ? 8.345 / 3.78541
       : 8.345;
 
-  const { array } = useWeightOrVol(
-    ingredient.details,
-    ingredient.brix,
-    "weight"
-  );
-
   const filtered = filterTerm
     ? ingredients.filter(
         (ingredient) =>
@@ -69,9 +76,15 @@ export default function Ingredient({
     : ingredients;
   function changeIngredient(e: FormEvent<EventTarget>, index: number) {
     const target = e.target as HTMLSelectElement;
-    const { sugar_content: brix, name } = ingredients.find(
-      (ingredient) => ingredient.name === target.value
-    );
+    const {
+      sugar_content: brix,
+      name,
+      category,
+    } = ingredients.find((ingredient) => ingredient.name === target.value) || {
+      sugar_content: 0,
+      name: "error",
+      category: "error",
+    };
 
     setIndividual(index, {
       brix: Number(brix),
@@ -82,6 +95,8 @@ export default function Ingredient({
           (ingredient.details[0] / converter / toSG(Number(brix))) * 10000
         ) / 10000,
       ],
+      secondary: false,
+      category,
     });
   }
 
@@ -103,12 +118,10 @@ export default function Ingredient({
           : Math.round((value / converter / toSG(ingredient.brix)) * 10000) /
             10000;
 
-      console.log(detailCopy);
       setIndividual(index, {
         details: detailCopy,
       });
     } else {
-      console.log(ingredient.details);
       setIndividual(index, {
         brix: value,
         details: [
@@ -126,7 +139,7 @@ export default function Ingredient({
         index == 1 ? "border-dotted border-b-[1px] border-textColor" : null
       }`}
     >
-      <div key={index} className="grid grid-cols-4 w-full">
+      <div key={index} className="grid grid-cols-5 w-full items-center">
         <select
           name="ingredientList"
           id="ingredientList"
@@ -162,6 +175,12 @@ export default function Ingredient({
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
           onChange={(e) => handleChange(e, index, 1)}
           onFocus={(e) => e.target.select()}
+        />
+        <input
+          type="checkbox"
+          className="h-5"
+          checked={ingredient.secondary}
+          onChange={() => setChecked(index)}
         />
       </div>
       {index > 3 && (

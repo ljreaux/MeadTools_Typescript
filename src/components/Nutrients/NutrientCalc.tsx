@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import useMultiStepForm from "../../hooks/useMultiStepForm";
 import MainInputs, { YeastType } from "./MainInputs";
-import { initialData } from "./intialData";
+import { initialData } from "./initialData";
 import NutrientCalcResults from "./NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
 import AdvancedInputForm from "./AdvancedInputForm";
 import { useTranslation } from "react-i18next";
 
 interface Selected {
-  yeastBrand: string;
+  yeastBrand: keyof YeastType;
   yeastStrain: string;
   yeastDetails: {
     name: string;

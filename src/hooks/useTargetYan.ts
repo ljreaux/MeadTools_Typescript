@@ -1,6 +1,5 @@
 import { toBrix } from "../helpers/unitConverters";
 import { useState, useEffect } from "react";
-import { useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function useTargetYan(

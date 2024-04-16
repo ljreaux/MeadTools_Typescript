@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 export interface Brix {
   value: number;
-  unit: string;
+  unit: "SG" | "Brix";
 }
 
 export default function Brix() {
@@ -20,8 +20,8 @@ export default function Brix() {
   const handleUnitChange = (e: FormEvent<EventTarget>) => {
     const target = e.target as HTMLInputElement;
     const unit = target.value;
-    console.log(unit);
-    setBrixObj((prev) => ({ ...prev, unit: unit }));
+    if (unit === "SG" || unit === "Brix")
+      setBrixObj((prev) => ({ ...prev, unit: unit }));
   };
 
   useBrixUnitsChange({

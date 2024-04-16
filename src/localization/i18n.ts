@@ -1,6 +1,8 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+import { ingredientTranslations } from "./ingredients";
+import { homeCalcTranslations } from "./home";
 import { unitsTranslations } from "./units";
 import { extraCalcsTranslations } from "./extraCalcs";
 import { nutrientCalcTranslations } from "./nutrientCalc";
@@ -8,6 +10,8 @@ import { navBarTranslations } from "./navbar";
 import { aboutTranslations } from "./about";
 import { contactTranslations } from "./contact";
 
+const [ingredientsEN] = ingredientTranslations;
+const [homeCalcEN] = homeCalcTranslations;
 const [unitsEN, unitsDE] = unitsTranslations;
 const [ExtraCalcsEN, ExtraCalcsDE] = extraCalcsTranslations;
 const [NutrientCalcEN, NutrientCalcDE] = nutrientCalcTranslations;
@@ -24,6 +28,8 @@ i18n
       en: {
         translation: {
           greeting: "Hello",
+          ...ingredientsEN,
+          ...homeCalcEN,
           ...unitsEN,
           ...ExtraCalcsEN,
           ...NutrientCalcEN,
