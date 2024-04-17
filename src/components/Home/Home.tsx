@@ -1,6 +1,6 @@
 import useMultiStepForm from "../../hooks/useMultiStepForm";
 import RecipeBuilder from "./RecipeBuilder";
-import { RecipeData } from "../../App";
+import { Additive, RecipeData } from "../../App";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import MainInputs from "../Nutrients/MainInputs";
 import AdvancedInputForm from "../Nutrients/AdvancedInputForm";
@@ -9,6 +9,8 @@ import useMaxGpl from "../../hooks/useMaxGpl";
 import { initialData } from "../Nutrients/initialData";
 import { useTranslation } from "react-i18next";
 import { FormData } from "../Nutrients/NutrientCalc";
+import Stabilizers from "./Stabilizers";
+import Additives from "./Additives";
 
 export default function Home({
   recipeData,
@@ -24,6 +26,47 @@ export default function Home({
     if (advanced) setYanFromSource([0, 0, 0]);
     else setYanFromSource(null);
   }, [advanced]);
+
+  function setSorbateSulfite(sorbate?: number, sulfite?: number): void {
+    if (sorbate && sulfite)
+      setRecipeData((prev) => ({
+        ...prev,
+        sorbate,
+        sulfite,
+      }));
+    else
+      setRecipeData((prev) => {
+        const prevCopy = { ...prev };
+        delete prevCopy.sorbate;
+        delete prevCopy.sulfite;
+        return {
+          ...prevCopy,
+        };
+      });
+  }
+
+  function editAdditives(additive: Additive, index: number) {
+    setRecipeData((prev) => ({
+      ...prev,
+      additives: prev.additives.map((prevAdd, i) =>
+        i === index ? additive : prevAdd
+      ),
+    }));
+  }
+
+  function addAdditive() {
+    setRecipeData((prev) => ({
+      ...prev,
+      additives: [...prev.additives, { name: "", amount: 0, unit: "g" }],
+    }));
+  }
+
+  function deleteAdditive(index: number) {
+    setRecipeData((prev) => ({
+      ...prev,
+      additives: prev.additives.filter((_, i) => i !== index),
+    }));
+  }
 
   const [yanContribution, setYanContribution] = useState([40, 100, 210]);
   const [yanFromSource, setYanFromSource] = useState<number[] | null>(null);
@@ -93,6 +136,20 @@ export default function Home({
       {...maxGPL}
       yanFromSource={yanFromSource}
       advanced={advanced}
+    />,
+    <Stabilizers
+      abv={recipeData.ABV}
+      batchVolume={recipeData.volume}
+      volumeUnits={recipeData.units.volume}
+      setSorbateSulfite={setSorbateSulfite}
+    />,
+    <Additives
+      additives={recipeData.additives}
+      editAdditives={editAdditives}
+      addAdditive={addAdditive}
+      deleteAdditive={deleteAdditive}
+      volumeUnits={recipeData.units.volume}
+      batchVolume={recipeData.volume}
     />,
   ]);
   return (

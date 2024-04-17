@@ -64,14 +64,9 @@ export default function MainInputs({
         const RedStar = allYeasts.filter(
           (yeast: Yeast) => yeast.brand == "Red Star"
         );
-        const OtherUnParsed = await allYeasts.filter(
+        const Other = await allYeasts.filter(
           (yeast: Yeast) => yeast.brand == "Other"
         );
-
-        const Other = OtherUnParsed.map((yeast: Yeast) => ({
-          ...yeast,
-          name: t(`${lodash.camelCase(yeast.name)}`),
-        }));
 
         const data = {
           Lalvin,
@@ -204,10 +199,9 @@ export default function MainInputs({
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
             >
               {Object.keys(yeasts).map((yeast) => {
-                const name = yeast.replace(/([A-Z])/g, " $1").trim();
                 return (
                   <option key={yeast} value={yeast}>
-                    {name}
+                    {t(`${lodash.camelCase(yeast)}.label`)}
                   </option>
                 );
               })}
@@ -221,7 +215,11 @@ export default function MainInputs({
             >
               {yeasts[selected.yeastBrand].map((yeast) => (
                 <option key={yeast.name} value={yeast.name}>
-                  {yeast.name}
+                  {t(
+                    `${lodash.camelCase(
+                      selected.yeastBrand
+                    )}.yeasts.${lodash.camelCase(yeast.name)}`
+                  )}
                 </option>
               ))}
             </select>

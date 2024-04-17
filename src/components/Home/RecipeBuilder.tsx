@@ -167,7 +167,7 @@ export default function RecipeBuilder({
           volume: noSecondaryBlend.totalVolume,
         };
       });
-  }, [blend.blendedValue, noSecondaryBlend.blendedValue]);
+  }, [blend.blendedValue, noSecondaryBlend.blendedValue, ABV]);
 
   const [loading, setLoading] = useState(true);
 

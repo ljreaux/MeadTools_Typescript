@@ -11,6 +11,12 @@ import { initialIngredients } from "./components/Home/initialIngredients";
 import { IngredientListItem } from "./components/Home/Ingredient";
 import { useTranslation } from "react-i18next";
 
+export interface Additive {
+  name: string;
+  amount: number;
+  unit: string;
+}
+
 export interface Ingredient {
   name: string;
   brix: number;
@@ -30,6 +36,9 @@ export interface RecipeData {
     weight: "lbs" | "kg";
     volume: "gal" | "liter";
   };
+  sorbate?: number;
+  sulfite?: number;
+  additives: Additive[];
 }
 
 function App() {
@@ -48,6 +57,7 @@ function App() {
       weight: language === "en" ? "lbs" : "kg",
       volume: language === "en" ? "gal" : "liter",
     },
+    additives: [{ name: "", amount: 0, unit: "g" }],
   });
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [opened, setOpened] = useState({

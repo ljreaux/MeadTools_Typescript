@@ -1,0 +1,38 @@
+const stabilizers = {
+  en: {
+    stabilizersHeading: "Stabilizers",
+    adding: "Are you adding Stabilizers?",
+    pH: "Are you taking a pH Reading?",
+    yes: "Yes",
+    no: "No",
+    noSorb: "No Sorbate Needed!",
+    kSorbate: "Potassium Sorbate",
+    kSulfite: "Potassium Sulfite",
+    kMeta: "Potassium Metabisulfite",
+    additivesHeading: "Additives and Additional Ingredients",
+    list: {
+      redWineTannin: "Red Wine Tannin",
+      ftRouge: "FT Rouge",
+      optiRed: "Opti-Red",
+      ftBlancSoft: "FT Blanc Soft",
+      optiWhite: "Opti-White",
+      tanninComplex: "Tannin Complex",
+      tanninRicheExtra: "Tannin Riche Extra",
+      citricAcid: "Citric Acid",
+      malicAcid: "Malic Acid",
+      tartaricAcid: "Tartaric Acid",
+      bentonite: "Bentonite",
+      chitosan: "Chitosan",
+      kieselsol: "Kieselsol",
+      sparkolloid: "Sparkolloid",
+      pecticEnzyme: "Pectic Enzyme",
+      lallzymeExV: "Lallzyme EX-V",
+      oakChips: "Oak Chips",
+      oakSpirals: "Oak Spirals",
+      oakCubes: "Oak Cubes",
+      potassiumCarbonate: "Potassium Carbonate",
+    },
+  },
+};
+
+export const stabilizersTranslations = [stabilizers.en];
