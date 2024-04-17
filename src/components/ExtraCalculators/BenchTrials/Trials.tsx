@@ -18,7 +18,7 @@ export default function Trials({ batchDetails }: Props) {
   function handleStockVolume(e: FormEvent<EventTarget>, index: number): void {
     const target = e.target as HTMLInputElement;
     const value = Number(target.value);
-    console.log(e);
+
     setStockVolume((prev) => {
       return prev.map((_, i) => (i === index ? value : prev[i]));
     });

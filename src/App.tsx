@@ -8,8 +8,8 @@ import ContactUs from "./components/About/ContactUs";
 import NutrientCalc from "./components/Nutrients/NutrientCalc";
 import Home from "./components/Home/Home";
 import { initialIngredients } from "./components/Home/initialIngredients";
-import useChangeLogger from "./hooks/useChangeLogger";
 import { IngredientListItem } from "./components/Home/Ingredient";
+import { useTranslation } from "react-i18next";
 
 export interface Ingredient {
   name: string;
@@ -33,6 +33,9 @@ export interface RecipeData {
 }
 
 function App() {
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+
   const [recipeData, setRecipeData] = useState<RecipeData>({
     ingredients: initialIngredients,
     ingredientsList: [],
@@ -42,8 +45,8 @@ function App() {
     FG: 0.996,
     offset: 0,
     units: {
-      weight: "lbs",
-      volume: "gal",
+      weight: language === "en" ? "lbs" : "kg",
+      volume: language === "en" ? "gal" : "liter",
     },
   });
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -54,8 +57,6 @@ function App() {
     account: false,
     links: false,
   });
-
-  useChangeLogger(recipeData.offset);
 
   return (
     <div className="grid">

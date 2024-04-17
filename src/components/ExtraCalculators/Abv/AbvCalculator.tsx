@@ -11,7 +11,6 @@ export default function AbvCalculator() {
   const [inputValues, setInputValues] = useState([1.105, 1]);
   const abv = useAbv({ OG: inputValues[0], FG: inputValues[1] });
   const inputArr = [t("OG"), t("FG")];
-  console.log(t("OG"));
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">

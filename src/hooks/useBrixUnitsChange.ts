@@ -12,7 +12,6 @@ export default function useBrixUnitsChange({
   propertyToChange: "value" | "unit";
 }) {
   useEffect(() => {
-    console.log(stateObj);
     let newState = stateObj[propertyToChange];
     if (stateObj.unit === "SG" && typeof newState === "number") {
       newState = Math.round(toSG(newState) * 1000) / 1000;

@@ -9,6 +9,7 @@ import { nutrientCalcTranslations } from "./nutrientCalc";
 import { navBarTranslations } from "./navbar";
 import { aboutTranslations } from "./about";
 import { contactTranslations } from "./contact";
+import { otherYeastTranslations } from "./otherYeasts";
 
 const [ingredientsEN, ingredientsDE] = ingredientTranslations;
 const [homeCalcEN, homeCalcDE] = homeCalcTranslations;
@@ -18,6 +19,7 @@ const [NutrientCalcEN, NutrientCalcDE] = nutrientCalcTranslations;
 const [NavbarEN, NavbarDE] = navBarTranslations;
 const [AboutEN, AboutDE] = aboutTranslations;
 const [ContactEN, ContactDE] = contactTranslations;
+const [otherYeastsEN] = otherYeastTranslations;
 
 i18n
   .use(LanguageDetector)
@@ -36,6 +38,7 @@ i18n
           ...NavbarEN,
           ...AboutEN,
           ...ContactEN,
+          ...otherYeastsEN,
         },
       },
       de: {

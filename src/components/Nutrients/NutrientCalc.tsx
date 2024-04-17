@@ -6,16 +6,20 @@ import NutrientCalcResults from "./NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
 import AdvancedInputForm from "./AdvancedInputForm";
 import { useTranslation } from "react-i18next";
+import getAllYeasts from "../../helpers/getAllYeasts";
+import { Yeast } from "./MainInputs";
 
 interface Selected {
   yeastBrand: keyof YeastType;
   yeastStrain: string;
   yeastDetails: {
+    brand?: string;
+    id?: number;
     name: string;
-    NitrogenRequirement: string;
-    ABVTolerance: number | string;
-    LowTemp: number;
-    HighTemp: number;
+    nitrogen_requirement: string;
+    tolerance: number | string;
+    low_temp: number;
+    high_temp: number;
   };
   n2Requirement: string;
   volumeUnits: string;
@@ -90,7 +94,7 @@ export default function NutrientCalc() {
           yanContribution={yanContribution}
           setYanContribution={setYanContribution}
         />
-      )}{" "}
+      )}
     </>,
     <NutrientCalcResults
       {...data}

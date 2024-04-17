@@ -9,6 +9,7 @@ import useAbv from "../../hooks/useAbv";
 import { IngredientListItem } from "./Ingredient";
 import { Ingredient as IngredientType } from "../../App";
 import { useTranslation } from "react-i18next";
+import Loading from "../Loading";
 
 export default function RecipeBuilder({
   ingredients,
@@ -168,165 +169,180 @@ export default function RecipeBuilder({
       });
   }, [blend.blendedValue, noSecondaryBlend.blendedValue]);
 
-  return (
-    <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-24 aspect-video">
-      <Title header={t("recipeBuilder.homeHeading")} />
-      <div className="grid grid-cols-5 text-center">
-        <label htmlFor="ingredients">
-          {t("recipeBuilder.labels.ingredients")}
-        </label>
-        <label htmlFor="weight">
-          {t("recipeBuilder.labels.weight")}
-          <select
-            name="weightUnits"
-            id="weightUnits"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            value={units.weight}
-            onChange={(e) => {
-              setRecipeData((prev) => {
-                return e.target.value === "lbs" || e.target.value === "kg"
-                  ? {
-                      ...prev,
-                      units: {
-                        ...prev.units,
-                        weight: e.target.value,
-                      },
-                    }
-                  : prev;
-              });
-            }}
-          >
-            <option value="lbs">{t("LBS")}</option>
-            <option value="kg">{t("KG")}</option>
-          </select>
-        </label>
-        <label htmlFor="brix">{t("recipeBuilder.labels.brix")}</label>
-        <label htmlFor="volume">
-          {t("recipeBuilder.labels.volume")}
-          <select
-            name="volumeUnits"
-            id="volumeUnits"
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            value={units.volume}
-            onChange={(e) => {
-              setRecipeData((prev) => {
-                return e.target.value === "gal" || e.target.value === "liter"
-                  ? {
-                      ...prev,
-                      units: {
-                        ...prev.units,
-                        volume: e.target.value,
-                      },
-                    }
-                  : prev;
-              });
-            }}
-          >
-            <option value="gal">{t("GAL")}</option>
-            <option value="liter">{t("LIT")}</option>
-          </select>
-        </label>
-        <label htmlFor="secondary">{t("recipeBuilder.labels.secondary")}</label>
-      </div>
-      {ingredients.map((ingredient, i) => (
-        <Ingredient
-          ingredient={ingredient}
-          index={i}
-          ingredientsList={ingredientsList}
-          setIngredients={setIngredients}
-          setIndividual={setIndividual}
-          removeLine={removeLine}
-          filterTerm={i <= 1 ? ["water", "juice"] : null}
-          units={units}
-          setChecked={setChecked}
-        />
-      ))}
-      {ingredients.length < 9 && (
-        <button onClick={addIngredientLine}>{t("recipeBuilder.addNew")}</button>
-      )}
-      <div className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 col-span-5 items-center flex justify-center sm:gap-8 gap-4 my-4 group text-lg">
-        <button
-          type="button"
-          className={`group w-fit text-sidebar hover:text-textColor transition-colors disabled:cursor-not-allowed`}
-          disabled={ingredients.length > 9}
-          onClick={addIngredientLine}
-        >
-          <FaPlusSquare className="group-hover:scale-125 group-hover:text-textColor " />
-        </button>
-        <button
-          type="button"
-          className={`group w-fit text-sidebar hover:text-textColor transition-colors disabled:cursor-not-allowed`}
-          disabled={ingredients.length <= 4}
-          onClick={() => removeLine(ingredients.length - 1)}
-        >
-          <FaMinusSquare className="group-hover:scale-125 group-hover:text-textColor" />
-        </button>
-      </div>
-      <button
-        className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2"
-        onClick={() => {
-          runBlendingFunction();
-          secondaryBlendFunction();
-        }}
-      >
-        {t("recipeBuilder.submit")}
-      </button>{" "}
-      {blend.blendedValue > 0 && (
-        <div className="w-full grid grid-cols-5">
-          <label htmlFor="estOG">
-            {t("recipeBuilder.resultsLabels.estOG")}
-          </label>
-          <label htmlFor="estActualOG">
-            {t("recipeBuilder.resultsLabels.estActualOG")}
-          </label>
-          <label htmlFor="estFG">
-            {t("recipeBuilder.resultsLabels.estFG")}
-          </label>
-          <label htmlFor="abv">{t("recipeBuilder.resultsLabels.abv")}</label>
-          <label htmlFor="delle">
-            {t("recipeBuilder.resultsLabels.delle")}
-          </label>
-          <p id="estOG">
-            {Math.round(noSecondaryBlend.blendedValue * 1000) / 1000}
-          </p>
-          <p>{Math.round(blend.blendedValue * 1000) / 1000}</p>
-          <input
-            type="number"
-            value={FG}
-            className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
-            onChange={(e) => {
-              setRecipeData((prev) => {
-                return {
-                  ...prev,
-                  FG: Number(e.target.value),
-                };
-              });
-            }}
-            onFocus={(e) => e.target.select()}
-          />
+  const [loading, setLoading] = useState(true);
 
-          <p>
-            {Math.round(ABV * 100) / 100}
-            {t("recipeBuilder.percent")}
-          </p>
-          <p>
-            {Math.round(delle)} {t("DU")}
-          </p>
-          <label htmlFor="totalVolume">
-            {t("recipeBuilder.resultsLabels.totalPrimary")}
+  return (
+    <>
+      {loading && <Loading />}
+      <div
+        className={`w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-24 aspect-video ${
+          loading ? "hidden" : ""
+        }`}
+      >
+        <Title header={t("recipeBuilder.homeHeading")} />
+        <div className="grid grid-cols-5 text-center">
+          <label htmlFor="ingredients">
+            {t("recipeBuilder.labels.ingredients")}
           </label>
-          <p id="totalVolume">
-            {Math.round(noSecondaryBlend.totalVolume * 1000) / 1000}{" "}
-            {units.volume}
-          </p>
-          <label htmlFor="totalSecondaryVolume" className="col-start-3">
-            {t("recipeBuilder.resultsLabels.totalSecondary")}
+          <label htmlFor="weight">
+            {t("recipeBuilder.labels.weight")}
+            <select
+              name="weightUnits"
+              id="weightUnits"
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+              value={units.weight}
+              onChange={(e) => {
+                setRecipeData((prev) => {
+                  return e.target.value === "lbs" || e.target.value === "kg"
+                    ? {
+                        ...prev,
+                        units: {
+                          ...prev.units,
+                          weight: e.target.value,
+                        },
+                      }
+                    : prev;
+                });
+              }}
+            >
+              <option value="lbs">{t("LBS")}</option>
+              <option value="kg">{t("KG")}</option>
+            </select>
           </label>
-          <p id="totalVolume">
-            {Math.round(blend.totalVolume * 1000) / 1000} {units.volume}
-          </p>
+          <label htmlFor="brix">{t("recipeBuilder.labels.brix")}</label>
+          <label htmlFor="volume">
+            {t("recipeBuilder.labels.volume")}
+            <select
+              name="volumeUnits"
+              id="volumeUnits"
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+              value={units.volume}
+              onChange={(e) => {
+                setRecipeData((prev) => {
+                  return e.target.value === "gal" || e.target.value === "liter"
+                    ? {
+                        ...prev,
+                        units: {
+                          ...prev.units,
+                          volume: e.target.value,
+                        },
+                      }
+                    : prev;
+                });
+              }}
+            >
+              <option value="gal">{t("GAL")}</option>
+              <option value="liter">{t("LIT")}</option>
+            </select>
+          </label>
+          <label htmlFor="secondary">
+            {t("recipeBuilder.labels.secondary")}
+          </label>
         </div>
-      )}
-    </div>
+        {ingredients.map((ingredient, i) => (
+          <Ingredient
+            ingredient={ingredient}
+            index={i}
+            ingredientsList={ingredientsList}
+            setIngredients={setIngredients}
+            setIndividual={setIndividual}
+            removeLine={removeLine}
+            filterTerm={i <= 1 ? ["water", "juice"] : null}
+            units={units}
+            setChecked={setChecked}
+            key={i + ingredient.name}
+            setLoading={setLoading}
+          />
+        ))}
+        {ingredients.length < 9 && (
+          <button onClick={addIngredientLine}>
+            {t("recipeBuilder.addNew")}
+          </button>
+        )}
+        <div className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 col-span-5 items-center flex justify-center sm:gap-8 gap-4 my-4 group text-lg">
+          <button
+            type="button"
+            className={`group w-fit text-sidebar hover:text-textColor transition-colors disabled:cursor-not-allowed`}
+            disabled={ingredients.length > 9}
+            onClick={addIngredientLine}
+          >
+            <FaPlusSquare className="group-hover:scale-125 group-hover:text-textColor " />
+          </button>
+          <button
+            type="button"
+            className={`group w-fit text-sidebar hover:text-textColor transition-colors disabled:cursor-not-allowed`}
+            disabled={ingredients.length <= 4}
+            onClick={() => removeLine(ingredients.length - 1)}
+          >
+            <FaMinusSquare className="group-hover:scale-125 group-hover:text-textColor" />
+          </button>
+        </div>
+        <button
+          className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2"
+          onClick={() => {
+            runBlendingFunction();
+            secondaryBlendFunction();
+          }}
+        >
+          {t("recipeBuilder.submit")}
+        </button>{" "}
+        {blend.blendedValue > 0 && (
+          <div className="w-full grid grid-cols-5">
+            <label htmlFor="estOG">
+              {t("recipeBuilder.resultsLabels.estOG")}
+            </label>
+            <label htmlFor="estActualOG">
+              {t("recipeBuilder.resultsLabels.estActualOG")}
+            </label>
+            <label htmlFor="estFG">
+              {t("recipeBuilder.resultsLabels.estFG")}
+            </label>
+            <label htmlFor="abv">{t("recipeBuilder.resultsLabels.abv")}</label>
+            <label htmlFor="delle">
+              {t("recipeBuilder.resultsLabels.delle")}
+            </label>
+            <p id="estOG">
+              {Math.round(noSecondaryBlend.blendedValue * 1000) / 1000}
+            </p>
+            <p>{Math.round(blend.blendedValue * 1000) / 1000}</p>
+            <input
+              type="number"
+              value={FG}
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+              onChange={(e) => {
+                setRecipeData((prev) => {
+                  return {
+                    ...prev,
+                    FG: Number(e.target.value),
+                  };
+                });
+              }}
+              onFocus={(e) => e.target.select()}
+            />
+
+            <p>
+              {Math.round(ABV * 100) / 100}
+              {t("recipeBuilder.percent")}
+            </p>
+            <p>
+              {Math.round(delle)} {t("DU")}
+            </p>
+            <label htmlFor="totalVolume">
+              {t("recipeBuilder.resultsLabels.totalPrimary")}
+            </label>
+            <p id="totalVolume">
+              {Math.round(noSecondaryBlend.totalVolume * 1000) / 1000}{" "}
+              {units.volume}
+            </p>
+            <label htmlFor="totalSecondaryVolume" className="col-start-3">
+              {t("recipeBuilder.resultsLabels.totalSecondary")}
+            </label>
+            <p id="totalVolume">
+              {Math.round(blend.totalVolume * 1000) / 1000} {units.volume}
+            </p>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

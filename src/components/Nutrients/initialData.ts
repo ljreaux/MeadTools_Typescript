@@ -1,8 +1,13 @@
-import yeasts from "../../assets/JSON/yeast.json";
 import { FormData } from "./NutrientCalc";
 
 export const initialData: FormData = {
-  yeasts,
+  yeasts: {
+    Lalvin: [],
+    Fermentis: [],
+    MangroveJack: [],
+    RedStar: [],
+    Other: [],
+  },
   inputs: {
     volume: 0,
     sg: 1.0,
@@ -13,11 +18,13 @@ export const initialData: FormData = {
     yeastBrand: "Lalvin",
     yeastStrain: "18-2007",
     yeastDetails: {
+      id: 1,
+      brand: "Lalvin",
       name: "18-2007",
-      NitrogenRequirement: "Low",
-      ABVTolerance: 15,
-      LowTemp: 50,
-      HighTemp: 90,
+      nitrogen_requirement: "Low",
+      tolerance: 15,
+      low_temp: 50,
+      high_temp: 90,
     },
     n2Requirement: "Low",
     volumeUnits: "gal",

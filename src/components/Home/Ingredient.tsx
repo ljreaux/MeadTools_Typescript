@@ -1,5 +1,5 @@
 import { Ingredient as IngredientType } from "../../App";
-import { FormEvent } from "react";
+import React, { FormEvent } from "react";
 import { FaMinusSquare } from "react-icons/fa";
 import { useEffect } from "react";
 import getAllIngredients from "../../helpers/getAllIngredients";
@@ -18,15 +18,18 @@ export interface IngredientListItem {
 function IngredientOptions({
   ingredients,
   setIngredients,
+  setLoading,
 }: {
   ingredients: IngredientListItem[];
   setIngredients: (obj: IngredientListItem[]) => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation();
   useEffect(() => {
     (async () => {
       const ingredients = await getAllIngredients();
       setIngredients(ingredients);
+      setLoading(false);
     })();
   }, []);
 
@@ -51,6 +54,7 @@ export default function Ingredient({
   removeLine,
   setChecked,
   setIndividual,
+  setLoading,
 }: {
   ingredient: IngredientType;
   index: number;
@@ -64,6 +68,7 @@ export default function Ingredient({
   removeLine: (index: number) => void;
   setChecked: (index: number) => void;
   setIndividual: (index: number, obj: Partial<IngredientType>) => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const converter =
     units.weight === "kg" && units.volume === "liter"
@@ -157,6 +162,7 @@ export default function Ingredient({
           <IngredientOptions
             ingredients={filtered}
             setIngredients={setIngredients}
+            setLoading={setLoading}
           />
         </select>
         <input
