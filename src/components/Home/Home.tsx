@@ -11,6 +11,8 @@ import { useTranslation } from "react-i18next";
 import { FormData } from "../Nutrients/NutrientCalc";
 import Stabilizers from "./Stabilizers";
 import Additives from "./Additives";
+import { PDFViewer } from "@react-pdf/renderer";
+import MyDocument from "./PDF";
 
 export default function Home({
   recipeData,
@@ -112,45 +114,48 @@ export default function Home({
   ]);
 
   const { next, back, step, currentStepIndex, steps } = useMultiStepForm([
-    <RecipeBuilder {...recipeData} setRecipeData={setRecipeData} />,
-    <>
-      <MainInputs {...data} setData={setData} />
-      <button
-        onClick={() => setAdvanced((prev) => !prev)}
-        className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
-      >
-        {t("buttonLabels.advanced")}
-      </button>
-      {advanced && (
-        <AdvancedInputForm
-          advanced={advanced}
-          yanFromSource={yanFromSource}
-          setYanFromSource={setYanFromSource}
-          yanContribution={yanContribution}
-          setYanContribution={setYanContribution}
-        />
-      )}{" "}
-    </>,
-    <NutrientCalcResults
-      {...data}
-      {...maxGPL}
-      yanFromSource={yanFromSource}
-      advanced={advanced}
-    />,
-    <Stabilizers
-      abv={recipeData.ABV}
-      batchVolume={recipeData.volume}
-      volumeUnits={recipeData.units.volume}
-      setSorbateSulfite={setSorbateSulfite}
-    />,
-    <Additives
-      additives={recipeData.additives}
-      editAdditives={editAdditives}
-      addAdditive={addAdditive}
-      deleteAdditive={deleteAdditive}
-      volumeUnits={recipeData.units.volume}
-      batchVolume={recipeData.volume}
-    />,
+    // <RecipeBuilder {...recipeData} setRecipeData={setRecipeData} />,
+    // <>
+    //   <MainInputs {...data} setData={setData} />
+    //   <button
+    //     onClick={() => setAdvanced((prev) => !prev)}
+    //     className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
+    //   >
+    //     {t("buttonLabels.advanced")}
+    //   </button>
+    //   {advanced && (
+    //     <AdvancedInputForm
+    //       advanced={advanced}
+    //       yanFromSource={yanFromSource}
+    //       setYanFromSource={setYanFromSource}
+    //       yanContribution={yanContribution}
+    //       setYanContribution={setYanContribution}
+    //     />
+    //   )}{" "}
+    // </>,
+    // <NutrientCalcResults
+    //   {...data}
+    //   {...maxGPL}
+    //   yanFromSource={yanFromSource}
+    //   advanced={advanced}
+    // />,
+    // <Stabilizers
+    //   abv={recipeData.ABV}
+    //   batchVolume={recipeData.volume}
+    //   volumeUnits={recipeData.units.volume}
+    //   setSorbateSulfite={setSorbateSulfite}
+    // />,
+    // <Additives
+    //   additives={recipeData.additives}
+    //   editAdditives={editAdditives}
+    //   addAdditive={addAdditive}
+    //   deleteAdditive={deleteAdditive}
+    //   volumeUnits={recipeData.units.volume}
+    //   batchVolume={recipeData.volume}
+    // />,
+    <PDFViewer className="w-11/12 h-[50vh]">
+      <MyDocument {...recipeData} {...data} />
+    </PDFViewer>,
   ]);
   return (
     <div className="w-full flex flex-col items-center justify-center mt-12 mb-12">
