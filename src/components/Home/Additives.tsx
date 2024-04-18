@@ -2,6 +2,7 @@ import Title from "../Title";
 import { Additive } from "../../App";
 import lodash from "lodash";
 import { useTranslation } from "react-i18next";
+import { FaMinusSquare, FaPlusSquare } from "react-icons/fa";
 
 export default function Additives({
   additives,
@@ -176,6 +177,7 @@ export default function Additives({
               }}
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
             disabled:cursor-not-allowed"
+              onFocus={(e) => e.target.select()}
             />
             <select
               name="additiveUnits"
@@ -183,6 +185,9 @@ export default function Additives({
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2 disabled:bg-sidebar
             disabled:cursor-not-allowed"
               value={additive.unit}
+              onChange={(e) => {
+                editAdditives({ ...additive, unit: e.target.value }, i);
+              }}
             >
               <option value="g">{t("G")}</option>
               <option value="mg">{t("MG")}</option>
@@ -199,25 +204,24 @@ export default function Additives({
               <option value="units">{t("UNITS")}</option>
             </select>
             {additives.length > 1 && i !== 0 && (
-              <button
-                className="col-span-4 bg-background rounded-2xl border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
-                onClick={() => deleteAdditive(i)}
-              >
-                delete
+              <button className="ml-4" onClick={() => deleteAdditive(i)}>
+                <FaMinusSquare />
               </button>
             )}
           </div>
         );
       })}
-      {additives.length < 10 && (
+
+      <div className="col-span-4 flex justify-center">
         <button
-          className="col-span-4 bg-background rounded-2xl border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed"
+          className="bg-background rounded-2xl border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4 flex justify-center items-center"
           type="button"
           onClick={addAdditive}
+          disabled={additives.length >= 10}
         >
-          add
+          <FaPlusSquare />
         </button>
-      )}
+      </div>
     </div>
   );
 }

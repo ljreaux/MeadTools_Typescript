@@ -38,7 +38,9 @@ function IngredientOptions({
       {ingredients.map((ingredient) => {
         const ingredientDisplay = lodash.camelCase(ingredient.name);
         return (
-          <option value={ingredient.name}>{t(`${ingredientDisplay}`)}</option>
+          <option key={ingredientDisplay} value={ingredient.name}>
+            {t(`${ingredientDisplay}`)}
+          </option>
         );
       })}
     </>
