@@ -62,6 +62,17 @@ export interface FormData {
 export default function NutrientCalc() {
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState(false);
+  const [nuteInfo, setNuteInfo] = useState<null | {
+    ppmYan: number[];
+    totalGrams: number[];
+    perAddition: number[];
+    totalYan: number;
+    remainingYan: number;
+    gf: {
+      gf: number;
+      gfWater: number;
+    };
+  }>(null);
 
   useEffect(() => {
     if (advanced) setYanFromSource([0, 0, 0]);
@@ -101,6 +112,7 @@ export default function NutrientCalc() {
       {...maxGPL}
       yanFromSource={yanFromSource}
       advanced={advanced}
+      setNuteInfo={setNuteInfo}
     />,
   ]);
 

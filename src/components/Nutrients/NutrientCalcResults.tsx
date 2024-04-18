@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, FormEvent, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  FormEvent,
+  useState,
+  useEffect,
+} from "react";
 import { FormData } from "./NutrientCalc";
 import Title from "../Title";
 // import useMaxGpl from "../../helpers/useMaxGpl";
@@ -17,6 +23,7 @@ export default function NutrientCalcResults({
   yanFromSource,
   advanced,
   setGplArr,
+  setNuteInfo,
 }: {
   gplArr: number[];
   yanContribution: FormData["yanContribution"];
@@ -26,6 +33,19 @@ export default function NutrientCalcResults({
   yanFromSource: number[] | null;
   advanced: boolean;
   setGplArr: Dispatch<SetStateAction<number[]>>;
+  setNuteInfo: Dispatch<
+    SetStateAction<null | {
+      ppmYan: number[];
+      totalGrams: number[];
+      perAddition: number[];
+      totalYan: number;
+      remainingYan: number;
+      gf: {
+        gf: number;
+        gfWater: number;
+      };
+    }>
+  >;
 }) {
   const { t } = useTranslation();
   const [gfType, setGfType] = useState("Go-Ferm");
@@ -49,6 +69,10 @@ export default function NutrientCalcResults({
   );
 
   const { gf, gfWater } = useGoFerm(gfType, outputs.yeastAmount);
+
+  useEffect(() => {
+    setNuteInfo({ ...nutrients, gf: { gf, gfWater } });
+  }, [nutrients, gf, gfWater]);
 
   return (
     <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video">

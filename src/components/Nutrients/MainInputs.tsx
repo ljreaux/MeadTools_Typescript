@@ -248,6 +248,7 @@ export default function MainInputs({
               name="schedule"
               id="schedule"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+              value={selected.schedule}
               onChange={handleSelected}
             >
               {maxGpl &&
