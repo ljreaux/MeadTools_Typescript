@@ -15,6 +15,7 @@ import { toBrix } from "../../helpers/unitConverters";
 import useAbv from "../../hooks/useAbv.ts";
 import { FormData } from "../Nutrients/NutrientCalc";
 import calcSb from "../../helpers/calcSb";
+import i18n from "../../localization/i18n.ts";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -93,7 +94,7 @@ const MyDocument = ({
     return item.amount > 0 && item.name.length > 0;
   });
   return (
-    <Document>
+    <Document title="MeadTools Recipe PDF" language={i18n.language}>
       <Page size="A4" style={styles.page} wrap>
         <View
           fixed
@@ -105,7 +106,7 @@ const MyDocument = ({
         >
           <Image src={logo} style={styles.image} />
           <Text style={{ marginTop: "-8%", paddingBottom: 8, fontSize: 24 }}>
-            Recipe Sheet
+            {t("PDF.pageTitle")}
           </Text>
         </View>
         <View
@@ -132,7 +133,7 @@ const MyDocument = ({
                   border: "1px solid black",
                 }}
               >
-                Total Volume
+                {t("PDF.totalVolume")}
               </Text>
               <Text
                 style={{
@@ -142,7 +143,7 @@ const MyDocument = ({
                   border: "1px solid black",
                 }}
               >
-                Yeast
+                {t("PDF.yeast")}
               </Text>
               <Text
                 style={{
@@ -162,14 +163,18 @@ const MyDocument = ({
               >
                 <Text>
                   {outputs &&
-                    `${Math.round(outputs?.yeastAmount * 100) / 100}g of ${
+                    `${Math.round(outputs?.yeastAmount * 100) / 100}g ${t(
+                      "PDF.of"
+                    )} ${
                       selected?.yeastBrand !== "Other"
                         ? selected?.yeastBrand
                         : ""
                     } ${selected?.yeastDetails.name}`}
                 </Text>
                 <Text>
-                  {`Temp Range: ${selected?.yeastDetails.low_temp}-${selected?.yeastDetails.high_temp}°F`}
+                  {`${t("PDF.tempRange")} ${selected?.yeastDetails.low_temp}-${
+                    selected?.yeastDetails.high_temp
+                  }°F`}
                 </Text>
               </View>
               <View
@@ -188,7 +193,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Estimated OG:
+                  {t("PDF.estimatedOG")}
                 </Text>
                 <Text
                   style={{
@@ -198,7 +203,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Estimated FG:
+                  {t("PDF.estimatedFG")}
                 </Text>
                 <View
                   style={{
@@ -244,7 +249,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  ABV Tolerance:
+                  {t("PDF.tolerance")}
                 </Text>
                 <Text
                   style={{
@@ -254,7 +259,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Expected ABV:
+                  {t("PDF.expectedABV")}
                 </Text>
                 <View
                   style={{
@@ -266,7 +271,9 @@ const MyDocument = ({
                   <Text>{`${selected?.yeastDetails.tolerance}%`}</Text>
                   <Text>
                     {OG !== undefined
-                      ? `1/3 SB: ${Math.round(calcSb(OG) * 1000) / 1000}`
+                      ? `${t("PDF.sugarBreak")} ${
+                          Math.round(calcSb(OG) * 1000) / 1000
+                        }`
                       : ""}
                   </Text>
                 </View>
@@ -298,7 +305,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Nutrient Protocol:
+                  {t("PDF.nutrient")}
                 </Text>
                 <Text
                   style={{
@@ -308,7 +315,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Number of Additions:
+                  {t("PDF.numberOfAdditions")}
                 </Text>
                 <View
                   style={{
@@ -345,7 +352,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Amount per Addition:
+                  {t("PDF.amount")}
                 </Text>
                 <Text
                   style={{
@@ -355,7 +362,7 @@ const MyDocument = ({
                     width: "50%",
                   }}
                 >
-                  Total:
+                  {t("PDF.total")}
                 </Text>
                 <View
                   style={{
@@ -429,7 +436,7 @@ const MyDocument = ({
                       fontFamily: "Times-Bold",
                     }}
                   >
-                    Stabilizers
+                    {t("PDF.stabilizers")}
                   </Text>
                 )}
                 <Text
@@ -440,7 +447,7 @@ const MyDocument = ({
                     fontFamily: "Times-Bold",
                   }}
                 >
-                  Remaining Yan
+                  {t("PDF.remaining")}
                 </Text>
                 <View style={{ width: "50%" }}>
                   <Text
@@ -448,14 +455,16 @@ const MyDocument = ({
                       border: "1px solid black",
                     }}
                   >
-                    {sulfite && `${Math.round(sulfite * 1000) / 1000}g k-meta`}
+                    {sulfite &&
+                      `${Math.round(sulfite * 1000) / 1000}g ${t("PDF.kmeta")}`}
                   </Text>
                   <Text
                     style={{
                       border: "1px solid black",
                     }}
                   >
-                    {sorbate && `${Math.round(sorbate * 1000) / 1000}g k-sorb`}
+                    {sorbate &&
+                      `${Math.round(sorbate * 1000) / 1000}g ${t("PDF.ksorb")}`}
                   </Text>
                 </View>
                 <Text
@@ -487,7 +496,7 @@ const MyDocument = ({
                 },
               ]}
             >
-              Primary Ingredients
+              {t("PDF.primary")}
             </Text>
             <Text
               style={[
@@ -499,7 +508,7 @@ const MyDocument = ({
                 },
               ]}
             >
-              Weight {units && units.weight}
+              {t("PDF.weight")} {units && units.weight}
             </Text>
             <Text
               style={[
@@ -511,7 +520,7 @@ const MyDocument = ({
                 },
               ]}
             >
-              Volume {units && units.volume}
+              {t("PDF.volume")} {units && units.volume}
             </Text>
           </View>
           {primary &&
@@ -550,7 +559,7 @@ const MyDocument = ({
                   },
                 ]}
               >
-                Secondary Ingredients
+                {t("PDF.secondary")}
               </Text>
               <Text
                 style={[
@@ -562,7 +571,7 @@ const MyDocument = ({
                   },
                 ]}
               >
-                Weight {units && units.weight}
+                {t("PDF.weight")} {units && units.weight}
               </Text>
               <Text
                 style={[
@@ -574,7 +583,7 @@ const MyDocument = ({
                   },
                 ]}
               >
-                Volume {units && units.volume}
+                {t("PDF.volume")} {units && units.volume}
               </Text>
             </View>
           )}
@@ -611,7 +620,7 @@ const MyDocument = ({
                   },
                 ]}
               >
-                Additives
+                {t("PDF.additives")}
               </Text>
               <Text
                 style={[
@@ -623,7 +632,7 @@ const MyDocument = ({
                   },
                 ]}
               >
-                Amount
+                {t("PDF.addAmount")}
               </Text>
             </View>
           )}
