@@ -6,10 +6,10 @@ import Ingredient from "./Ingredient";
 import { toSG } from "../../helpers/unitConverters";
 import useBlend from "../../hooks/useBlend";
 import useAbv from "../../hooks/useAbv";
-import { IngredientListItem } from "./Ingredient";
 import { Ingredient as IngredientType } from "../../App";
 import { useTranslation } from "react-i18next";
 import Loading from "../Loading";
+import { List } from "../../App";
 
 export default function RecipeBuilder({
   ingredients,
@@ -17,7 +17,12 @@ export default function RecipeBuilder({
   FG,
   units,
   setRecipeData,
-}: RecipeData & { setRecipeData: Dispatch<SetStateAction<RecipeData>> }) {
+  setIngredientsList,
+}: RecipeData & {
+  setRecipeData: Dispatch<SetStateAction<RecipeData>>;
+  ingredientsList: List;
+  setIngredientsList: Dispatch<SetStateAction<List>>;
+}) {
   const { t } = useTranslation();
   const [firstMount, setFirstMount] = useState(true);
   useEffect(() => setFirstMount(false), []);
@@ -40,15 +45,8 @@ export default function RecipeBuilder({
     runBlendingFunction: secondaryBlendFunction,
   } = useBlend(withOutSecondary);
 
-  function setIngredients(ingredientList: IngredientListItem[]) {
-    setRecipeData((prev) => {
-      return ingredientList
-        ? {
-            ...prev,
-            ingredientsList: ingredientList,
-          }
-        : prev;
-    });
+  function setIngredients(ingredientList: List) {
+    setIngredientsList(ingredientList);
   }
   function setIndividual(index: number, ingredient: Partial<IngredientType>) {
     setRecipeData((prev) => {
@@ -163,11 +161,10 @@ export default function RecipeBuilder({
           offset: offsetArr.reduce((prev, curr) => {
             return curr / noSecondaryBlend.totalVolume + prev;
           }, 0),
-          ABV,
           volume: noSecondaryBlend.totalVolume,
         };
       });
-  }, [blend.blendedValue, noSecondaryBlend.blendedValue, ABV]);
+  }, [blend.blendedValue, noSecondaryBlend.blendedValue]);
 
   const [loading, setLoading] = useState(true);
 

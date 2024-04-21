@@ -1,13 +1,6 @@
 import { FormData } from "./NutrientCalc";
 
 export const initialData: FormData = {
-  yeasts: {
-    Lalvin: [],
-    Fermentis: [],
-    MangroveJack: [],
-    RedStar: [],
-    Other: [],
-  },
   inputs: {
     volume: 0,
     sg: 1.0,

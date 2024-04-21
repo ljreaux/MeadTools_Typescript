@@ -2,7 +2,7 @@ import useMultiStepForm from "../../hooks/useMultiStepForm";
 import RecipeBuilder from "./RecipeBuilder";
 import { Additive, RecipeData } from "../../App";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import MainInputs from "../Nutrients/MainInputs";
+import MainInputs, { YeastType } from "../Nutrients/MainInputs";
 import AdvancedInputForm from "../Nutrients/AdvancedInputForm";
 import NutrientCalcResults from "../Nutrients/NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
@@ -11,16 +11,49 @@ import { useTranslation } from "react-i18next";
 import { FormData } from "../Nutrients/NutrientCalc";
 import Stabilizers from "./Stabilizers";
 import Additives from "./Additives";
+import MyDocument from "./PDF";
+import Loading from "../Loading";
+import { List } from "../../App";
+import { usePDF } from "@react-pdf/renderer";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { pdfjs } from "react-pdf";
+// Plugins
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+
+// Import styles
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import Title from "../Title";
+import { Link } from "react-router-dom";
 
 export default function Home({
   recipeData,
   setRecipeData,
+  ingredientsList,
+  setIngredientsList,
+  token,
 }: {
   recipeData: RecipeData;
   setRecipeData: Dispatch<SetStateAction<RecipeData>>;
+  ingredientsList: List;
+  setIngredientsList: Dispatch<SetStateAction<List>>;
+  token: string | null;
 }) {
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { t } = useTranslation();
-  const [advanced, setAdvanced] = useState(false);
+  const [advanced, setAdvanced] = useLocalStorage("advanced", false);
+  const [nuteInfo, setNuteInfo] = useLocalStorage<null | {
+    ppmYan: number[];
+    totalGrams: number[];
+    perAddition: number[];
+    totalYan: number;
+    remainingYan: number;
+    gf: {
+      gf: number;
+      gfWater: number;
+    };
+  }>("nuteInfo", null);
 
   useEffect(() => {
     if (advanced) setYanFromSource([0, 0, 0]);
@@ -68,9 +101,15 @@ export default function Home({
     }));
   }
 
-  const [yanContribution, setYanContribution] = useState([40, 100, 210]);
-  const [yanFromSource, setYanFromSource] = useState<number[] | null>(null);
-  const [data, setData] = useState<FormData>({
+  const [yanContribution, setYanContribution] = useLocalStorage(
+    "yanContribution",
+    [40, 100, 210]
+  );
+  const [yanFromSource, setYanFromSource] = useLocalStorage<number[] | null>(
+    "yanFromSource",
+    null
+  );
+  const [data, setData] = useLocalStorage<FormData>("nutrientData", {
     ...initialData,
     inputs: {
       ...initialData.inputs,
@@ -90,7 +129,7 @@ export default function Home({
   );
 
   useEffect(() => {
-    setData((prev) => ({
+    setData((prev: FormData) => ({
       ...prev,
       inputs: {
         ...prev.inputs,
@@ -110,13 +149,54 @@ export default function Home({
     recipeData.offset,
     recipeData.units.volume,
   ]);
+  const [yeasts, setYeasts] = useState<YeastType>({
+    Lalvin: [],
+    Fermentis: [],
+    MangroveJack: [],
+    RedStar: [],
+    Other: [],
+  });
 
-  const { next, back, step, currentStepIndex, steps } = useMultiStepForm([
-    <RecipeBuilder {...recipeData} setRecipeData={setRecipeData} />,
+  const [instance, setInstance] = usePDF({
+    document: (
+      <MyDocument
+        {...recipeData}
+        {...ingredientsList}
+        {...data}
+        {...yeasts}
+        nuteInfo={nuteInfo}
+      />
+    ),
+  });
+
+  useEffect(() => {
+    setInstance(
+      <MyDocument
+        {...recipeData}
+        {...ingredientsList}
+        {...data}
+        {...yeasts}
+        nuteInfo={nuteInfo}
+      />
+    );
+  }, [recipeData, ingredientsList, data, yeasts, nuteInfo]);
+
+  const { next, back, step, currentStepIndex, steps, goTo } = useMultiStepForm([
+    <RecipeBuilder
+      {...recipeData}
+      setRecipeData={setRecipeData}
+      ingredientsList={ingredientsList}
+      setIngredientsList={setIngredientsList}
+    />,
     <>
-      <MainInputs {...data} setData={setData} />
+      <MainInputs
+        {...data}
+        setData={setData}
+        yeasts={yeasts}
+        setYeasts={setYeasts}
+      />
       <button
-        onClick={() => setAdvanced((prev) => !prev)}
+        onClick={() => setAdvanced((prev: boolean) => !prev)}
         className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
       >
         {t("buttonLabels.advanced")}
@@ -136,6 +216,7 @@ export default function Home({
       {...maxGPL}
       yanFromSource={yanFromSource}
       advanced={advanced}
+      setNuteInfo={setNuteInfo}
     />,
     <Stabilizers
       abv={recipeData.ABV}
@@ -151,6 +232,50 @@ export default function Home({
       volumeUnits={recipeData.units.volume}
       batchVolume={recipeData.volume}
     />,
+    <>
+      {instance.loading && <Loading />}
+      {!instance.loading && instance.url && (
+        <div className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video">
+          <Title header={t("PDF.title")} />
+          <div className="w-[80%] h-[50vh]">
+            <Worker
+              workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`}
+            >
+              <Viewer
+                fileUrl={instance.url}
+                plugins={[
+                  // Register plugins
+                  defaultLayoutPluginInstance,
+                ]}
+              />
+            </Worker>
+          </div>
+        </div>
+      )}
+    </>,
+    <>
+      {!token ? (
+        <Link to={"/login"}>Login to Save Recipe</Link>
+      ) : (
+        <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
+          <Title header="Save Your Recipe?" />
+          <label
+            htmlFor="recipeName"
+            className="w-full flex justify-center items-center text-center gap-4"
+          >
+            <p>Enter a Recipe Name</p>
+            <input
+              type="text"
+              className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-1/4 my-2 disabled:bg-sidebar
+            disabled:cursor-not-allowed"
+            />
+          </label>
+          <button className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2">
+            Save Recipe
+          </button>
+        </form>
+      )}
+    </>,
   ]);
   return (
     <div className="w-full flex flex-col items-center justify-center mt-12 mb-12">
@@ -177,6 +302,7 @@ export default function Home({
           {t("buttonLabels.next")}
         </button>
       )}
+      <button onClick={() => goTo(steps.length - 2)}> to PDF</button>
     </div>
   );
 }

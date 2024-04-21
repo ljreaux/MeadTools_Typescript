@@ -32,7 +32,6 @@ export type Yeast = {
 };
 
 interface MainInputs {
-  yeasts: FormData["yeasts"];
   selected: FormData["selected"];
   inputs: FormData["inputs"];
   maxGpl: FormData["maxGpl"];
@@ -44,8 +43,11 @@ export default function MainInputs({
   inputs,
   maxGpl,
   setData,
+  setYeasts,
 }: MainInputs & {
   setData: Dispatch<SetStateAction<FormData>>;
+  yeasts: YeastType;
+  setYeasts: Dispatch<SetStateAction<YeastType>>;
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -76,12 +78,7 @@ export default function MainInputs({
           Other,
         };
 
-        setData((prev) => {
-          return {
-            ...prev,
-            yeasts: data,
-          };
-        });
+        setYeasts(data);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -248,6 +245,7 @@ export default function MainInputs({
               name="schedule"
               id="schedule"
               className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background w-11/12 my-2"
+              value={selected.schedule}
               onChange={handleSelected}
             >
               {maxGpl &&

@@ -6,8 +6,6 @@ import NutrientCalcResults from "./NutrientCalcResults";
 import useMaxGpl from "../../hooks/useMaxGpl";
 import AdvancedInputForm from "./AdvancedInputForm";
 import { useTranslation } from "react-i18next";
-import getAllYeasts from "../../helpers/getAllYeasts";
-import { Yeast } from "./MainInputs";
 
 interface Selected {
   yeastBrand: keyof YeastType;
@@ -32,7 +30,6 @@ interface GplEntries {
 }
 
 export interface FormData {
-  yeasts: YeastType;
   maxGpl: {
     tbe: GplEntries;
     tosna: GplEntries;
@@ -62,6 +59,17 @@ export interface FormData {
 export default function NutrientCalc() {
   const { t } = useTranslation();
   const [advanced, setAdvanced] = useState(false);
+  const [, setNuteInfo] = useState<null | {
+    ppmYan: number[];
+    totalGrams: number[];
+    perAddition: number[];
+    totalYan: number;
+    remainingYan: number;
+    gf: {
+      gf: number;
+      gfWater: number;
+    };
+  }>(null);
 
   useEffect(() => {
     if (advanced) setYanFromSource([0, 0, 0]);
@@ -76,10 +84,22 @@ export default function NutrientCalc() {
     data.selected.schedule,
     data.inputs?.sg
   );
+  const [yeasts, setYeasts] = useState<YeastType>({
+    Lalvin: [],
+    Fermentis: [],
+    MangroveJack: [],
+    RedStar: [],
+    Other: [],
+  });
 
   const { currentStepIndex, step, next, back, steps } = useMultiStepForm([
     <>
-      <MainInputs {...data} setData={setData} />
+      <MainInputs
+        {...data}
+        setData={setData}
+        yeasts={yeasts}
+        setYeasts={setYeasts}
+      />
       <button
         onClick={() => setAdvanced((prev) => !prev)}
         className="hover:bg-background rounded-2xl border-2 border-solid hover:border-textColor  bg-sidebar border-background md:text-lg text-base px-2 py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed w-1/4"
@@ -101,6 +121,7 @@ export default function NutrientCalc() {
       {...maxGPL}
       yanFromSource={yanFromSource}
       advanced={advanced}
+      setNuteInfo={setNuteInfo}
     />,
   ]);
 

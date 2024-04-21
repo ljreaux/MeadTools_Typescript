@@ -1,4 +1,4 @@
-import { Ingredient as IngredientType } from "../../App";
+import { Ingredient as IngredientType, List } from "../../App";
 import React, { FormEvent } from "react";
 import { FaMinusSquare } from "react-icons/fa";
 import { useEffect } from "react";
@@ -20,8 +20,8 @@ function IngredientOptions({
   setIngredients,
   setLoading,
 }: {
-  ingredients: IngredientListItem[];
-  setIngredients: (obj: IngredientListItem[]) => void;
+  ingredients: List;
+  setIngredients: (obj: List) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation();
@@ -60,13 +60,13 @@ export default function Ingredient({
 }: {
   ingredient: IngredientType;
   index: number;
-  ingredientsList: IngredientListItem[];
+  ingredientsList: List;
   filterTerm: null | string[];
   units: {
     weight: "lbs" | "kg";
     volume: "gal" | "liter";
   };
-  setIngredients: (obj: IngredientListItem[]) => void;
+  setIngredients: (obj: List) => void;
   removeLine: (index: number) => void;
   setChecked: (index: number) => void;
   setIndividual: (index: number, obj: Partial<IngredientType>) => void;
