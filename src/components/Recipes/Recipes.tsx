@@ -1,6 +1,7 @@
 import useMultiStepForm from "../../hooks/useMultiStepForm";
-import RecipeBuilder from "./RecipeBuilder";
+import RecipeBuilder from "../Home/RecipeBuilder";
 import { Additive, RecipeData } from "../../App";
+import { initialIngredients } from "../Home/initialIngredients";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import MainInputs, { YeastType } from "../Nutrients/MainInputs";
 import AdvancedInputForm from "../Nutrients/AdvancedInputForm";
@@ -9,9 +10,9 @@ import useMaxGpl from "../../hooks/useMaxGpl";
 import { initialData } from "../Nutrients/initialData";
 import { useTranslation } from "react-i18next";
 import { FormData } from "../Nutrients/NutrientCalc";
-import Stabilizers from "./Stabilizers";
-import Additives from "./Additives";
-import MyDocument from "./PDF";
+import Stabilizers from "../Home/Stabilizers";
+import Additives from "../Home/Additives";
+import MyDocument from "../Home/PDF";
 import Loading from "../Loading";
 import { List } from "../../App";
 import { usePDF } from "@react-pdf/renderer";
@@ -23,38 +24,49 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 // Import styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import Title from "../Title";
-import { Link } from "react-router-dom";
-import Notes from "./Notes";
-import SaveRecipeForm from "./SaveRecipeForm";
 
-export default function Home({
-  recipeData,
-  setRecipeData,
+import Title from "../Title";
+import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../../main";
+import Notes from "../Home/Notes";
+
+export default function Recipes({
   ingredientsList,
   setIngredientsList,
   token,
+  userId,
 }: {
-  recipeData: RecipeData;
-  setRecipeData: Dispatch<SetStateAction<RecipeData>>;
   ingredientsList: List;
   setIngredientsList: Dispatch<SetStateAction<List>>;
   token: string | null;
+  userId: number | null;
 }) {
-  const [primaryNotes, setPrimaryNotes] = useLocalStorage<string[][]>(
-    "primaryNotes",
-    [["", ""]]
-  );
-  const [secondaryNotes, setSecondaryNotes] = useLocalStorage<string[][]>(
-    "secondaryNotes",
-    [["", ""]]
-  );
+  const { i18n, t } = useTranslation();
+  const language = i18n.language;
+  const isMetric = language !== "en" && language !== "en-US";
+  const navigate = useNavigate();
+  const [recipeUser, setRecipeUser] = useState(0);
+  const notCurrentUser = recipeUser !== 0 && recipeUser !== userId;
 
+  const [primaryNotes, setPrimaryNotes] = useState<string[][]>([["", ""]]);
+  const [secondaryNotes, setSecondaryNotes] = useState<string[][]>([["", ""]]);
+
+  const [recipeData, setRecipeData] = useState<RecipeData>({
+    ingredients: initialIngredients,
+    OG: 0,
+    volume: 0,
+    ABV: 0,
+    FG: 0.996,
+    offset: 0,
+    units: {
+      weight: isMetric ? "kg" : "lbs",
+      volume: isMetric ? "liter" : "gal",
+    },
+    additives: [{ name: "", amount: 0, unit: "g" }],
+  });
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { t } = useTranslation();
-  const [advanced, setAdvanced] = useLocalStorage("advanced", false);
-  const [nuteInfo, setNuteInfo] = useLocalStorage<null | {
+  const [advanced, setAdvanced] = useState(false);
+  const [nuteInfo, setNuteInfo] = useState<null | {
     ppmYan: number[];
     totalGrams: number[];
     perAddition: number[];
@@ -64,7 +76,7 @@ export default function Home({
       gf: number;
       gfWater: number;
     };
-  }>("nuteInfo", null);
+  }>(null);
 
   useEffect(() => {
     if (advanced) setYanFromSource([0, 0, 0]);
@@ -112,15 +124,9 @@ export default function Home({
     }));
   }
 
-  const [yanContribution, setYanContribution] = useLocalStorage(
-    "yanContribution",
-    [40, 100, 210]
-  );
-  const [yanFromSource, setYanFromSource] = useLocalStorage<number[] | null>(
-    "yanFromSource",
-    null
-  );
-  const [data, setData] = useLocalStorage<FormData>("nutrientData", {
+  const [yanContribution, setYanContribution] = useState([40, 100, 210]);
+  const [yanFromSource, setYanFromSource] = useState<number[] | null>(null);
+  const [data, setData] = useState<FormData>({
     ...initialData,
     inputs: {
       ...initialData.inputs,
@@ -196,6 +202,64 @@ export default function Home({
     );
   }, [recipeData, ingredientsList, data, yeasts, nuteInfo]);
 
+  const { recipeId } = useParams();
+  useEffect(() => {
+    function cocatNotes(notes: string[]): string[][] {
+      const newNotes = [];
+      while (notes.length) newNotes.push(notes.splice(0, 2));
+
+      console.log(newNotes);
+      return newNotes;
+    }
+    console.log(recipeId);
+    const getRecipe = async () => {
+      const loginError = "You must be logged in to view user recipes";
+      const notFoundError = "RecipeNotFoundError";
+      try {
+        if (!token) throw new Error(loginError);
+        const res = await fetch(`${API_URL}recipes/${recipeId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const { recipe } = await res.json();
+        console.log(recipe);
+        if (recipe.name === notFoundError) throw new Error(recipe.message);
+        const {
+          recipeData,
+          nutrientData,
+          advanced,
+          yanFromSource,
+          yanContribution,
+          nuteInfo,
+          user_id,
+          primaryNotes,
+          secondaryNotes,
+        } = recipe;
+        setRecipeUser(user_id);
+        setRecipeData(JSON.parse(recipeData));
+        setData(JSON.parse(nutrientData));
+        setAdvanced(JSON.parse(advanced));
+        setYanFromSource(JSON.parse(yanFromSource));
+        setYanContribution(JSON.parse(yanContribution));
+        setNuteInfo(JSON.parse(nuteInfo));
+        setPrimaryNotes(cocatNotes(primaryNotes));
+        setSecondaryNotes(cocatNotes(secondaryNotes));
+      } catch (err) {
+        console.log(err);
+        alert(err);
+        navigate("/");
+      }
+    };
+    getRecipe();
+  }, []);
+
+  useEffect(() => {
+    console.log(recipeUser, userId);
+    notCurrentUser &&
+      alert("This is another user's recipe, any changes will not be saved.");
+  }, [recipeUser]);
   const { next, back, step, currentStepIndex, steps, goTo } = useMultiStepForm([
     <RecipeBuilder
       {...recipeData}
@@ -249,8 +313,8 @@ export default function Home({
     />,
     <Notes
       primaryNotes={primaryNotes}
-      setPrimaryNotes={setPrimaryNotes}
       secondaryNotes={secondaryNotes}
+      setPrimaryNotes={setPrimaryNotes}
       setSecondaryNotes={setSecondaryNotes}
     />,
     <>
@@ -275,19 +339,14 @@ export default function Home({
       )}
     </>,
     <>
-      {!token ? (
-        <Link to={"/login"}>Login to Save Recipe</Link>
+      {notCurrentUser ? (
+        <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
+          Save Recipe to Your Account?
+        </form>
       ) : (
-        <SaveRecipeForm
-          recipeData={recipeData}
-          nutrientData={data}
-          nuteInfo={nuteInfo}
-          primaryNotes={primaryNotes}
-          secondaryNotes={secondaryNotes}
-          yanContribution={yanContribution}
-          yanFromSource={yanFromSource}
-          advanced={advanced}
-        />
+        <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
+          Save Changes to Recipe?
+        </form>
       )}
     </>,
   ]);

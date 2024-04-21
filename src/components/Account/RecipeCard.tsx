@@ -23,7 +23,7 @@ export default function RecipeCard({
               const { recipeData } = res.recipe;
               setRecipeData(JSON.parse(recipeData));
               console.log(recipeData);
-              navigate("/");
+              navigate(`/recipes/${recipe.id}`);
             })
             .catch((err) => alert(err))
         }

@@ -15,11 +15,17 @@ interface UserInfo {
 
 export default function Account({
   token,
+  user,
   setToken,
+  setUser,
   setRecipeData,
 }: {
   token: string | null;
+  user: { id: number; role: "user" | "admin" } | null;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
+  setUser: React.Dispatch<
+    React.SetStateAction<{ id: number; role: "user" | "admin" } | null>
+  >;
   setRecipeData: React.Dispatch<React.SetStateAction<RecipeData>>;
 }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -32,6 +38,7 @@ export default function Account({
         const user = await getUserInfo(token);
         if (user) {
           setUserInfo(user);
+          setUser((prev) => ({ ...prev, id: user.id, role: user.role }));
           console.log(user);
         } else {
           alert("Login failed");
@@ -39,6 +46,13 @@ export default function Account({
         }
       })();
   }, [token]);
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+
+      navigate("/account");
+    }
+  }, [user]);
   return (
     <div>
       {userInfo ? (

@@ -16,6 +16,7 @@ import useAbv from "../../hooks/useAbv.ts";
 import { FormData } from "../Nutrients/NutrientCalc";
 import calcSb from "../../helpers/calcSb";
 import i18n from "../../localization/i18n.ts";
+import { Dispatch, SetStateAction } from "react";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -66,6 +67,8 @@ const MyDocument = ({
   sorbate,
   sulfite,
   additives,
+  primaryNotes,
+  secondaryNotes,
 }: Partial<RecipeData> &
   Partial<FormData> & {
     nuteInfo: null | {
@@ -79,6 +82,9 @@ const MyDocument = ({
         gfWater: number;
       };
     };
+  } & {
+    primaryNotes: string[][];
+    secondaryNotes: string[][];
   }) => {
   const { t } = useTranslation();
   const ABVOBJ = OG && FG ? { OG, FG } : { OG: 1, FG: 1 };
@@ -543,7 +549,60 @@ const MyDocument = ({
               </View>
             ))}
         </View>
-
+        {primaryNotes.length > 0 && primaryNotes[0][0].length && (
+          <View
+            style={{
+              width: "90%",
+              flexDirection: "row",
+              marginTop: 16,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text
+              style={[
+                styles.tableAlign,
+                {
+                  width: "75%",
+                  textAlign: "left",
+                  paddingLeft: 10,
+                  backgroundColor: "gray",
+                  fontFamily: "Times-Bold",
+                },
+              ]}
+            >
+              Primary Notes
+            </Text>
+            <Text
+              style={[
+                styles.tableAlign,
+                {
+                  width: "25%",
+                  backgroundColor: "gray",
+                  fontFamily: "Times-Bold",
+                },
+              ]}
+            >
+              Details
+            </Text>
+            {primaryNotes.map((note, i) => {
+              return (
+                <>
+                  <Text
+                    style={[
+                      styles.tableAlign,
+                      { width: "75%", textAlign: "left", paddingLeft: 10 },
+                    ]}
+                  >
+                    {i + 1}. {note[0]}
+                  </Text>
+                  <Text style={[styles.tableAlign, { width: "25%" }]}>
+                    {note[1]}
+                  </Text>
+                </>
+              );
+            })}
+          </View>
+        )}
         <View style={[styles.section]} break>
           {secondary && secondary.length && (
             <View style={styles.sectionTwo}>
@@ -653,6 +712,60 @@ const MyDocument = ({
               </View>
             ))}
         </View>
+        {secondaryNotes.length && secondaryNotes[0][0].length && (
+          <View
+            style={{
+              width: "90%",
+              flexDirection: "row",
+              marginTop: 16,
+              flexWrap: "wrap",
+            }}
+          >
+            <Text
+              style={[
+                styles.tableAlign,
+                {
+                  width: "75%",
+                  textAlign: "left",
+                  paddingLeft: 10,
+                  backgroundColor: "gray",
+                  fontFamily: "Times-Bold",
+                },
+              ]}
+            >
+              Secondary Notes
+            </Text>
+            <Text
+              style={[
+                styles.tableAlign,
+                {
+                  width: "25%",
+                  backgroundColor: "gray",
+                  fontFamily: "Times-Bold",
+                },
+              ]}
+            >
+              Details
+            </Text>
+            {secondaryNotes.map((note, i) => {
+              return (
+                <>
+                  <Text
+                    style={[
+                      styles.tableAlign,
+                      { width: "75%", textAlign: "left", paddingLeft: 10 },
+                    ]}
+                  >
+                    {i + 1}. {note[0]}
+                  </Text>
+                  <Text style={[styles.tableAlign, { width: "25%" }]}>
+                    {note[1]}
+                  </Text>
+                </>
+              );
+            })}
+          </View>
+        )}
       </Page>
     </Document>
   );

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/full-logo.png";
 import logoOnly from "../../assets/logoOnly.png";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -22,16 +22,21 @@ interface Opened {
 export default function Navbar({
   token,
   setToken,
+  setUser,
   opened,
   setOpened,
 }: {
   token: string | null;
   setToken: Dispatch<SetStateAction<string | null>>;
+  setUser: Dispatch<
+    SetStateAction<{ id: number; role: "user" | "admin" } | null>
+  >;
   opened: Opened;
   setOpened: Dispatch<SetStateAction<Opened>>;
 }) {
   const { t, i18n } = useTranslation();
   const { theme, toggle } = useThemeButton();
+  const navigate = useNavigate();
   return (
     <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
       <div className="w-screen h-full bg-sidebar flex justify-between items-center text-textColor text-xl text-center relative">
@@ -170,6 +175,9 @@ export default function Navbar({
                   onClick={() => {
                     localStorage.removeItem("token");
                     setToken(null);
+                    localStorage.removeItem("user");
+                    setUser(null);
+                    navigate("/login");
                   }}
                   className="hover:text-background transition-colors sm:mx-4 mx-2 "
                 >

@@ -15,6 +15,7 @@ import Account from "./components/Account/Account";
 import useLocalStorage from "./hooks/useLocalStorage";
 import useChangeLogger from "./hooks/useChangeLogger";
 import useAbv from "./hooks/useAbv";
+import Recipes from "./components/Recipes/Recipes";
 
 export interface Additive {
   name: string;
@@ -80,6 +81,12 @@ function App() {
   );
   useChangeLogger(language);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
+
+  const [user, setUser] = useLocalStorage<{
+    id: number;
+    role: "user" | "admin";
+  } | null>("user", null);
+
   const [opened, setOpened] = useState({
     menu: false,
     calcs: false,
@@ -99,6 +106,7 @@ function App() {
       <Navbar
         token={token}
         setToken={setToken}
+        setUser={setUser}
         opened={opened}
         setOpened={setOpened}
       />
@@ -131,6 +139,19 @@ function App() {
                 token={token}
                 setToken={setToken}
                 setRecipeData={setRecipeData}
+                setUser={setUser}
+                user={user}
+              />
+            }
+          />
+          <Route
+            path="/recipes/:recipeId"
+            element={
+              <Recipes
+                ingredientsList={ingredientsList}
+                setIngredientsList={setIngredientsList}
+                token={token}
+                userId={user?.id || null}
               />
             }
           />
