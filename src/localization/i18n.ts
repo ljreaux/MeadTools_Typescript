@@ -22,10 +22,10 @@ const [NutrientCalcEN, NutrientCalcDE] = nutrientCalcTranslations;
 const [NavbarEN, NavbarDE] = navBarTranslations;
 const [AboutEN, AboutDE] = aboutTranslations;
 const [ContactEN, ContactDE] = contactTranslations;
-const [otherYeastsEN] = yeastTranslations;
-const [stabilizersEN] = stabilizersTranslations;
-const [PDFEN] = PDFTranslations;
-const [notesEN] = notesTranslations;
+const [otherYeastsEN, otherYeastsDE] = yeastTranslations;
+const [stabilizersEN, stabilizersDE] = stabilizersTranslations;
+const [PDFEN, PDFDE] = PDFTranslations;
+const [notesEN, notesDE] = notesTranslations;
 
 i18n
   .use(LanguageDetector)
@@ -61,6 +61,10 @@ i18n
           ...NavbarDE,
           ...AboutDE,
           ...ContactDE,
+          ...otherYeastsDE,
+          ...stabilizersDE,
+          ...PDFDE,
+          ...notesDE
         },
       },
     },

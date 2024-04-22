@@ -52,6 +52,59 @@ const notesAndExtras = {
       or: "OR",
     },
   },
+  de: {
+    notes: {
+      title: "Notizen Hinzufügen",
+      subtitleOne: "Primäre Notizen",
+      subtitleTwo: "Sekundäre Notizen",
+      note: "Notiz",
+      details: "Datum, Dichte, etc.",
+      placeholder: "Notiz hier einfügen",
+    },
+    recipeForm: {
+      login: "Anmelden um das Rezept zu speichern",
+      title: "Rezept Speichern",
+      subtitle: "Rezeptname eingeben",
+      submit: "Rezept Speichern",
+    },
+    changesForm: {
+      login: "Änderungen am Rezept speichern?",
+      subtitle: "Rezeptname",
+      submit: "Änderungen Speichern",
+    },
+    alerts: {
+      loginError: "Du musst angemeldet sein, um Benutzerrezepte einzusehen",
+      notCurrentUser:
+        "Dies ist das Rezept eines anderen Benutzers. Du musst eine Kopie davon machen, um Änderungen vorzunehmen.",
+    },
+    accountPage: {
+      title: "Benutzerkonto",
+      theme: {
+        title: "Bevorzugtes Theme",
+        light: "Hell",
+        dark: "Dunkel",
+      },
+      language: {
+        title: "Bevorzugte Sprache",
+      },
+      units: {
+        title: "Bevorzugte Einheiten",
+        metric: "Metrisch",
+        us: "US",
+      },
+      myRecipes: "Meine Rezepte",
+      viewRecipe: "Rezept Ansehen",
+      buttonMessage: {
+        register: "Noch kein Benutzerkonto? Jetzt registrieren!",
+        login: "Hast du schon ein Benutzerkonto? Hier anmelden!",
+      },
+      login: "Anmelden",
+      register: "Registrieren",
+      email: "E-Mail",
+      password: "Passwort",
+      or: "ODER",
+    },
+  },
 };
 
-export const notesTranslations = [notesAndExtras.en];
+export const notesTranslations = [notesAndExtras.en, notesAndExtras.de];
