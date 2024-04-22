@@ -28,6 +28,33 @@ const PDF = {
       ksorb: "k-sorb",
     },
   },
+  de: {
+    title: "Rezept-PDF",
+    pageTitle: "Rezeptbogen",
+    totalVolume: "Gesamtvolumen",
+    yeast: "Hefe",
+    of: "von",
+    tempRange: "Temperaturspanne",
+    estimatedOG: "Geschätzte OG:",
+    estimatedFG: "Geschätzte FG:",
+    tolerance: "Alkoholtolerance",
+    sugarBreak: "1/3 SB",
+    expectedABV: "Erwarteter Alkoholgehalt:",
+    nutrient: "Nährstoffprotokoll:",
+    numberOfAdditions: "Anzahl an Gaben:",
+    amount: "Menge pro Gabe:",
+    total: "Gesamt:",
+    stabilizers: "Stabilisatoren",
+    remaining: "Verbleibende YAN:",
+    primary: "Primärzutaten",
+    weight: "Gewicht",
+    volume: "Volumen",
+    secondary: "Sekundärzutaten",
+    additives: "Zusätze",
+    addAmount: "Menge",
+    kmeta: "Kaliumdisulfit",
+    ksorb: "Kaliumsorbat",
+  }
 };
 
-export const PDFTranslations = [PDF.en];
+export const PDFTranslations = [PDF.en, PDF.de];
