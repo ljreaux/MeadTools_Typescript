@@ -1,34 +1,21 @@
-import { RecipeData } from "../../App";
-import { getRecipeById } from "../../helpers/Login";
 import { useNavigate } from "react-router-dom";
 
 export default function RecipeCard({
   recipe,
   token,
-  setRecipeData,
 }: {
   recipe: { id: number; user_id: number; name: string };
   token: string | null;
-  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData>>;
 }) {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="grid items-center justify-center gap-2">
       <p>{recipe.name}</p>
       <button
-        onClick={() =>
-          token &&
-          getRecipeById(recipe.id, token)
-            .then((res) => {
-              const { recipeData } = res.recipe;
-              setRecipeData(JSON.parse(recipeData));
-              console.log(recipeData);
-              navigate(`/recipes/${recipe.id}`);
-            })
-            .catch((err) => alert(err))
-        }
+        onClick={() => token && navigate(`/recipes/${recipe.id}`)}
+        className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2 mt-6"
       >
-        {recipe.id}
+        View Recipe
       </button>
     </div>
   );

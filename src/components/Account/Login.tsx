@@ -6,8 +6,10 @@ import { login, register } from "../../helpers/Login";
 import Form from "./Form";
 export default function Login({
   setToken,
+  theme: isDarkTheme,
 }: {
   setToken: Dispatch<SetStateAction<string | null>>;
+  theme: boolean;
 }) {
   const { goTo, step, currentStepIndex } = useMultiStepForm([
     <Form titleText="Login" setToken={setToken} fetchFunction={login} />,
@@ -18,33 +20,19 @@ export default function Login({
     index === 1
       ? "Don't have any account? Register now."
       : "Already have an account? Login here.";
-  const [mode, setMode] = useState("dark");
-  const btnSrc = mode === "dark" ? signInButton : lightSignIn;
-  useEffect(() => {
-    // Add listener to update styles
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => setMode(e.matches ? "dark" : "light"));
 
-    // Setup dark/light mode for the first time
-    setMode(
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"
-    );
+  const btnSrc = isDarkTheme ? signInButton : lightSignIn;
 
-    // Remove listener
-    return () => {
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", () => {});
-    };
-  }, []);
   return (
-    <div className="flex flex-col items-center justify-center w-screen">
+    <div className="flex flex-col items-center justify-center w-screen gap-6">
       <div className="flex flex-col items-center justify-center w-full">
         {step}
-        <button onClick={() => goTo(index)}>{buttonMessage}</button>
+        <button
+          onClick={() => goTo(index)}
+          className=" text-textColor font-bold underline hover:text-sidebar transition-all"
+        >
+          {buttonMessage}
+        </button>
       </div>
       <p>OR</p>
       <div>

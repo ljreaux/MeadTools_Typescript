@@ -49,18 +49,20 @@ export interface RecipeData {
   additives: Additive[];
 }
 
-type Opened = {
+export type Opened = {
   menu: boolean;
   calcs: boolean;
   extraCalcs: boolean;
   account: boolean;
   links: boolean;
+  settings: boolean;
 };
 
 function App() {
   const { i18n } = useTranslation();
   const language = i18n.language;
-  const isMetric = language !== "en" && language !== "en-US";
+  const [isMetric, setIsMetric] = useLocalStorage("metric", false);
+  const [theme, setTheme] = useLocalStorage("theme", true);
 
   const [ingredientsList, setIngredientsList] = useState<List>([]);
   const [recipeData, setRecipeData] = useLocalStorage<RecipeData>(
@@ -93,6 +95,7 @@ function App() {
     extraCalcs: false,
     account: false,
     links: false,
+    settings: false,
   });
 
   const { ABV } = useAbv({ OG: recipeData.OG, FG: recipeData.FG });
@@ -101,6 +104,30 @@ function App() {
     setRecipeData((prev) => ({ ...prev, ABV }));
   }, [ABV]);
 
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body?.setAttribute("data-theme", theme ? "dark" : "light");
+  }, [theme]);
+
+  useEffect(() => {
+    setRecipeData((prev) => ({
+      ...prev,
+      units: {
+        weight: isMetric ? "kg" : "lbs",
+        volume: isMetric ? "liter" : "gal",
+      },
+    }));
+  }, [isMetric]);
+  useChangeLogger(opened);
+  const toggleSettings = () => {
+    setOpened((prev: Opened) => {
+      console.log(!prev.settings);
+      return {
+        ...prev,
+        settings: !prev.settings,
+      };
+    });
+  };
   return (
     <div className="grid">
       <Navbar
@@ -109,10 +136,18 @@ function App() {
         setUser={setUser}
         opened={opened}
         setOpened={setOpened}
+        theme={theme}
+        setTheme={setTheme}
       />
       <main
         className="flex items-center justify-center w-full min-h-[100vh]"
-        onClick={() => setOpened((prev: Opened) => ({ ...prev, menu: false }))}
+        onClick={() =>
+          setOpened((prev: Opened) => ({
+            ...prev,
+            menu: false,
+            settings: false,
+          }))
+        }
       >
         <Routes>
           <Route
@@ -131,16 +166,22 @@ function App() {
           <Route path="/ExtraCalcs/*" element={<ExtraCalcs />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route
+            path="/login"
+            element={<Login setToken={setToken} theme={theme} />}
+          />
           <Route
             path="/account"
             element={
               <Account
                 token={token}
                 setToken={setToken}
-                setRecipeData={setRecipeData}
                 setUser={setUser}
                 user={user}
+                isDarkTheme={theme}
+                setTheme={setTheme}
+                isMetric={isMetric}
+                setIsMetric={setIsMetric}
               />
             }
           />

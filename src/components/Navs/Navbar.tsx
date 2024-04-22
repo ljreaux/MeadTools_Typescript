@@ -8,7 +8,6 @@ import { MdExpandCircleDown } from "react-icons/md";
 import { IoIosArrowDropupCircle } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { MdLightMode } from "react-icons/md";
-import useThemeButton from "../../hooks/useThemeButton";
 import { useTranslation } from "react-i18next";
 
 interface Opened {
@@ -17,6 +16,7 @@ interface Opened {
   extraCalcs: boolean;
   account: boolean;
   links: boolean;
+  settings: boolean;
 }
 
 export default function Navbar({
@@ -25,6 +25,8 @@ export default function Navbar({
   setUser,
   opened,
   setOpened,
+  theme: isDarkTheme,
+  setTheme: toggle,
 }: {
   token: string | null;
   setToken: Dispatch<SetStateAction<string | null>>;
@@ -33,9 +35,11 @@ export default function Navbar({
   >;
   opened: Opened;
   setOpened: Dispatch<SetStateAction<Opened>>;
+  theme: boolean;
+  setTheme: Dispatch<SetStateAction<boolean>>;
 }) {
   const { t, i18n } = useTranslation();
-  const { theme, toggle } = useThemeButton();
+  // const { theme, toggle } = useThemeButton();
   const navigate = useNavigate();
   return (
     <nav className="h-20 fixed top-0 z-[51] flex items-center justify-between mb-[1rem]">
@@ -226,8 +230,8 @@ export default function Navbar({
           </div>
         </nav>
         <div className="flex h-full justify-center items-center">
-          <button onClick={toggle} className="mr-[2rem]">
-            {theme === "light" ? <MdDarkMode /> : <MdLightMode />}
+          <button onClick={() => toggle(!isDarkTheme)} className="mr-[2rem]">
+            {isDarkTheme ? <MdDarkMode /> : <MdLightMode />}
           </button>
           <select
             name=""
