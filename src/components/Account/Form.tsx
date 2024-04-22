@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "../Title";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Form({
   titleText,
@@ -17,6 +18,7 @@ export default function Form({
   }) => Promise<Partial<{ token: string; message: string }>>;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
+  const { t } = useTranslation();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -45,11 +47,11 @@ export default function Form({
           }
         });
       }}
-      className="aspect-video min-w-[50%] flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8"
+      className="aspect-video sm:w-2/4 w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8"
     >
       <Title header={titleText} />
       <label htmlFor="email" className="flex justify-between w-7/12">
-        Email:
+        {t("accountPage.email")}
         <input
           type="email"
           id="email"
@@ -62,7 +64,7 @@ export default function Form({
         />
       </label>
       <label htmlFor="password" className="flex justify-between w-7/12">
-        Password:
+        {t("accountPage.password")}
         <input
           type="password"
           id="password"

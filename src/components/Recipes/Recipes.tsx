@@ -29,6 +29,8 @@ import Title from "../Title";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../main";
 import Notes from "../Home/Notes";
+import SaveRecipeForm from "../Home/SaveRecipeForm";
+import UpdateRecipeForm from "./UpdateRecipeForm";
 
 export default function Recipes({
   ingredientsList,
@@ -47,6 +49,7 @@ export default function Recipes({
   const navigate = useNavigate();
   const [recipeUser, setRecipeUser] = useState(0);
   const notCurrentUser = recipeUser !== 0 && recipeUser !== userId;
+  const [recipeName, setRecipeName] = useState("");
 
   const [primaryNotes, setPrimaryNotes] = useState<string[][]>([["", ""]]);
   const [secondaryNotes, setSecondaryNotes] = useState<string[][]>([["", ""]]);
@@ -208,12 +211,11 @@ export default function Recipes({
       const newNotes = [];
       while (notes.length) newNotes.push(notes.splice(0, 2));
 
-      console.log(newNotes);
       return newNotes;
     }
-    console.log(recipeId);
+
     const getRecipe = async () => {
-      const loginError = "You must be logged in to view user recipes";
+      const loginError = t("alerts.loginError");
       const notFoundError = "RecipeNotFoundError";
       try {
         if (!token) throw new Error(loginError);
@@ -224,9 +226,10 @@ export default function Recipes({
           },
         });
         const { recipe } = await res.json();
-        console.log(recipe);
+
         if (recipe.name === notFoundError) throw new Error(recipe.message);
         const {
+          name,
           recipeData,
           nutrientData,
           advanced,
@@ -237,6 +240,7 @@ export default function Recipes({
           primaryNotes,
           secondaryNotes,
         } = recipe;
+        setRecipeName(name);
         setRecipeUser(user_id);
         setRecipeData(JSON.parse(recipeData));
         setData(JSON.parse(nutrientData));
@@ -256,9 +260,7 @@ export default function Recipes({
   }, []);
 
   useEffect(() => {
-    console.log(recipeUser, userId);
-    notCurrentUser &&
-      alert("This is another user's recipe, any changes will not be saved.");
+    notCurrentUser && alert(t("alerts.notCurrentUser"));
   }, [recipeUser]);
   const { next, back, step, currentStepIndex, steps, goTo } = useMultiStepForm([
     <RecipeBuilder
@@ -340,13 +342,29 @@ export default function Recipes({
     </>,
     <>
       {notCurrentUser ? (
-        <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
-          Save Recipe to Your Account?
-        </form>
+        <SaveRecipeForm
+          recipeData={recipeData}
+          nutrientData={data}
+          nuteInfo={nuteInfo}
+          primaryNotes={primaryNotes}
+          secondaryNotes={secondaryNotes}
+          yanContribution={yanContribution}
+          yanFromSource={yanFromSource}
+          advanced={advanced}
+        />
       ) : (
-        <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
-          Save Changes to Recipe?
-        </form>
+        <UpdateRecipeForm
+          name={recipeName}
+          updateName={setRecipeName}
+          recipeData={recipeData}
+          nutrientData={data}
+          nuteInfo={nuteInfo}
+          primaryNotes={primaryNotes}
+          secondaryNotes={secondaryNotes}
+          yanContribution={yanContribution}
+          yanFromSource={yanFromSource}
+          advanced={advanced}
+        />
       )}
     </>,
   ]);
@@ -375,7 +393,6 @@ export default function Recipes({
           {t("buttonLabels.next")}
         </button>
       )}
-      <button onClick={() => goTo(steps.length - 2)}> to PDF</button>
     </div>
   );
 }

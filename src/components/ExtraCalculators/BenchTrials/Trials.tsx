@@ -10,7 +10,7 @@ interface Props {
 
 export default function Trials({ batchDetails }: Props) {
   const { t } = useTranslation();
-  const newStockSolutions = [0.5, 1, 1.5, 2, 2.5];
+  const newStockSolutions = [0.5, 1, 1.5, 2];
 
   const [stockVolume, setStockVolume] =
     useState<StockVolume>(newStockSolutions);
@@ -34,7 +34,7 @@ export default function Trials({ batchDetails }: Props) {
 
   return (
     <>
-      <div className="col-span-2 grid col-setup gap-2">
+      <div className="col-span-2 grid col-setup w-full">
         {stockVolume.map((solution, i) => {
           const sample = adjunctInSample(i);
           const scaler =
@@ -53,7 +53,7 @@ export default function Trials({ batchDetails }: Props) {
           return (
             <div key={i} className="grid text-center">
               <label
-                className="flex items-center justify-center text-sm p-2"
+                className="flex items-center justify-center text-sm p-2 gap-2"
                 htmlFor={`stockVolume ${i + 1}`}
               >
                 {i === 0 && t("solutionVolume")}
@@ -68,7 +68,7 @@ export default function Trials({ batchDetails }: Props) {
               </label>
 
               <label
-                className="flex items-center justify-center text-sm p-2"
+                className="flex items-center justify-center text-sm p-2 gap-2"
                 htmlFor={`adjunctAmount ${i + 1}`}
               >
                 {i === 0 && t("adjunctAmount")}
@@ -82,7 +82,7 @@ export default function Trials({ batchDetails }: Props) {
                 />
               </label>
               <label
-                className="flex items-center justify-center text-sm p-2"
+                className="flex items-center justify-center text-sm p-2 gap-2"
                 htmlFor={`adjunctInSample ${i + 1}`}
               >
                 {i === 0 && t("adjunctConcentration")}
@@ -96,7 +96,7 @@ export default function Trials({ batchDetails }: Props) {
                 />
               </label>
               <label
-                className="flex items-center justify-center text-sm p-2"
+                className="flex items-center justify-center text-sm p-2 gap-2"
                 htmlFor="scaledAdjunct"
               >
                 {i === 0 && t(`${batchDetails.units}ScaledAdjunct`)}
@@ -110,7 +110,7 @@ export default function Trials({ batchDetails }: Props) {
                 />
               </label>
               <label
-                className="flex items-center justify-center text-sm p-2"
+                className="flex items-center justify-center text-sm p-2 gap-2"
                 htmlFor={`batchAmount ${i + 1}`}
               >
                 {i === 0 && t("scaledBatch")}

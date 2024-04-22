@@ -4,6 +4,7 @@ import signInButton from "../../assets/signin-assets/Web (mobile + desktop)/svg/
 import lightSignIn from "../../assets/signin-assets/Web (mobile + desktop)/svg/light/web_light_rd_ctn.svg";
 import { login, register } from "../../helpers/Login";
 import Form from "./Form";
+import { useTranslation } from "react-i18next";
 export default function Login({
   setToken,
   theme: isDarkTheme,
@@ -11,15 +12,24 @@ export default function Login({
   setToken: Dispatch<SetStateAction<string | null>>;
   theme: boolean;
 }) {
+  const { t } = useTranslation();
   const { goTo, step, currentStepIndex } = useMultiStepForm([
-    <Form titleText="Login" setToken={setToken} fetchFunction={login} />,
-    <Form titleText="Register" setToken={setToken} fetchFunction={register} />,
+    <Form
+      titleText={t("accountPage.login")}
+      setToken={setToken}
+      fetchFunction={login}
+    />,
+    <Form
+      titleText={t("accountPage.register")}
+      setToken={setToken}
+      fetchFunction={register}
+    />,
   ]);
   const index = currentStepIndex === 0 ? 1 : 0;
   const buttonMessage =
     index === 1
-      ? "Don't have any account? Register now."
-      : "Already have an account? Login here.";
+      ? t("accountPage.buttonMessage.register")
+      : t("accountPage.buttonMessage.login");
 
   const btnSrc = isDarkTheme ? signInButton : lightSignIn;
 

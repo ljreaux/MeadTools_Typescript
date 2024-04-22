@@ -148,7 +148,7 @@ export default function MainInputs({
   return (
     <>
       {!loading ? (
-        <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mt-24 mb-8 aspect-video">
+        <div className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-2 sm:p-8 mt-24 mb-8 aspect-video text-xs sm:text-base text-wrap">
           <Title header={t("nutesHeading")} />
           <form
             action=""

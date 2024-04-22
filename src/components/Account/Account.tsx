@@ -1,9 +1,8 @@
-import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../../helpers/Login";
 import Loading from "../Loading";
 import RecipeCard from "./RecipeCard";
-import { Opened, RecipeData } from "../../App";
 import Title from "../Title";
 import { IoSettingsSharp, IoLogOutSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
@@ -38,7 +37,7 @@ export default function Account({
   setIsMetric: React.Dispatch<SetStateAction<boolean>>;
 }) {
   const [isOpened, setOpened] = useState(false);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const columns =
     userInfo?.recipes && userInfo?.recipes.length < 5
@@ -105,7 +104,7 @@ export default function Account({
             >
               <ul className="text-sm w-full flex flex-col justify-center items-center mx-4 my-2 py-2">
                 <li className="flex justify-between w-full py-2">
-                  <p> Preferred Theme</p>
+                  <p>{t("accountPage.theme.title")}</p>
                   <select
                     className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
                     name="theme"
@@ -113,12 +112,14 @@ export default function Account({
                     value={isDarkTheme ? "dark" : "light"}
                     onChange={(e) => setTheme(e.target.value === "dark")}
                   >
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
+                    <option value="dark">{t("accountPage.theme.dark")}</option>
+                    <option value="light">
+                      {t("accountPage.theme.light")}
+                    </option>
                   </select>
                 </li>
                 <li className="flex justify-between w-full py-2">
-                  <p> Preferred Language</p>
+                  <p>{t("accountPage.language.title")}</p>
                   <select
                     className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
                     name="lang"
@@ -131,7 +132,7 @@ export default function Account({
                   </select>
                 </li>
                 <li className="flex justify-between w-full py-2">
-                  <p> Preferred Units</p>
+                  <p>{t("accountPage.units.title")}</p>
                   <select
                     className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background"
                     name="units"
@@ -139,22 +140,30 @@ export default function Account({
                     value={isMetric ? "metric" : "us"}
                     onChange={(e) => setIsMetric(e.target.value === "metric")}
                   >
-                    <option value="us">US</option>
-                    <option value="metric">Metric</option>
+                    <option value="us">{t("accountPage.units.us")}</option>
+                    <option value="metric">
+                      {t("accountPage.theme.metric")}
+                    </option>
                   </select>
                 </li>
               </ul>
             </div>
           </div>
-          <Title header="Account" />
+          <Title header={t("accountPage.title")} />
           <div className="flex flex-col items-center justify-center w-full">
             <h2>Hello {userInfo.email}</h2>
 
             <div
-              className={`grid grid-cols-${columns} justify-center items-center gap-4 text-center`}
+              className={`grid sm:grid-cols-${columns} grid-cols-${
+                userInfo.recipes.length >= 2 ? 2 : 1
+              } justify-center items-center gap-4 text-center`}
             >
-              <h2 className={`text-2xl text-center col-span-${columns}`}>
-                My Recipes
+              <h2
+                className={`text-2xl text-center sm:col-span-${columns} col-span-${
+                  userInfo.recipes.length >= 2 ? 2 : 1
+                }`}
+              >
+                {t("accountPage.myRecipes")}
               </h2>
               {userInfo.recipes.map((recipe) => (
                 <RecipeCard recipe={recipe} token={token} />

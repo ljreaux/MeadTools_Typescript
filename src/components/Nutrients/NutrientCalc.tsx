@@ -126,7 +126,7 @@ export default function NutrientCalc() {
   ]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center">
+    <div className="w-full flex flex-col items-center justify-center text-sm sm:text-base mb-8">
       {step}
       {currentStepIndex > 0 && (
         <button

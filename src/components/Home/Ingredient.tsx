@@ -153,7 +153,10 @@ export default function Ingredient({
         index == 1 ? "border-dotted border-b-[1px] border-textColor" : null
       }`}
     >
-      <div key={index} className="grid grid-cols-5 w-full items-center">
+      <div
+        key={index}
+        className="grid grid-cols-5 w-[97%] items-center justify-center gap-4"
+      >
         <select
           name="ingredientList"
           id="ingredientList"
@@ -199,7 +202,7 @@ export default function Ingredient({
         />
       </div>
       {index > 3 && (
-        <button onClick={() => removeLine(index)}>
+        <button className="w-[3%]" onClick={() => removeLine(index)}>
           <FaMinusSquare />
         </button>
       )}

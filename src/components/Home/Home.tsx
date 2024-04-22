@@ -276,7 +276,7 @@ export default function Home({
     </>,
     <>
       {!token ? (
-        <Link to={"/login"}>Login to Save Recipe</Link>
+        <Link to={"/login"}>{t("recipeForm.login")}</Link>
       ) : (
         <SaveRecipeForm
           recipeData={recipeData}
@@ -316,7 +316,6 @@ export default function Home({
           {t("buttonLabels.next")}
         </button>
       )}
-      <button onClick={() => goTo(steps.length - 2)}> to PDF</button>
     </div>
   );
 }

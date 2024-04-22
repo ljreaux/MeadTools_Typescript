@@ -37,9 +37,9 @@ export default function BenchTrials() {
   };
   useUnitChange({ ...unitChangeParams, propertyToChange: "batchSize" });
   return (
-    <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-8 aspect-video">
+    <form className="w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar sm:p-8 p-2 my-24 aspect-video">
       <Title header={t("benchTrialsHeading")} />
-      <div className="grid grid-cols-2 items-center justify-center my-4">
+      <div className="grid grid-cols-2 items-center justify-center my-4 w-full">
         <label htmlFor="batchSize">{t("batchSize")}</label>
         <input
           id="batchSize"
@@ -78,8 +78,8 @@ export default function BenchTrials() {
           onFocus={(e) => e.target.select()}
           className="h-5 bg-background text-center text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background "
         />
+        <Trials batchDetails={batchDetails} />
       </div>
-      <Trials batchDetails={batchDetails} />
     </form>
   );
 }

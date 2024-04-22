@@ -23,5 +23,5 @@
 }
 
 .col-setup {
-  grid-template-columns: 30% repeat(4, 15%);
+  grid-template-columns: 40% repeat(3, 20%);
 }

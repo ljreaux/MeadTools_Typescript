@@ -171,13 +171,18 @@ export default function RecipeBuilder({
   return (
     <>
       {loading && <Loading />}
-      <div
-        className={`w-11/12 sm:w-9/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 my-24 aspect-video ${
+      <form
+        className={`w-11/12 sm:w-9/12 flex flex-col items-center justify-center text-center rounded-xl bg-sidebar p-2 sm:p-8 my-24 aspect-video text-xs sm:text-base ${
           loading ? "hidden" : ""
         }`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          runBlendingFunction();
+          secondaryBlendFunction();
+        }}
       >
         <Title header={t("recipeBuilder.homeHeading")} />
-        <div className="grid grid-cols-5 text-center">
+        <div className="grid grid-cols-5 gap-4 w-[97%]">
           <label htmlFor="ingredients">
             {t("recipeBuilder.labels.ingredients")}
           </label>
@@ -252,7 +257,7 @@ export default function RecipeBuilder({
           />
         ))}
         {ingredients.length < 9 && (
-          <button onClick={addIngredientLine}>
+          <button onClick={addIngredientLine} type="button">
             {t("recipeBuilder.addNew")}
           </button>
         )}
@@ -276,15 +281,12 @@ export default function RecipeBuilder({
         </div>
         <button
           className="border-2 border-solid border-textColor  hover:bg-sidebar hover:border-background md:text-lg py-1 disabled:bg-sidebar disabled:hover:border-textColor disabled:hover:text-sidebar disabled:cursor-not-allowed bg-background rounded-2xl px-2"
-          onClick={() => {
-            runBlendingFunction();
-            secondaryBlendFunction();
-          }}
+          type="submit"
         >
           {t("recipeBuilder.submit")}
         </button>{" "}
         {blend.blendedValue > 0 && (
-          <div className="w-full grid grid-cols-5">
+          <div className="w-full grid grid-cols-5 items-center justify-center text-center mt-4">
             <label htmlFor="estOG">
               {t("recipeBuilder.resultsLabels.estOG")}
             </label>
@@ -339,7 +341,7 @@ export default function RecipeBuilder({
             </p>
           </div>
         )}
-      </div>
+      </form>
     </>
   );
 }

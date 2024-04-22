@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import Title from "../Title";
 import { FaMinusSquare, FaPlusSquare } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export default function Notes({
   primaryNotes,
@@ -25,16 +26,18 @@ export default function Notes({
       setSecondaryNotes((prev) => prev.filter((_, i) => i !== index));
   }
 
+  const { t } = useTranslation();
+
   return (
-    <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4">
-      <Title header="Add Notes" />
-      <label htmlFor="primaryNotes">Primary Notes</label>
-      <div className="grid grid-cols-notes gap-4 w-full ml-8">
+    <form className="w-11/12 flex flex-col items-center justify-center rounded-xl bg-sidebar p-8 mb-8 mt-24 aspect-video gap-4 sm:text-base text-sm">
+      <Title header={t("notes.title")} />
+      <label htmlFor="primaryNotes">{t("notes.subtitleOne")}</label>
+      <div className="grid grid-cols-notes gap-4 w-full">
         <label htmlFor="Note" className="col-start-2">
-          Note
+          {t("notes.note")}
         </label>
         <label htmlFor="details" className="col-start-3">
-          Date, Gravity, etc.
+          {t("notes.details")}
         </label>
       </div>
       {primaryNotes.map((note, index) => {
@@ -46,7 +49,7 @@ export default function Notes({
             <p className="h-full text-start">{index + 1}.</p>
             <textarea
               value={note[0]}
-              placeholder="Add Note Here"
+              placeholder={t("notes.placeholder")}
               className="h-20 bg-background text-left text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background my-2 disabled:bg-sidebar
         disabled:cursor-not-allowed"
               onChange={(e) => {
@@ -59,7 +62,7 @@ export default function Notes({
             />
             <textarea
               value={note[1]}
-              placeholder="Add Note Here"
+              placeholder={t("notes.placeholder")}
               className="h-20 bg-background text-left text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background my-2 disabled:bg-sidebar
         disabled:cursor-not-allowed"
               onChange={(e) => {
@@ -91,13 +94,13 @@ export default function Notes({
           <FaPlusSquare />
         </button>
       )}
-      <label htmlFor="secondaryNotes">Secondary Notes</label>
-      <div className="grid grid-cols-notes gap-4 w-full ml-8">
+      <label htmlFor="secondaryNotes">{t("notes.subtitleTwo")}</label>
+      <div className="grid grid-cols-notes gap-4 w-full">
         <label htmlFor="Note" className="col-start-2">
-          Note
+          {t("notes.note")}
         </label>
         <label htmlFor="details" className="col-start-3">
-          Date, Gravity, etc.
+          {t("notes.details")}
         </label>
       </div>
       {secondaryNotes.map((note, index) => {
@@ -109,7 +112,7 @@ export default function Notes({
             <p className="h-full text-start">{index + 1}.</p>
             <textarea
               value={note[0]}
-              placeholder="Add Note Here"
+              placeholder={t("notes.placeholder")}
               className="h-20 bg-background text-left text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background my-2 disabled:bg-sidebar
         disabled:cursor-not-allowed"
               onChange={(e) => {
@@ -122,7 +125,7 @@ export default function Notes({
             />
             <textarea
               value={note[1]}
-              placeholder="Add Note Here"
+              placeholder={t("notes.placeholder")}
               className="h-20 bg-background text-left text-[.5rem]  md:text-sm rounded-xl  border-2 border-solid border-textColor hover:bg-sidebar hover:border-background my-2 disabled:bg-sidebar
         disabled:cursor-not-allowed"
               onChange={(e) => {
