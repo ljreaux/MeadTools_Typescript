@@ -44,7 +44,7 @@ export default function Login({
           {buttonMessage}
         </button>
       </div>
-      <p>OR</p>
+      <p>{t("accountPage.or")}</p>
       <div>
         <button
           onClick={() => {

@@ -49,6 +49,7 @@ const notesAndExtras = {
       register: "Register",
       email: "Email",
       password: "Password",
+      or: "OR",
     },
   },
 };

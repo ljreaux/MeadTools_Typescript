@@ -276,7 +276,12 @@ export default function Home({
     </>,
     <>
       {!token ? (
-        <Link to={"/login"}>{t("recipeForm.login")}</Link>
+        <Link
+          to={"/login"}
+          className=" text-textColor font-bold underline hover:text-sidebar transition-all my-4"
+        >
+          {t("recipeForm.login")}
+        </Link>
       ) : (
         <SaveRecipeForm
           recipeData={recipeData}
